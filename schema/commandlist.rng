@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="urn:speedata.de:2015/latexref">
+    <start>
+        <element name="ltxref">
+            <oneOrMore>
+                <ref name="command"/>
+            </oneOrMore>
+            <oneOrMore>
+                <ref name="environment"/>
+            </oneOrMore>
+            <oneOrMore>
+                <ref name="package"/>
+            </oneOrMore>
+        </element>
+    </start>
+
+    <define name="environment">
+        <element name="environment">
+            <ref name="cmdcontents"/>
+        </element>
+    </define>
+    <define name="command">
+        <element name="command">
+            <ref name="cmdcontents"/>
+        </element>
+    </define>
+    <define name="cmdcontents">
+        <attribute name="name"/>
+        <optional>
+            <attribute name="label"/>
+        </optional>
+        <optional>
+            <attribute name="level">
+                <choice>
+                    <value>beginner</value>
+                    <value>expert</value>
+                </choice>
+            </attribute>
+        </optional>
+        <oneOrMore>
+            <element name="shortdescription">
+                <attribute name="lang"/>
+                <text/>
+            </element>
+        </oneOrMore>
+        <oneOrMore>
+            <element name="description">
+                <attribute name="lang"/>
+                <text/>
+            </element>
+        </oneOrMore>
+        <oneOrMore>
+            <element name="variant">
+                <attribute name="name"/>
+                <zeroOrMore>
+                    <element name="argument">
+                        <attribute name="optional">
+                            <choice>
+                                <value>yes</value>
+                                <value>no</value>
+                            </choice>
+                        </attribute>
+                        <attribute name="name"/>
+                        <attribute name="type">
+                            <choice>
+                                <value>optarg</value>
+                                <value>mandarg</value>
+                                <value>todimenorspreaddimen</value>
+                                <value>optlist</value>
+                                <value>mandlist</value>
+                            </choice>
+                        </attribute>
+                    </element>
+                </zeroOrMore>
+            </element>
+        </oneOrMore>
+        <optional>
+            <element name="seealso">
+                <oneOrMore>
+                    <interleave>
+                        <ref name="cmd"/>
+                        <text/>
+                    </interleave>
+                </oneOrMore>
+            </element>
+        </optional>
+    </define>
+    <define name="cmd">
+        <element name="cmd">
+            <attribute name="name"/>
+        </element>
+    </define>
+    <define name="package">
+        <element name="package">
+            <oneOrMore>
+                <element name="shortdescription">
+                    <attribute name="lang"/>
+                    <text/>
+                </element>
+            </oneOrMore>
+            <attribute name="name"/>
+            <oneOrMore>
+                <ref name="command"/>
+            </oneOrMore>
+        </element>
+    </define>
+</grammar>

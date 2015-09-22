@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ltxref xmlns="urn:speedata.de:2015/latexref" version="0.0.1">
+  <command name="\usepackage" label="preamble" level="beginner">
+    <shortdescription lang="en">Loads a package which can influence the layout or the functionality of the document</shortdescription>
+    <description lang="en">You can give a list of packages to load.</description>
+    <variant name="\usepackage">
+      <argument name="options" optional="yes" type="optlist"/>
+      <argument name="packagelist" optional="no" type="mandlist"/>
+    </variant>
+  </command>
+  <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
+    <shortdescription lang="en">Sectioning command to create a heading and an entry in the table of contents.</shortdescription>
+    <description lang="en"><![CDATA[
+            <p>This is a description of <tt>\section</tt>.
+            <ol>
+              <li>The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.</li>
+              <li>The second denotes the name of the section.
+            </ol></p>
+<pre>
+\section{some example section}
+</pre>
+            ]]></description>
+    <variant name="\section">
+      <argument optional="yes" name="shorttitle" type="optarg"/>
+      <argument optional="no" name="longtitle" type="mandarg"/>
+      <description lang="en"><![CDATA[<ol>
+              <li>The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.</li>
+              <li>The second denotes the name of the section.
+            </ol>]]></description>
+    </variant>
+    <variant name="\section*">
+      <argument optional="no" name="longtitle" type="mandarg"/>
+      <description lang="en"><![CDATA[<ol>
+              <li>The name of the section.</li>
+            </ol>]]></description>
+    </variant>
+    <seealso><cmd name="\chapter"/>, <cmd name="\tableofcontents"/></seealso>
+  </command>
+  <command name="\makebox" level="beginner" label="box command">
+    <shortdescription lang="en">Make a box with a given width and height</shortdescription>
+    <description lang="en">Some long description</description>
+    <variant name="makebox">
+      <argument name="width" optional="yes" type="optarg"/>
+      <argument name="pos" optional="yes" type="optarg"/>
+      <argument name="text" optional="no" type="mandarg"/>
+    </variant>
+  </command>
+  <command name="\hbox" label="plain,box command" level="expert">
+    <shortdescription lang="en">Create a horizontal box</shortdescription>
+    <variant name="\hbox">
+      <argument optional="yes" name="to" type="todimenorspreaddimen"/>
+      <argument optional="no" name="contents" type="mandarg"/>
+    </variant>
+  </command>
+  <environment name="minipage" label="box command" level="beginner">
+    <shortdescription lang="en"><![CDATA[The minipage environment creates a rectangle area of a <i>fixed</i> width]]></shortdescription>
+    <variant name="minipage">
+      <argument name="pos" optional="yes" type="optarg"/>
+      <argument name="height" optional="yes" type="optarg"/>
+      <argument name="inner-pos" optional="yes" type="optarg"/>
+      <argument name="width" optional="no" type="mandarg"/>
+    </variant>
+  </environment>
+  <package name="graphicx">
+    <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
+    <command name="includegraphics" label="graphics,images" level="beginner">
+      <shortdescription lang="en">Include an image file</shortdescription>
+      <variant name="\includegraphics">
+        <argument optional="yes" name="keyvalue" type="optlist"/>
+        <argument optional="no" name="filename" type="mandarg"/>
+      </variant>
+    </command>
+  </package>
+</ltxref>

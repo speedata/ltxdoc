@@ -1,0 +1,43 @@
+{{ template "head" }}
+
+<div class="container-fluid">
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <a href="/?filter={{ urlescape .Filter  }}">&lt;--  back to list</a>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <h1><tt>{{ .Command.Name }}</tt></h1>
+      <p>{{  index .Command.ShortDescription  "en" }}</p>
+    </div>
+  </div>
+{{ range $varindex, $variant := .Command.Variant }}
+  <div class="row">
+    <div class="col-sm-4 col-md-4 col-xs-4">
+      <table class="table table-condensed">
+        <tr>
+          <td  class="lxcommand" align="left">{{ .Name }}</td>
+  {{ range $index, $argument := .Arguments }}
+            <td class="{{ if eq $argument.Optional true }}lxoptional{{end}}">{{showargument $argument.Type }}</td>
+  {{ end }}
+        </tr><tr><td></td><!-- empty -->
+  {{ range $index, $argument := .Arguments }}<td>{{ addone $index }}</td>{{end}}
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">{{ index .Description "en" }}</div>
+  </div>
+  <hr class="vardivider">
+{{ end }}
+
+  <div class="row">
+    <div class="col-sm-12">
+    {{  index .Command.Description "en"  }}
+    </div>
+  </div>
+</div>
+
+{{ template "foot" }}

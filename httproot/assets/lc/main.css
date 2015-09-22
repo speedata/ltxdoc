@@ -1,0 +1,71 @@
+body {
+	color: #5E412F;
+}
+
+
+
+.container-fluid, .col-md-4, .col-md-5, .col-md-6, .col-md-7 {
+	/*border: 1px solid black;*/
+}
+
+.navbar {
+	background-color: #F0A830;
+	color: #5E412F;
+}
+
+.active > a {
+	background-color: #5E412F ;
+	color: #FCEBB6 ;
+}
+
+.row {
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.table {
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+.lxcommand {
+	font-family: monospace;
+}
+
+.lxpackage {
+	font-style: italic;
+}
+
+.lxoptional {
+	background-color: rgba(120,192,168,0.20);
+}
+
+
+.shortdesc {
+	/*font-size: smaller;*/
+}
+
+.cmddescription:nth-child(odd) {
+    background-color: rgba(120,192,168,0.20);
+}
+
+.cmddescription:nth-child(even) {
+	background-color: rgba(240,168,48,0.20);
+}
+
+
+.lxcmddesc {
+	padding-left: 4px;
+	padding-right: 4px;
+	font-family: Tahoma;
+	font-style: italic;
+	font-weight: lighter;
+}
+
+.vardivider {
+  	border: 0;
+  	color: rgba(94,65,47,0.8);
+	background-color: rgba(94,65,47,0.8);
+	height: 1px;
+}
