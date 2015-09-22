@@ -6,7 +6,7 @@ getdependencies:
 	go get ./...
 
 install:
-	go install ltxdoc
+	go install ltxdoc/ltxdoc
 
 formatxml:
 	xmllint --format ltxref.xml > temp.xml
@@ -15,3 +15,5 @@ formatxml:
 validatexml:
 	xmllint --relaxng schema/commandlist.rng ltxref.xml  --noout
 
+clean:
+	-rm -rf bin/ltxdoc pkg

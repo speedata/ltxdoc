@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/speedata/ltxdoc"
+	"ltxdoc"
 )
 
 func main() {
