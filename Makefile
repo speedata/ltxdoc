@@ -1,11 +1,13 @@
 
 all:
-	@echo "make [getdependencies | install | formatxml | validatexml]"
+	@echo "make [getdependencies | install | formatxml | validatexml | clean | bindata | local]"
+
+
 
 getdependencies:
 	go get ./...
 
-install:
+install: bindata
 	go install ltxdoc/ltxdoc
 
 formatxml:
@@ -17,3 +19,11 @@ validatexml:
 
 clean:
 	-rm -rf bin/ltxdoc pkg
+
+bindata:
+	bin/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+
+local:
+	bin/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	go install ltxdoc/ltxdoc
+

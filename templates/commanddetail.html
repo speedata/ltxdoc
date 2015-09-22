@@ -1,9 +1,11 @@
-{{ template "head" }}
+{{ define "commanddetail.html"}}
 
+
+{{ template "head" }}
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
-    <a href="/?filter={{ urlescape .Filter  }}">&lt;--  back to list</a>
+    <a href="/{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
   <div class="row">
@@ -39,5 +41,6 @@
     </div>
   </div>
 </div>
-
 {{ template "foot" }}
+
+{{end }}

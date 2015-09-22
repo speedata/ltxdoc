@@ -5,7 +5,9 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
+	"strings"
 
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/gorilla/mux"
 	"github.com/speedata/ltxref"
 )
@@ -51,9 +53,16 @@ func StartHTTPD(httpaddress, filename string) {
 			return template.HTML(ret)
 		},
 	}
-	tpl = template.Must(template.New("").Funcs(funcMap).ParseGlob("templates/*html"))
+
+	maintemplate := string(MustAsset("templates/main.html"))
+	detailtemplate := string(MustAsset("templates/commanddetail.html"))
+	layouttemplate := string(MustAsset("templates/layout.html"))
+
 	var err error
-	latexref, err = ltxref.ReadXMLFile(filename)
+	tpl = template.Must(template.New("main.html").Funcs(funcMap).Parse(maintemplate))
+	template.Must(tpl.Parse(detailtemplate)).Parse(layouttemplate)
+	// a bug in go-bindata leads to the duplication of the path
+	latexref, err = ltxref.ReadXMLData(MustAsset("ltxref.xml"))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -63,7 +72,7 @@ func StartHTTPD(httpaddress, filename string) {
 	r.HandleFunc("/", mainHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/tag/{tagname}", tagHandler)
-	r.PathPrefix("/assets/").Handler(http.FileServer(http.Dir("httproot")))
+	r.PathPrefix("/assets/").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: "httproot"}))
 	http.Handle("/", r)
 	fmt.Println("Listening on", httpaddress)
 	http.ListenAndServe(httpaddress, nil)
@@ -71,7 +80,7 @@ func StartHTTPD(httpaddress, filename string) {
 
 func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedCommand := mux.Vars(r)["command"]
-	filtervalue := r.FormValue("filter")
+	filtervalue := strings.ToLower(r.FormValue("filter"))
 
 	for _, command := range latexref.Commands {
 		if command.Name == requestedCommand {
@@ -115,7 +124,7 @@ func tagHandler(w http.ResponseWriter, r *http.Request) {
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	// empty string if no filter is given
-	filterFormValue := r.FormValue("filter")
+	filterFormValue := strings.ToLower(r.FormValue("filter"))
 
 	data := mainstruct{
 		Filter:   filterFormValue,
