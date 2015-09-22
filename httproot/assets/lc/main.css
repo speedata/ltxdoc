@@ -33,6 +33,8 @@ body {
 	font-family: monospace;
 }
 
+.lxenvironment {}
+
 .lxpackage {
 	font-style: italic;
 }

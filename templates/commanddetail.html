@@ -1,11 +1,86 @@
-{{ define "commanddetail.html"}}
-
-
+{{ define "pkgdetail"}}
 {{ template "head" }}
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
     <a href="/{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+  </div>
+</div>
+{{ with .Package }}
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <h1><tt>{{ .Name }}</tt></h1>
+      <p>{{  index .ShortDescription  "en" }}</p>
+    </div>
+  </div>
+
+  <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
+
+{{ range .Commands }}
+<div class="cmddescription"><a href="/pkg/{{ urlescape $.Package.Name }}/cmd/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+      <div class="col-md-4 lxcommand">{{ .Name }}</div>
+      <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
+</div></a></div>
+{{ end }}
+{{ end}}
+</div>
+{{ template "foot" }}
+{{end }}
+
+
+
+
+{{ define "envdetail"}}
+{{ template "head" }}
+<div class="container-fluid">
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <a href="/{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <h1><tt>{{ .Environment.Name }}</tt></h1>
+      <p>{{  index .Environment.ShortDescription  "en" }}</p>
+    </div>
+  </div>
+{{ range $varindex, $variant := .Environment.Variant }}
+  <div class="row">
+    <div class="col-sm-4 col-md-4 col-xs-4">
+      <table class="table table-condensed">
+        <tr>
+          <td  class="lxenvironment" align="left">{{ .Name }}</td>
+  {{ range $index, $argument := .Arguments }}
+            <td class="{{ if eq $argument.Optional true }}lxoptional{{end}}">{{showargument $argument.Type }}</td>
+  {{ end }}
+        </tr><tr><td></td><!-- empty -->
+  {{ range $index, $argument := .Arguments }}<td>{{ addone $index }}</td>{{end}}
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">{{ index .Description "en" }}</div>
+  </div>
+  <hr class="vardivider">
+{{ end }}
+
+  <div class="row">
+    <div class="col-sm-12">
+    {{  index .Environment.Description "en"  }}
+    </div>
+  </div>
+</div>
+{{ template "foot" }}
+{{end }}
+
+
+{{ define "commanddetail.html"}}
+{{ template "head" }}
+<div class="container-fluid">
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <a href="{{.Backlink}}{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
   <div class="row">
@@ -42,5 +117,4 @@
   </div>
 </div>
 {{ template "foot" }}
-
 {{end }}

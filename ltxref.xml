@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ltxref xmlns="urn:speedata.de:2015/latexref" version="0.0.1">
-  <command name="\usepackage" label="preamble" level="beginner">
-    <shortdescription lang="en">Loads a package which can influence the layout or the functionality of the document</shortdescription>
-    <description lang="en">You can give a list of packages to load.</description>
-    <variant name="\usepackage">
-      <argument name="options" optional="yes" type="optlist"/>
-      <argument name="packagelist" optional="no" type="mandlist"/>
+  <command name="\hbox" label="plain,box command" level="expert">
+    <shortdescription lang="en">Create a horizontal box</shortdescription>
+    <description lang="en"/>
+    <variant name="\hbox">
+      <argument optional="yes" name="to" type="todimenorspreaddimen"/>
+      <argument optional="no" name="contents" type="mandarg"/>
+      <description lang="en"/>
+    </variant>
+  </command>
+  <command name="\makebox" level="beginner" label="box command">
+    <shortdescription lang="en">Make a box with a given width and height</shortdescription>
+    <description lang="en">Some long description</description>
+    <variant name="makebox">
+      <argument name="width" optional="yes" type="optarg"/>
+      <argument name="pos" optional="yes" type="optarg"/>
+      <argument name="text" optional="no" type="mandarg"/>
+      <description lang="en"/>
     </variant>
   </command>
   <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
@@ -36,39 +47,55 @@
     </variant>
     <seealso><cmd name="\chapter"/>, <cmd name="\tableofcontents"/></seealso>
   </command>
-  <command name="\makebox" level="beginner" label="box command">
-    <shortdescription lang="en">Make a box with a given width and height</shortdescription>
-    <description lang="en">Some long description</description>
-    <variant name="makebox">
-      <argument name="width" optional="yes" type="optarg"/>
-      <argument name="pos" optional="yes" type="optarg"/>
-      <argument name="text" optional="no" type="mandarg"/>
-    </variant>
-  </command>
-  <command name="\hbox" label="plain,box command" level="expert">
-    <shortdescription lang="en">Create a horizontal box</shortdescription>
-    <variant name="\hbox">
-      <argument optional="yes" name="to" type="todimenorspreaddimen"/>
-      <argument optional="no" name="contents" type="mandarg"/>
+  <command name="\usepackage" label="preamble" level="beginner">
+    <shortdescription lang="en">Loads a package which can influence the layout or the functionality of the document</shortdescription>
+    <description lang="en">You can give a list of packages to load.</description>
+    <variant name="\usepackage">
+      <argument name="options" optional="yes" type="optlist"/>
+      <argument name="packagelist" optional="no" type="mandlist"/>
+      <description lang="en"/>
     </variant>
   </command>
   <environment name="minipage" label="box command" level="beginner">
     <shortdescription lang="en"><![CDATA[The minipage environment creates a rectangle area of a <i>fixed</i> width]]></shortdescription>
+    <description lang="en">The minipage environment is very nice</description>
     <variant name="minipage">
       <argument name="pos" optional="yes" type="optarg"/>
       <argument name="height" optional="yes" type="optarg"/>
       <argument name="inner-pos" optional="yes" type="optarg"/>
       <argument name="width" optional="no" type="mandarg"/>
+      <description lang="en"/>
     </variant>
   </environment>
-  <package name="graphicx">
+  <package name="graphicx" label="graphics" loadspackages="keyval,graphics">
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
-    <command name="includegraphics" label="graphics,images" level="beginner">
+    <packageoption name="draft">
+      <description lang="en">Suppress all the ‘special’ features. In particular graphics files are not included (but they are still read for size info) just the filename is printed in a box of the correct size.</description>
+    </packageoption>
+    <packageoption name="final">
+      <description lang="en">The opposite of draft. Useful to over-ride a global draft option specified in the \documentclass command.</description>
+    </packageoption>
+    <packageoption name="hiderotate">
+      <description lang="en">Do not show rotated text (presumably because the previewer can not rotate).</description>
+    </packageoption>
+    <packageoption name="hidescale">
+      <description lang="en">Do not show scaled text (presumably because the previewer can not scale).</description>
+    </packageoption>
+    <packageoption name="hiresbb">
+      <description lang="en">Look for size specifications in %%HiResBoundingBox lines rather than standard %%BoundingBox lines.</description>
+    </packageoption>
+    <packageoption name="demo">
+      <description lang="en">Instead of inserting an image file \includegraphics draws a 150 pt by 100 pt rectangle unless other dimensions are specified manually.</description>
+    </packageoption>
+    <command name="\includegraphics" label="graphics,images" level="beginner">
       <shortdescription lang="en">Include an image file</shortdescription>
+      <description lang="en"><![CDATA[<p>The package <code>graphicx</code> (with cx at the end!) provides the command \includegraphics which can be used to include images of various formats, such as PNG, PDF etc. The complete list of</p>]]></description>
       <variant name="\includegraphics">
         <argument optional="yes" name="keyvalue" type="optlist"/>
         <argument optional="no" name="filename" type="mandarg"/>
+        <description lang="en"/>
       </variant>
     </command>
+    <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>
   </package>
 </ltxref>

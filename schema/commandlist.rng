@@ -13,6 +13,7 @@
             <oneOrMore>
                 <ref name="package"/>
             </oneOrMore>
+            <attribute name="version"/>
         </element>
     </start>
 
@@ -41,15 +42,12 @@
         </optional>
         <oneOrMore>
             <element name="shortdescription">
-                <attribute name="lang"/>
+                <ref name="attlang"/>
                 <text/>
             </element>
         </oneOrMore>
         <oneOrMore>
-            <element name="description">
-                <attribute name="lang"/>
-                <text/>
-            </element>
+            <ref name="description"/>
         </oneOrMore>
         <oneOrMore>
             <element name="variant">
@@ -74,6 +72,9 @@
                         </attribute>
                     </element>
                 </zeroOrMore>
+                <oneOrMore>
+                    <ref name="description"/>
+                </oneOrMore>
             </element>
         </oneOrMore>
         <optional>
@@ -96,14 +97,40 @@
         <element name="package">
             <oneOrMore>
                 <element name="shortdescription">
-                    <attribute name="lang"/>
+                    <ref name="attlang"/>
                     <text/>
                 </element>
             </oneOrMore>
+            <zeroOrMore>
+                <element name="packageoption">
+                    <attribute name="name"/>
+                    <ref name="description"/>
+                </element>
+            </zeroOrMore>
             <attribute name="name"/>
+            <optional>
+                <attribute name="loadspackages"/>
+            </optional>
+            <optional>
+                <attribute name="label"/>
+            </optional>
             <oneOrMore>
                 <ref name="command"/>
             </oneOrMore>
+            <ref name="description"></ref>
         </element>
+    </define>
+    <define name="description">
+        <element name="description">
+            <ref name="attlang"/>
+            <text/>
+        </element>
+    </define>
+    <define name="attlang">
+        <attribute name="lang">
+            <choice>
+                <value>en</value>
+            </choice>
+        </attribute>
     </define>
 </grammar>

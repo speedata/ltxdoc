@@ -20,16 +20,20 @@ func dummy() {
 	fmt.Println()
 }
 
+func escapeurl(part string) string {
+	var Url *url.URL
+	Url, err := url.Parse(part)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return Url.String()
+}
+
 func StartHTTPD(httpaddress, filename string) {
 
 	funcMap := template.FuncMap{
 		"urlescape": func(in string) string {
-			var Url *url.URL
-			Url, err := url.Parse(in)
-			if err != nil {
-				fmt.Println(err)
-			}
-			return Url.String()
+			return escapeurl(in)
 		},
 		"addone": func(in int) int {
 			return in + 1
@@ -71,6 +75,9 @@ func StartHTTPD(httpaddress, filename string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/", mainHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
+	r.HandleFunc("/env/{environment}", environmentDetailHandler)
+	r.HandleFunc("/pkg/{package}", packageDetailHandler)
+	r.HandleFunc("/pkg/{package}/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/tag/{tagname}", tagHandler)
 	r.PathPrefix("/assets/").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: "httproot"}))
 	http.Handle("/", r)
@@ -80,31 +87,84 @@ func StartHTTPD(httpaddress, filename string) {
 
 func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedCommand := mux.Vars(r)["command"]
+	requestedPackage := mux.Vars(r)["package"]
+	filtervalue := strings.ToLower(r.FormValue("filter"))
+	var backlink string
+	if requestedPackage == "" {
+		backlink = "/"
+	} else {
+		backlink = "/pkg/" + escapeurl(requestedPackage)
+	}
+	cmd := latexref.GetCommandFromPackage(requestedCommand, requestedPackage)
+	if cmd != nil {
+		data := struct {
+			Backlink string
+			Filter   string
+			Command  *ltxref.Command
+		}{
+			Backlink: backlink,
+			Filter:   filtervalue,
+			Command:  cmd,
+		}
+		err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return
+	}
+	fmt.Println("Command not found")
+	return
+}
+
+func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
+	requestedEnvironment := mux.Vars(r)["environment"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
-	for _, command := range latexref.Commands {
-		if command.Name == requestedCommand {
+	for _, env := range latexref.Environments {
+		if env.Name == requestedEnvironment {
 			data := struct {
-				Filter  string
-				Command ltxref.Command
+				Filter      string
+				Environment ltxref.Environment
 			}{
-				Filter:  filtervalue,
-				Command: command,
+				Filter:      filtervalue,
+				Environment: env,
 			}
-			err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
+			err := tpl.ExecuteTemplate(w, "envdetail", data)
 			if err != nil {
 				fmt.Println(err)
 			}
 			return
 		}
 	}
+}
 
+func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
+	requestedPackage := mux.Vars(r)["package"]
+	filtervalue := strings.ToLower(r.FormValue("filter"))
+	for _, pkg := range latexref.Packages {
+		if pkg.Name == requestedPackage {
+			data := struct {
+				Filter  string
+				Package ltxref.Package
+			}{
+				Filter:  filtervalue,
+				Package: pkg,
+			}
+			err := tpl.ExecuteTemplate(w, "pkgdetail", data)
+			if err != nil {
+				fmt.Println(err)
+			}
+			return
+		}
+	}
 }
 
 type mainstruct struct {
-	Filter   string
-	Commands []ltxref.Command
-	Tags     []string
+	Filter       string
+	Commands     []ltxref.Command
+	Environments []ltxref.Environment
+	Packages     []ltxref.Package
+	Tags         []string
 }
 
 // Show commands with the given tag only
@@ -112,8 +172,9 @@ func tagHandler(w http.ResponseWriter, r *http.Request) {
 	tagname := mux.Vars(r)["tagname"]
 
 	data := mainstruct{
-		Commands: latexref.GetCommandsWithTag(tagname),
-		Tags:     latexref.Tags(),
+		Commands:     latexref.GetCommandsWithTag(tagname),
+		Environments: latexref.GetEnvironmentsWithTag(tagname),
+		Tags:         latexref.Tags(),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)
@@ -127,9 +188,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	filterFormValue := strings.ToLower(r.FormValue("filter"))
 
 	data := mainstruct{
-		Filter:   filterFormValue,
-		Commands: latexref.FilterCommands(filterFormValue),
-		Tags:     latexref.Tags(),
+		Filter:       filterFormValue,
+		Commands:     latexref.FilterCommands(filterFormValue),
+		Environments: latexref.Environments,
+		Packages:     latexref.Packages,
+		Tags:         latexref.Tags(),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)
