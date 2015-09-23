@@ -3,8 +3,9 @@ all:
 	@echo "make [getdependencies | install | formatxml | validatexml | clean | bindata | local]"
 
 
-
 getdependencies:
+	go get -u github.com/jteeuwen/go-bindata/...
+	bin/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	go get ./...
 
 install: bindata
