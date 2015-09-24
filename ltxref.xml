@@ -67,6 +67,348 @@
       <description lang="en"/>
     </variant>
   </environment>
+  <documentclass name="article" label="documentclass">
+    <shortdescription lang="en">For a journal article, a presentation, and miscellaneous general use.</shortdescription>
+    <description lang="en">Description for article</description>
+    <optiongroup>
+      <shortdescription lang="en">Font size</shortdescription>
+      <packageoption name="10pt" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="11pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="12pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper size</shortdescription>
+      <packageoption name="a4paper" default="no">
+        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="a5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="b5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="letterpaper" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="legalpaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="executivepaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper orientation</shortdescription>
+      <packageoption name="landscape" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Separate page for title</shortdescription>
+      <packageoption name="titlepage" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">State of the document</shortdescription>
+      <packageoption name="draft" default="no">
+        <shortdescription lang="en">Show overfull rules</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="final" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">One or two column document</shortdescription>
+      <packageoption name="onecolumn" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twocolumn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Different page layout on left / right page</shortdescription>
+      <packageoption name="oneside" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twoside" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Equation numbers centered or left</shortdescription>
+      <packageoption name="leqno" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="fleqn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="openbib" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+  </documentclass>
+  <documentclass name="book" label="documentclass">
+    <shortdescription lang="en">Full-length books, including chapters and possibly including front matter, such as a preface, and back matter, such as an appendix.</shortdescription>
+    <description lang="en">Description for article</description>
+    <optiongroup>
+      <shortdescription lang="en">Font size</shortdescription>
+      <packageoption name="10pt" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="11pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="12pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper size</shortdescription>
+      <packageoption name="a4paper" default="no">
+        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="a5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="b5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="letterpaper" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="legalpaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="executivepaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper orientation</shortdescription>
+      <packageoption name="landscape" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Separate page for title</shortdescription>
+      <packageoption name="titlepage" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">State of the document</shortdescription>
+      <packageoption name="draft" default="no">
+        <shortdescription lang="en">Show overfull rules</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="final" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">One or two column document</shortdescription>
+      <packageoption name="onecolumn" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twocolumn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Different page layout on left / right page</shortdescription>
+      <packageoption name="oneside" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twoside" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Equation numbers centered or left</shortdescription>
+      <packageoption name="leqno" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="fleqn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="openbib" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+  </documentclass>
+  <documentclass name="report" label="documentclass">
+    <shortdescription lang="en">For documents of length between an article and a book, such as technical reports or theses, which may contain several chapters. </shortdescription>
+    <description lang="en">Description for report</description>
+    <optiongroup>
+      <shortdescription lang="en">Font size</shortdescription>
+      <packageoption name="10pt" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="11pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="12pt" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper size</shortdescription>
+      <packageoption name="a4paper" default="no">
+        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="a5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="b5paper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="letterpaper" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="legalpaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="executivepaper" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper orientation</shortdescription>
+      <packageoption name="landscape" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Separate page for title</shortdescription>
+      <packageoption name="titlepage" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">State of the document</shortdescription>
+      <packageoption name="draft" default="no">
+        <shortdescription lang="en">Show overfull rules</shortdescription>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="final" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">One or two column document</shortdescription>
+      <packageoption name="onecolumn" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twocolumn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Different page layout on left / right page</shortdescription>
+      <packageoption name="oneside" default="yes">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+      <packageoption name="twoside" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Equation numbers centered or left</shortdescription>
+      <packageoption name="leqno" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="fleqn" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <packageoption name="openbib" default="no">
+        <shortdescription lang="en"/>
+        <description lang="en"/>
+      </packageoption>
+    </optiongroup>
+  </documentclass>
   <package name="graphicx" label="graphics" loadspackages="keyval,graphics">
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
     <packageoption name="draft">

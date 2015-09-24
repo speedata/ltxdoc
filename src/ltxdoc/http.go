@@ -75,6 +75,7 @@ func StartHTTPD(httpaddress, filename string) {
 	r := mux.NewRouter()
 	r.HandleFunc("/", mainHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
+	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
 	r.HandleFunc("/pkg/{package}", packageDetailHandler)
 	r.HandleFunc("/pkg/{package}/cmd/{command}", commandDetailHandler)
@@ -114,6 +115,30 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Command not found")
 	return
+}
+
+func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
+	requestedDocumentclass := mux.Vars(r)["documentclass"]
+	filtervalue := strings.ToLower(r.FormValue("filter"))
+
+	for _, env := range latexref.Documentclasses {
+		if env.Name == requestedDocumentclass {
+			data := struct {
+				Filter        string
+				Backlink      string
+				Documentclass ltxref.Documentclass
+			}{
+				Filter:        filtervalue,
+				Documentclass: env,
+			}
+			err := tpl.ExecuteTemplate(w, "classdetail", data)
+			if err != nil {
+				fmt.Println(err)
+			}
+			return
+		}
+	}
+
 }
 
 func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
@@ -160,11 +185,12 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type mainstruct struct {
-	Filter       string
-	Commands     []ltxref.Command
-	Environments []ltxref.Environment
-	Packages     []ltxref.Package
-	Tags         []string
+	Filter          string
+	Commands        []ltxref.Command
+	Environments    []ltxref.Environment
+	Documentclasses []ltxref.Documentclass
+	Packages        []ltxref.Package
+	Tags            []string
 }
 
 // Show commands with the given tag only
@@ -188,11 +214,12 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	filterFormValue := strings.ToLower(r.FormValue("filter"))
 
 	data := mainstruct{
-		Filter:       filterFormValue,
-		Commands:     latexref.FilterCommands(filterFormValue),
-		Environments: latexref.Environments,
-		Packages:     latexref.Packages,
-		Tags:         latexref.Tags(),
+		Filter:          filterFormValue,
+		Commands:        latexref.FilterCommands(filterFormValue),
+		Environments:    latexref.Environments,
+		Documentclasses: latexref.Documentclasses,
+		Packages:        latexref.Packages,
+		Tags:            latexref.Tags(),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)

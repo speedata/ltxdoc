@@ -43,6 +43,12 @@ body {
 	background-color: rgba(120,192,168,0.20);
 }
 
+/*  document class options on detail page */
+.optiongroup {
+	margin-bottom: 0px;
+	margin-top: 10px;
+	font-size: larger;
+}
 
 .shortdesc {
 	/*font-size: smaller;*/
