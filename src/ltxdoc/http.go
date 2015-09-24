@@ -198,9 +198,11 @@ func tagHandler(w http.ResponseWriter, r *http.Request) {
 	tagname := mux.Vars(r)["tagname"]
 
 	data := mainstruct{
-		Commands:     latexref.GetCommandsWithTag(tagname),
-		Environments: latexref.GetEnvironmentsWithTag(tagname),
-		Tags:         latexref.Tags(),
+		Commands:        latexref.GetCommandsWithTag(tagname),
+		Environments:    latexref.GetEnvironmentsWithTag(tagname),
+		Packages:        latexref.GetPackagesWithTag(tagname),
+		Documentclasses: latexref.GetDocumentclassesWithTag(tagname),
+		Tags:            latexref.Tags(),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)
@@ -216,9 +218,9 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	data := mainstruct{
 		Filter:          filterFormValue,
 		Commands:        latexref.FilterCommands(filterFormValue),
-		Environments:    latexref.Environments,
-		Documentclasses: latexref.Documentclasses,
-		Packages:        latexref.Packages,
+		Environments:    latexref.FilterEnvironments(filterFormValue),
+		Documentclasses: latexref.FilterDocumentclasses(filterFormValue),
+		Packages:        latexref.FilterPackages(filterFormValue),
 		Tags:            latexref.Tags(),
 	}
 

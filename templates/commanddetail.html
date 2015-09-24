@@ -3,21 +3,21 @@
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
-    <a href="/{{.Backlink}}{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+    <a href="/{{.Backlink}}{{with .Filter}}?filter={{ urlescape .  }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
 {{ with .Documentclass }}
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h1><tt>{{ .Name }}</tt></h1>
+      <h1>{{ .Name }}</h1>
       <p>{{  index .ShortDescription  "en" }}</p>
     </div>
   </div>
 
-<h2>Class options</h2>
+{{ with .Optiongroup }}<h2>Class options</h2>{{end}}
 {{ range .Optiongroup }}
 <p class="optiongroup">{{index .ShortDescription "en" }}</p>
-{{ range .Packageoption }}
+{{ range .Classoption }}
 <div class="cmddescription">
   <div class="row">
       <div class="col-md-4 lxcommand">{{ .Name }}{{ if .Default }}*{{end}}</div>
@@ -43,7 +43,7 @@
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
-    <a href="/{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+    <a href="/{{with .Filter}}?filter={{ urlescape . }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
 {{ with .Package }}
@@ -53,6 +53,15 @@
       <p>{{  index .ShortDescription  "en" }}</p>
     </div>
   </div>
+
+{{ range .Options }}
+<div class="cmddescription">
+  <div class="row">
+      <div class="col-md-4 lxcommand">{{ .Name }}{{ if .Default }}*{{end}}</div>
+      <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
+  </div>
+</div>
+{{ end }}
 
   <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
 
@@ -75,7 +84,7 @@
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
-    <a href="/{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+    <a href="/{{with .Filter}}?filter={{ urlescape .  }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
   <div class="row">
@@ -89,12 +98,18 @@
     <div class="col-sm-4 col-md-4 col-xs-4">
       <table class="table table-condensed">
         <tr>
-          <td  class="lxenvironment" align="left">{{ .Name }}</td>
-  {{ range $index, $argument := .Arguments }}
+          <td  class="lxenvironment" align="left"><tt>\begin{{ "{" }}{{ .Name }}{{ "}" }}</tt></td>
+  {{ with .Arguments}}
+  {{ range $index, $argument := . }}
             <td class="{{ if eq $argument.Optional true }}lxoptional{{end}}">{{showargument $argument.Type }}</td>
   {{ end }}
-        </tr><tr><td></td><!-- empty -->
-  {{ range $index, $argument := .Arguments }}<td>{{ addone $index }}</td>{{end}}
+  {{ end }}
+        </tr>
+  {{ with .Arguments}}
+        <tr><td></td><!-- empty -->
+  {{ range $index, $argument := . }}<td>{{ addone $index }}</td>{{end}}
+  </tr>{{end}}<tr>
+    <td char="lxenvironment" align="left"><tt>\end{{ "{" }}{{ .Name }}{{ "}" }}</tt></td>{{ range .Arguments }}<td></td>{{end}}
         </tr>
       </table>
     </div>
@@ -120,7 +135,7 @@
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
-    <a href="{{.Backlink}}{{with .Filter}}?filter={{ urlescape .Filter  }}{{end}}">&lt;--  back to list</a>
+    <a href="{{.Backlink}}{{with .Filter}}?filter={{ urlescape .  }}{{end}}">&lt;--  back to list</a>
   </div>
 </div>
   <div class="row">
