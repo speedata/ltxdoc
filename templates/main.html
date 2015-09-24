@@ -5,9 +5,10 @@
           <form class="form-inline" role="search" action="/" method="GET">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="{{ with .Filter }}{{ . }}{{else}}Command{{end}}" name="filter">
+            {{with .Tag}}<input type="hidden" value="{{ . }}" name="tag">{{end}}
           </div>
           <button type="submit" class="btn btn-default">Filter</button>
-          <a href="/"><button type="button" class="btn btn-info">Clear Filter</button></a>
+          <a href="/{{ with .Tag}}?tag={{.}}{{end}}"><button type="button" class="btn btn-info">Clear Filter</button></a>
         </form>
 </p>
   </div>
@@ -58,8 +59,9 @@
 
       <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
       <h1 id="tags">Tags</h1>
+      {{with .Tag}}<p><a href="/{{ with $.Filter }}?filter={{ urlescape . }}{{end}}">Show all</a></p>{{end}}
       <ul class="list-unstyled" >
-{{ range .Tags }}<li><a href="/tag/{{ urlescape . }}">{{ . }}</a></li>{{ end }}
+{{ range .Tags }}<li{{ if eq . $.Tag}} class="active"{{end}}><a href="/?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}tag={{ . }}">{{ . }}</a></li>{{ end }}
       </ul>
     </div>
   </div>

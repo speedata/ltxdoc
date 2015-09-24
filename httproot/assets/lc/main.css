@@ -62,6 +62,9 @@ body {
 	background-color: rgba(240,168,48,0.20);
 }
 
+li.active {
+	background-color: rgba(94,65,47,0.8);
+}
 
 .lxcmddesc {
 	padding-left: 4px;

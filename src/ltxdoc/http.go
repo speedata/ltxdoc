@@ -79,7 +79,6 @@ func StartHTTPD(httpaddress, filename string) {
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
 	r.HandleFunc("/pkg/{package}", packageDetailHandler)
 	r.HandleFunc("/pkg/{package}/cmd/{command}", commandDetailHandler)
-	r.HandleFunc("/tag/{tagname}", tagHandler)
 	r.PathPrefix("/assets/").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: "httproot"}))
 	http.Handle("/", r)
 	fmt.Println("Listening on", httpaddress)
@@ -121,7 +120,7 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedDocumentclass := mux.Vars(r)["documentclass"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
-	for _, env := range latexref.Documentclasses {
+	for _, env := range latexref.FilterDocumentclasses("", "") {
 		if env.Name == requestedDocumentclass {
 			data := struct {
 				Filter        string
@@ -145,7 +144,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedEnvironment := mux.Vars(r)["environment"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
-	for _, env := range latexref.Environments {
+	for _, env := range latexref.FilterEnvironments("", "") {
 		if env.Name == requestedEnvironment {
 			data := struct {
 				Filter      string
@@ -166,7 +165,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedPackage := mux.Vars(r)["package"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
-	for _, pkg := range latexref.Packages {
+	for _, pkg := range latexref.FilterPackages("", "") {
 		if pkg.Name == requestedPackage {
 			data := struct {
 				Filter  string
@@ -186,6 +185,7 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 
 type mainstruct struct {
 	Filter          string
+	Tag             string
 	Commands        []ltxref.Command
 	Environments    []ltxref.Environment
 	Documentclasses []ltxref.Documentclass
@@ -193,34 +193,18 @@ type mainstruct struct {
 	Tags            []string
 }
 
-// Show commands with the given tag only
-func tagHandler(w http.ResponseWriter, r *http.Request) {
-	tagname := mux.Vars(r)["tagname"]
-
-	data := mainstruct{
-		Commands:        latexref.GetCommandsWithTag(tagname),
-		Environments:    latexref.GetEnvironmentsWithTag(tagname),
-		Packages:        latexref.GetPackagesWithTag(tagname),
-		Documentclasses: latexref.GetDocumentclassesWithTag(tagname),
-		Tags:            latexref.Tags(),
-	}
-
-	err := tpl.ExecuteTemplate(w, "main.html", data)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	// empty string if no filter is given
 	filterFormValue := strings.ToLower(r.FormValue("filter"))
+	tagFormValue := strings.ToLower(r.FormValue("tag"))
 
 	data := mainstruct{
 		Filter:          filterFormValue,
-		Commands:        latexref.FilterCommands(filterFormValue),
-		Environments:    latexref.FilterEnvironments(filterFormValue),
-		Documentclasses: latexref.FilterDocumentclasses(filterFormValue),
-		Packages:        latexref.FilterPackages(filterFormValue),
+		Tag:             tagFormValue,
+		Commands:        latexref.FilterCommands(filterFormValue, tagFormValue),
+		Environments:    latexref.FilterEnvironments(filterFormValue, tagFormValue),
+		Documentclasses: latexref.FilterDocumentclasses(filterFormValue, tagFormValue),
+		Packages:        latexref.FilterPackages(filterFormValue, tagFormValue),
 		Tags:            latexref.Tags(),
 	}
 

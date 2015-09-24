@@ -17,7 +17,7 @@ func ShowHelpFor(cmdname, filename string) {
 		fmt.Println(err)
 		return
 	}
-	commands := latexref.FilterCommands(cmdname)
+	commands := latexref.FilterCommands(cmdname, "")
 	for _, cmd := range commands {
 		fmt.Println("Documentation for command", cmd.Name)
 	}
