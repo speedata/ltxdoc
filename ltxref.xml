@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ltxref xmlns="urn:speedata.de:2015/latexref" version="0.0.1">
+<ltxref xmlns="urn:speedata.de:2015:latexref" version="0.0.1">
   <command name="\hbox" label="plain,box command" level="expert">
     <shortdescription lang="en">Create a horizontal box</shortdescription>
     <description lang="en"/>
@@ -21,8 +21,7 @@
   </command>
   <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
     <shortdescription lang="en">Sectioning command to create a heading and an entry in the table of contents.</shortdescription>
-    <description lang="en"><![CDATA[
-            <p>This is a description of <tt>\section</tt>.
+    <description lang="en"><![CDATA[<p>This is a description of <tt>\section</tt>.
             <ol>
               <li>The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.</li>
               <li>The second denotes the name of the section.
@@ -49,7 +48,7 @@
   </command>
   <command name="\tableofcontents" label="sectioning,tableofcontents,document structure" level="beginner">
     <shortdescription lang="en">Show the list of chapters, sections and similar commands</shortdescription>
-    <description lang="en"></description>
+    <description lang="en"/>
     <variant name="\tableofcontents">
       <description lang="en"><![CDATA[<p>A table of contents is produced with the \tableofcontents command. You put the command right where you want the table of contents to go; LaTeX does the rest for you. A previous run must have generated a .toc file.</p>
 <p>The \tableofcontents command produces a heading, but it does not automatically start a new page. If you want a new page after the table of contents, write a \newpage command after the \tableofcontents command.</p>
@@ -67,7 +66,7 @@
   </command>
   <environment name="description" level="beginner" label="list">
     <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
-    <description lang="en"></description>
+    <description lang="en"/>
     <variant name="description">
       <description lang="en">To change the formatting of the label, you must redefine \descriptionlabel.</description>
     </variant>
@@ -183,14 +182,14 @@
       </classoption>
     </optiongroup>
     <optiongroup name="fleqn">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="fleqn" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>
       </classoption>
     </optiongroup>
     <optiongroup name="openbib">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="openbib" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>
@@ -304,14 +303,14 @@
       </classoption>
     </optiongroup>
     <optiongroup name="fleqn">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="fleqn" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>
       </classoption>
     </optiongroup>
     <optiongroup name="openbib">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="openbib" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>
@@ -330,8 +329,8 @@
       doc package, rather than using simple ascii comments as used here.</description>
   </documentclass>
   <documentclass name="letter" label="documentclass,letter">
-    <shortdescription lang="en"></shortdescription>
-    <description lang="en"></description>
+    <shortdescription lang="en"/>
+    <description lang="en"/>
   </documentclass>
   <documentclass name="report" label="documentclass">
     <shortdescription lang="en">For documents of length between an article and a book, such as technical reports or theses, which may contain several chapters. </shortdescription>
@@ -440,14 +439,14 @@
       </classoption>
     </optiongroup>
     <optiongroup name="fleqn">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="fleqn" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>
       </classoption>
     </optiongroup>
     <optiongroup name="openbib">
-      <shortdescription lang="en"></shortdescription>
+      <shortdescription lang="en"/>
       <classoption name="openbib" default="no">
         <shortdescription lang="en"/>
         <description lang="en"/>

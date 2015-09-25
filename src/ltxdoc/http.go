@@ -96,15 +96,30 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 		backlink = "/pkg/" + escapeurl(requestedPackage)
 	}
 	cmd := latexref.GetCommandFromPackage(requestedCommand, requestedPackage)
+
+	if strings.ToLower(r.FormValue("format")) == "xml" {
+		l := ltxref.Ltxref{Version: latexref.Version}
+		l.Commands = append(l.Commands, *cmd)
+		str, err := l.ToXML()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Fprint(w, string(str))
+		return
+	}
+
 	if cmd != nil {
 		data := struct {
 			Backlink string
 			Filter   string
 			Command  *ltxref.Command
+			XMLUrl   string
 		}{
 			Backlink: backlink,
 			Filter:   filtervalue,
 			Command:  cmd,
+			XMLUrl:   addFormatString(r.URL),
 		}
 		err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
 		if err != nil {
@@ -120,23 +135,39 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedDocumentclass := mux.Vars(r)["documentclass"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
-	for _, env := range latexref.FilterDocumentclasses("", "") {
-		if env.Name == requestedDocumentclass {
-			data := struct {
-				Filter        string
-				Backlink      string
-				Documentclass ltxref.Documentclass
-			}{
-				Filter:        filtervalue,
-				Documentclass: env,
-			}
-			err := tpl.ExecuteTemplate(w, "classdetail", data)
-			if err != nil {
-				fmt.Println(err)
-			}
+	class := latexref.GetDocumentclass(requestedDocumentclass)
+	if class == nil {
+		// not found -> error // TODO
+		return
+	}
+
+	if strings.ToLower(r.FormValue("format")) == "xml" {
+		l := ltxref.Ltxref{Version: latexref.Version}
+		l.Documentclasses = append(l.Documentclasses, *class)
+		str, err := l.ToXML()
+		if err != nil {
+			fmt.Println(err)
 			return
 		}
+		fmt.Fprint(w, string(str))
+		return
 	}
+
+	data := struct {
+		Filter        string
+		Backlink      string
+		Documentclass ltxref.Documentclass
+		XMLUrl        string
+	}{
+		Filter:        filtervalue,
+		Documentclass: *class,
+		XMLUrl:        addFormatString(r.URL),
+	}
+	err := tpl.ExecuteTemplate(w, "classdetail", data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return
 
 }
 
@@ -144,14 +175,34 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedEnvironment := mux.Vars(r)["environment"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
+	env := latexref.GetEnvironmentWithName(requestedEnvironment)
+	if env == nil {
+		// not found -> error // TODO
+		return
+	}
+
+	if strings.ToLower(r.FormValue("format")) == "xml" {
+		l := ltxref.Ltxref{Version: latexref.Version}
+		l.Environments = append(l.Environments, *env)
+		str, err := l.ToXML()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Fprint(w, string(str))
+		return
+	}
+
 	for _, env := range latexref.FilterEnvironments("", "") {
 		if env.Name == requestedEnvironment {
 			data := struct {
 				Filter      string
 				Environment ltxref.Environment
+				XMLUrl      string
 			}{
 				Filter:      filtervalue,
 				Environment: env,
+				XMLUrl:      addFormatString(r.URL),
 			}
 			err := tpl.ExecuteTemplate(w, "envdetail", data)
 			if err != nil {
@@ -165,22 +216,39 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedPackage := mux.Vars(r)["package"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
-	for _, pkg := range latexref.FilterPackages("", "") {
-		if pkg.Name == requestedPackage {
-			data := struct {
-				Filter  string
-				Package ltxref.Package
-			}{
-				Filter:  filtervalue,
-				Package: pkg,
-			}
-			err := tpl.ExecuteTemplate(w, "pkgdetail", data)
-			if err != nil {
-				fmt.Println(err)
-			}
+
+	pkg := latexref.GetPackageWithName(requestedPackage)
+	if pkg == nil {
+		// not found -> error // TODO
+		return
+	}
+
+	if strings.ToLower(r.FormValue("format")) == "xml" {
+		l := ltxref.Ltxref{Version: latexref.Version}
+		l.Packages = append(l.Packages, *pkg)
+		str, err := l.ToXML()
+		if err != nil {
+			fmt.Println(err)
 			return
 		}
+		fmt.Fprint(w, string(str))
+		return
 	}
+
+	data := struct {
+		Filter  string
+		Package ltxref.Package
+		XMLUrl  string
+	}{
+		Filter:  filtervalue,
+		Package: *pkg,
+		XMLUrl:  addFormatString(r.URL),
+	}
+	err := tpl.ExecuteTemplate(w, "pkgdetail", data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return
 }
 
 type mainstruct struct {
@@ -191,6 +259,7 @@ type mainstruct struct {
 	Documentclasses []ltxref.Documentclass
 	Packages        []ltxref.Package
 	Tags            []string
+	XMLUrl          string
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
@@ -198,18 +267,51 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	filterFormValue := strings.ToLower(r.FormValue("filter"))
 	tagFormValue := strings.ToLower(r.FormValue("tag"))
 
+	commands := latexref.FilterCommands(filterFormValue, tagFormValue)
+	environments := latexref.FilterEnvironments(filterFormValue, tagFormValue)
+	classes := latexref.FilterDocumentclasses(filterFormValue, tagFormValue)
+	packages := latexref.FilterPackages(filterFormValue, tagFormValue)
+
+	if strings.ToLower(r.FormValue("format")) == "xml" {
+		l := ltxref.Ltxref{Version: latexref.Version}
+		l.Commands = commands
+		l.Packages = packages
+		l.Environments = environments
+		l.Documentclasses = classes
+		str, err := l.ToXML()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Fprint(w, string(str))
+		return
+	}
+
 	data := mainstruct{
 		Filter:          filterFormValue,
 		Tag:             tagFormValue,
-		Commands:        latexref.FilterCommands(filterFormValue, tagFormValue),
-		Environments:    latexref.FilterEnvironments(filterFormValue, tagFormValue),
-		Documentclasses: latexref.FilterDocumentclasses(filterFormValue, tagFormValue),
-		Packages:        latexref.FilterPackages(filterFormValue, tagFormValue),
+		Commands:        commands,
+		Environments:    environments,
+		Documentclasses: classes,
+		Packages:        packages,
 		Tags:            latexref.Tags(),
+		XMLUrl:          addFormatString(r.URL),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+// Add ?format=xml to the given URL
+func addFormatString(u *url.URL) string {
+	ret, err := u.Parse("")
+	if err != nil {
+		fmt.Println(err)
+		return u.String()
+	}
+	val := ret.Query()
+	val.Add("format", "xml")
+	ret.RawQuery = val.Encode()
+	return ret.String()
 }

@@ -16,7 +16,7 @@ formatxml:
 	mv temp.xml ltxref.xml
 
 validatexml:
-	xmllint --relaxng schema/commandlist.rng ltxref.xml  --noout
+	xmllint --relaxng src/github.com/speedata/ltxref/schema/commandlist.rng ltxref.xml  --noout
 
 clean:
 	-rm -rf bin/ltxdoc pkg
