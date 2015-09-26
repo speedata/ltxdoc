@@ -29,6 +29,9 @@ func escapeurl(part string) string {
 	return Url.String()
 }
 
+type common struct {
+}
+
 func StartHTTPD(httpaddress, filename string) {
 
 	funcMap := template.FuncMap{
@@ -97,7 +100,8 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	cmd := latexref.GetCommandFromPackage(requestedCommand, requestedPackage)
 
-	if strings.ToLower(r.FormValue("format")) == "xml" {
+	switch strings.ToLower(r.FormValue("format")) {
+	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
 		l.Commands = append(l.Commands, *cmd)
 		str, err := l.ToXML()
@@ -107,25 +111,32 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, string(str))
 		return
-	}
-
-	if cmd != nil {
-		data := struct {
-			Backlink string
-			Filter   string
-			Command  *ltxref.Command
-			XMLUrl   string
-		}{
-			Backlink: backlink,
-			Filter:   filtervalue,
-			Command:  cmd,
-			XMLUrl:   addFormatString(r.URL),
-		}
-		err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
-		if err != nil {
-			fmt.Println(err)
-		}
+	case "txt":
+		cmd.ToString(w)
 		return
+	default:
+		if cmd != nil {
+			data := struct {
+				Command      *ltxref.Command
+				Backlink     string
+				Filter       string
+				XMLUrl       string
+				PlainTextUrl string
+			}{
+				Backlink:     backlink,
+				Filter:       filtervalue,
+				Command:      cmd,
+				XMLUrl:       addXMLFormatString(r.URL),
+				PlainTextUrl: addTXTFormatString(r.URL),
+			}
+			err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
+			if err != nil {
+				fmt.Println(err)
+			}
+			return
+
+		}
+
 	}
 	fmt.Println("Command not found")
 	return
@@ -140,8 +151,8 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 		// not found -> error // TODO
 		return
 	}
-
-	if strings.ToLower(r.FormValue("format")) == "xml" {
+	switch strings.ToLower(r.FormValue("format")) {
+	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
 		l.Documentclasses = append(l.Documentclasses, *class)
 		str, err := l.ToXML()
@@ -151,24 +162,28 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, string(str))
 		return
-	}
-
-	data := struct {
-		Filter        string
-		Backlink      string
-		Documentclass ltxref.Documentclass
-		XMLUrl        string
-	}{
-		Filter:        filtervalue,
-		Documentclass: *class,
-		XMLUrl:        addFormatString(r.URL),
-	}
-	err := tpl.ExecuteTemplate(w, "classdetail", data)
-	if err != nil {
-		fmt.Println(err)
+	case "txt":
+		class.ToString(w)
+		return
+	default:
+		data := struct {
+			Filter        string
+			Backlink      string
+			Documentclass ltxref.Documentclass
+			XMLUrl        string
+			PlainTextUrl  string
+		}{
+			Filter:        filtervalue,
+			Documentclass: *class,
+			XMLUrl:        addXMLFormatString(r.URL),
+			PlainTextUrl:  addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "classdetail", data)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 	return
-
 }
 
 func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
@@ -181,7 +196,8 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.ToLower(r.FormValue("format")) == "xml" {
+	switch strings.ToLower(r.FormValue("format")) {
+	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
 		l.Environments = append(l.Environments, *env)
 		str, err := l.ToXML()
@@ -191,25 +207,25 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, string(str))
 		return
-	}
-
-	for _, env := range latexref.FilterEnvironments("", "") {
-		if env.Name == requestedEnvironment {
-			data := struct {
-				Filter      string
-				Environment ltxref.Environment
-				XMLUrl      string
-			}{
-				Filter:      filtervalue,
-				Environment: env,
-				XMLUrl:      addFormatString(r.URL),
-			}
-			err := tpl.ExecuteTemplate(w, "envdetail", data)
-			if err != nil {
-				fmt.Println(err)
-			}
-			return
+	case "txt":
+		env.ToString(w)
+	default:
+		data := struct {
+			Filter       string
+			Environment  ltxref.Environment
+			XMLUrl       string
+			PlainTextUrl string
+		}{
+			Filter:       filtervalue,
+			Environment:  *env,
+			XMLUrl:       addXMLFormatString(r.URL),
+			PlainTextUrl: addTXTFormatString(r.URL),
 		}
+		err := tpl.ExecuteTemplate(w, "envdetail", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return
 	}
 }
 
@@ -223,7 +239,8 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.ToLower(r.FormValue("format")) == "xml" {
+	switch strings.ToLower(r.FormValue("format")) {
+	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
 		l.Packages = append(l.Packages, *pkg)
 		str, err := l.ToXML()
@@ -233,68 +250,66 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, string(str))
 		return
+	case "txt":
+		pkg.ToString(w)
+	default:
+		data := struct {
+			Filter       string
+			Package      ltxref.Package
+			XMLUrl       string
+			PlainTextUrl string
+		}{
+			Filter:       filtervalue,
+			Package:      *pkg,
+			XMLUrl:       addXMLFormatString(r.URL),
+			PlainTextUrl: addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "pkgdetail", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return
 	}
-
-	data := struct {
-		Filter  string
-		Package ltxref.Package
-		XMLUrl  string
-	}{
-		Filter:  filtervalue,
-		Package: *pkg,
-		XMLUrl:  addFormatString(r.URL),
-	}
-	err := tpl.ExecuteTemplate(w, "pkgdetail", data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return
-}
-
-type mainstruct struct {
-	Filter          string
-	Tag             string
-	Commands        []ltxref.Command
-	Environments    []ltxref.Environment
-	Documentclasses []ltxref.Documentclass
-	Packages        []ltxref.Package
-	Tags            []string
-	XMLUrl          string
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// empty string if no filter is given
-	filterFormValue := strings.ToLower(r.FormValue("filter"))
-	tagFormValue := strings.ToLower(r.FormValue("tag"))
 
-	commands := latexref.FilterCommands(filterFormValue, tagFormValue)
-	environments := latexref.FilterEnvironments(filterFormValue, tagFormValue)
-	classes := latexref.FilterDocumentclasses(filterFormValue, tagFormValue)
-	packages := latexref.FilterPackages(filterFormValue, tagFormValue)
+	filter := strings.ToLower(r.FormValue("filter"))
+	tag := strings.ToLower(r.FormValue("tag"))
 
-	if strings.ToLower(r.FormValue("format")) == "xml" {
-		l := ltxref.Ltxref{Version: latexref.Version}
-		l.Commands = commands
-		l.Packages = packages
-		l.Environments = environments
-		l.Documentclasses = classes
+	l := ltxref.Ltxref{Version: latexref.Version}
+	l.Commands = latexref.FilterCommands(filter, tag)
+	l.Packages = latexref.FilterPackages(filter, tag)
+	l.Environments = latexref.FilterEnvironments(filter, tag)
+	l.Documentclasses = latexref.FilterDocumentclasses(filter, tag)
+
+	switch strings.ToLower(r.FormValue("format")) {
+	case "xml":
 		str, err := l.ToXML()
 		if err != nil {
 			fmt.Println(err)
 		}
 		fmt.Fprint(w, string(str))
 		return
+	case "txt":
+		l.ToString(w, true)
+		return
 	}
 
-	data := mainstruct{
-		Filter:          filterFormValue,
-		Tag:             tagFormValue,
-		Commands:        commands,
-		Environments:    environments,
-		Documentclasses: classes,
-		Packages:        packages,
-		Tags:            latexref.Tags(),
-		XMLUrl:          addFormatString(r.URL),
+	data := struct {
+		Filter       string
+		Tag          string
+		L            ltxref.Ltxref
+		Tags         []string
+		XMLUrl       string
+		PlainTextUrl string
+	}{
+		L:            l,
+		Filter:       filter,
+		Tag:          tag,
+		Tags:         latexref.Tags(),
+		XMLUrl:       addXMLFormatString(r.URL),
+		PlainTextUrl: addTXTFormatString(r.URL),
 	}
 
 	err := tpl.ExecuteTemplate(w, "main.html", data)
@@ -304,7 +319,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add ?format=xml to the given URL
-func addFormatString(u *url.URL) string {
+func addXMLFormatString(u *url.URL) string {
 	ret, err := u.Parse("")
 	if err != nil {
 		fmt.Println(err)
@@ -312,6 +327,19 @@ func addFormatString(u *url.URL) string {
 	}
 	val := ret.Query()
 	val.Add("format", "xml")
+	ret.RawQuery = val.Encode()
+	return ret.String()
+}
+
+// Add ?format=txt to the given URL
+func addTXTFormatString(u *url.URL) string {
+	ret, err := u.Parse("")
+	if err != nil {
+		fmt.Println(err)
+		return u.String()
+	}
+	val := ret.Query()
+	val.Add("format", "txt")
 	ret.RawQuery = val.Encode()
 	return ret.String()
 }

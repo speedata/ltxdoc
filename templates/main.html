@@ -22,6 +22,7 @@
 
 <div style="padding-top: 30px;"></div>
 
+{{ with .L }}
 
   <div class="row row-offcanvas row-offcanvas-left">
     <div class="col-xs-12 col-sm-9">
@@ -54,7 +55,7 @@
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
-
+{{ end }}
         </div>
 
       <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">

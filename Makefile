@@ -1,6 +1,7 @@
 
 all:
 	@echo "make [getdependencies | install | formatxml | validatexml | clean | bindata | local]"
+	@echo "'make install' installs a binary for your platform in the $GOBIN directory"
 
 
 getdependencies:
@@ -28,3 +29,14 @@ local:
 	bin/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	go install ltxdoc/ltxdoc
 
+buildwindows64: bindata
+	GOOS=windows GOARCH=amd64 go build ltxdoc/ltxdoc
+
+buildwindows32: bindata
+	GOOS=windows GOARCH=386 go build ltxdoc/ltxdoc
+
+buildlinux64: bindata
+	GOOS=linux GOARCH=amd64 go build ltxdoc/ltxdoc
+
+buildlinux32: bindata
+	GOOS=linux GOARCH=386 go build ltxdoc/ltxdoc

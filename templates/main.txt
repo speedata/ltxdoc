@@ -1,0 +1,20 @@
+{{ define "main"}}{{ with .L}}{{ with .Commands}}{{ underline "Commands" 1 }}{{ range . }}{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ end }}{{/*  range . (Commands) */}}
+{{ end }}{{/*  with .Commands */}}
+{{ with .Environments }}{{ underline "Environments" 1 }}{{ range . }}{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ end }}{{/*  range . */}}
+{{ end }}{{/*  with .Environments */}}
+{{ with .Documentclasses}}Documentclasses
+===============
+{{ range . }}
+{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ end }}{{/*  range . */}}
+{{ end }}{{/*  with .Documentclasses */}}
+{{ with .Packages}}Packages
+========
+{{ range . }}
+{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ end }}{{/*  range . */}}
+{{ end }}{{/*  with .Packages */}}
+{{ end }}{{/*  with .L */}}
+{{ end }}{{/* define "main" */}}

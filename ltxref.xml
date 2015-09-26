@@ -103,7 +103,7 @@
     <optiongroup name="paper size">
       <shortdescription lang="en">Paper size</shortdescription>
       <classoption name="a4paper" default="no">
-        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
         <description lang="en"/>
       </classoption>
       <classoption name="a5paper" default="no">
@@ -217,7 +217,7 @@
     <optiongroup name="paper size">
       <shortdescription lang="en">Paper size</shortdescription>
       <classoption name="a4paper" default="no">
-        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
         <description lang="en"/>
       </classoption>
       <classoption name="a5paper" default="no">
@@ -353,7 +353,7 @@
     <optiongroup name="paper size">
       <shortdescription lang="en">Paper size</shortdescription>
       <classoption name="a4paper" default="no">
-        <shortdescription lang="en">Select A4 papaer (210mm x 297mm)</shortdescription>
+        <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
         <description lang="en"/>
       </classoption>
       <classoption name="a5paper" default="no">
