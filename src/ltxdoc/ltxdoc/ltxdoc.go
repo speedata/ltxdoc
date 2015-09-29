@@ -9,12 +9,16 @@ import (
 )
 
 func main() {
-	var filename string
-	var http string
+	var filename, http string
+	var edit bool
 	flag.StringVar(&http, "http", "", "HTTP service address (e.g., ':6090')")
-	flag.StringVar(&filename, "xmlfile", "ltxref.xml", "Path to the XML file")
+	flag.StringVar(&filename, "xmlfile", "", "Path to the XML file")
+	flag.BoolVar(&edit, "edit", false, "Allow edit")
 	flag.Parse()
 
+	if edit {
+		fmt.Println("Edit mode")
+	}
 	if http == "" {
 		cmdname := flag.Arg(0)
 		if cmdname == "" {
@@ -23,7 +27,7 @@ func main() {
 		}
 		ltxdoc.ShowHelpFor(cmdname, filename)
 	} else {
-		ltxdoc.StartHTTPD(http, filename)
+		ltxdoc.StartHTTPD(http, filename, edit)
 	}
 
 }

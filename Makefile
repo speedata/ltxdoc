@@ -24,9 +24,13 @@ clean:
 
 bindata:
 	bin/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	cd src/github.com/speedata/ltxref;  make bindata
 
-local:
+bindata-debug:
 	bin/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	cd src/github.com/speedata/ltxref;  make bindata-debug
+
+local: bindata-debug
 	go install ltxdoc/ltxdoc
 
 buildwindows64: bindata

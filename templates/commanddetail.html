@@ -140,7 +140,7 @@
 </div>
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h1><tt>{{ .Command.Name }}</tt></h1>
+      <h1><tt>{{ .Command.Name }}</tt>{{ if .Edit}} <small><a href="/editcmd/{{.Command.Name}}">(edit)</small></a>{{ end }}</h1>
       <p>{{  index .Command.ShortDescription  "en" }}</p>
     </div>
   </div>

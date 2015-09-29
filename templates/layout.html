@@ -11,7 +11,7 @@
     <!-- Bootstrap -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-theme.min.css" rel="stylesheet">
-
+    <link href="/assets/css/bootstrap-tagsinput.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,11 +28,13 @@
   {{end}}
 
   {{ define "foot" }}
-    <p style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px;">ltxdoc by Patrick Gundlach / speedata. Source code at <a href="https://github.com/speedata/ltxdoc">Github</a>. {{with .XMLUrl}}<a href="{{ . }}">Export this page as XML</a>.{{end}} {{with .PlainTextUrl}}<a href="{{ . }}">Export as plain text</a>.{{end}}</p>
+    <p style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px;">ltxdoc by Patrick Gundlach / speedata. Source code at <a href="https://github.com/speedata/ltxdoc">Github</a>. {{with .XMLUrl}}<a href="{{ . }}">Export this page as XML</a>{{end}} {{with .PlainTextUrl}}<a href="{{ . }}">or as plain text</a>.{{end}} The contents is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/assets/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
+
   </body>
 </html>
 {{ end }}

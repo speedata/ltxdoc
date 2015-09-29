@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	tpl *template.Template
+	tpl      *template.Template
+	editMode bool
 )
 
 func dummy() {
@@ -32,7 +33,8 @@ func escapeurl(part string) string {
 type common struct {
 }
 
-func StartHTTPD(httpaddress, filename string) {
+func StartHTTPD(httpaddress, filename string, allowEdit bool) {
+	editMode = allowEdit
 
 	funcMap := template.FuncMap{
 		"urlescape": func(in string) string {
@@ -62,14 +64,21 @@ func StartHTTPD(httpaddress, filename string) {
 	}
 
 	maintemplate := string(MustAsset("templates/main.html"))
+	edittemplate := string(MustAsset("templates/edit.html"))
 	detailtemplate := string(MustAsset("templates/commanddetail.html"))
 	layouttemplate := string(MustAsset("templates/layout.html"))
 
 	var err error
 	tpl = template.Must(template.New("main.html").Funcs(funcMap).Parse(maintemplate))
-	template.Must(tpl.Parse(detailtemplate)).Parse(layouttemplate)
-	// a bug in go-bindata leads to the duplication of the path
-	latexref, err = ltxref.ReadXMLData(MustAsset("ltxref.xml"))
+	template.Must(tpl.Parse(detailtemplate))
+	template.Must(tpl.Parse(layouttemplate))
+	template.Must(tpl.Parse(edittemplate))
+
+	if filename != "" {
+		latexref, err = ltxref.ReadXMLFile(filename)
+	} else {
+		latexref, err = ltxref.ReadXMLData(MustAsset("ltxref.xml"))
+	}
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -77,6 +86,9 @@ func StartHTTPD(httpaddress, filename string) {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", mainHandler)
+	r.HandleFunc("/editcmd", editCommandHandler)
+	r.HandleFunc("/addcommand", addCommandHandler).Methods("POST")
+	r.HandleFunc("/editcmd/{command}", editCommandHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
@@ -86,6 +98,53 @@ func StartHTTPD(httpaddress, filename string) {
 	http.Handle("/", r)
 	fmt.Println("Listening on", httpaddress)
 	http.ListenAndServe(httpaddress, nil)
+}
+
+func addCommandHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("addCommandHandler")
+	requestedCommand := r.FormValue("command")
+	_, err := latexref.AddCommand(requestedCommand)
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		fmt.Println(err)
+		return
+	}
+	escaped := "/editcmd/" + requestedCommand //  escapeurl(requestedCommand)
+	fmt.Printf("escaped: %q\n", escaped)
+	http.Redirect(w, r, escaped, http.StatusTemporaryRedirect)
+	return
+}
+
+func editCommandHandler(w http.ResponseWriter, r *http.Request) {
+	var cmd *ltxref.Command
+
+	requestedCommand := r.FormValue("command")
+	fmt.Println("new command name=", requestedCommand)
+	if requestedCommand == "" {
+		requestedCommand = mux.Vars(r)["command"]
+	} else {
+	}
+	cmd = latexref.GetCommandFromPackage(requestedCommand, "")
+	if cmd == nil {
+		fmt.Println("Command not found")
+		return
+	}
+	fmt.Println("edit command", cmd.Name)
+	data := struct {
+		Command      *ltxref.Command
+		Edit         bool
+		XMLUrl       string
+		PlainTextUrl string
+	}{
+		Command:      cmd,
+		Edit:         editMode,
+		XMLUrl:       addXMLFormatString(r.URL),
+		PlainTextUrl: addTXTFormatString(r.URL),
+	}
+	err := tpl.ExecuteTemplate(w, "editcommand", data)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
@@ -119,11 +178,13 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 			data := struct {
 				Command      *ltxref.Command
 				Backlink     string
+				Edit         bool
 				Filter       string
 				XMLUrl       string
 				PlainTextUrl string
 			}{
 				Backlink:     backlink,
+				Edit:         editMode,
 				Filter:       filtervalue,
 				Command:      cmd,
 				XMLUrl:       addXMLFormatString(r.URL),
@@ -168,11 +229,13 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		data := struct {
 			Filter        string
+			Edit          bool
 			Backlink      string
 			Documentclass ltxref.Documentclass
 			XMLUrl        string
 			PlainTextUrl  string
 		}{
+			Edit:          editMode,
 			Filter:        filtervalue,
 			Documentclass: *class,
 			XMLUrl:        addXMLFormatString(r.URL),
@@ -212,10 +275,12 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		data := struct {
 			Filter       string
+			Edit         bool
 			Environment  ltxref.Environment
 			XMLUrl       string
 			PlainTextUrl string
 		}{
+			Edit:         editMode,
 			Filter:       filtervalue,
 			Environment:  *env,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -255,10 +320,12 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		data := struct {
 			Filter       string
+			Edit         bool
 			Package      ltxref.Package
 			XMLUrl       string
 			PlainTextUrl string
 		}{
+			Edit:         editMode,
 			Filter:       filtervalue,
 			Package:      *pkg,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -299,6 +366,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Filter       string
 		Tag          string
+		Edit         bool
 		L            ltxref.Ltxref
 		Tags         []string
 		XMLUrl       string
@@ -307,6 +375,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		L:            l,
 		Filter:       filter,
 		Tag:          tag,
+		Edit:         editMode,
 		Tags:         latexref.Tags(),
 		XMLUrl:       addXMLFormatString(r.URL),
 		PlainTextUrl: addTXTFormatString(r.URL),
