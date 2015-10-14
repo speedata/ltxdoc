@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/elazarl/go-bindata-assetfs"
@@ -117,33 +118,78 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 	var cmd *ltxref.Command
-
 	requestedCommand := r.FormValue("command")
-	fmt.Println("new command name=", requestedCommand)
 	if requestedCommand == "" {
 		requestedCommand = mux.Vars(r)["command"]
-	} else {
 	}
-	cmd = latexref.GetCommandFromPackage(requestedCommand, "")
-	if cmd == nil {
-		fmt.Println("Command not found")
+
+	switch r.Method {
+	case "POST":
+		fmt.Println("POST")
+		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
+		cmd.ShortDescription["en"] = r.FormValue("shortdesc")
+		cmd.Description["en"] = template.HTML(r.FormValue("description"))
+		cmd.Label = strings.Split(r.FormValue("tags"), ",")
+		cmd.Level = r.FormValue("level")
+		cmd.Variant = nil
+
+		variantcount, err := strconv.Atoi(r.FormValue("maxvarpanelcount"))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for i := 1; i <= variantcount; i++ {
+			v := ltxref.NewVariant()
+			fmt.Printf("%p\n", v)
+			v.Name = r.FormValue(fmt.Sprintf("name%d", i))
+			v.Description["en"] = template.HTML(r.FormValue(fmt.Sprintf("variant%d", i)))
+			numarguments, err := strconv.Atoi(r.FormValue(fmt.Sprintf("argcount%d", i)))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			for arg := 1; arg <= numarguments; arg++ {
+				a := ltxref.NewArgument()
+				a.Name = r.FormValue(fmt.Sprintf("v%da%dname", i, arg))
+				a.Optional = r.FormValue(fmt.Sprintf("v%da%doptional", i, arg)) == "on"
+
+				tmp, err := strconv.Atoi(r.FormValue(fmt.Sprintf("v%da%dtype", i, arg)))
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				a.Type = ltxref.Argumenttype(tmp)
+				v.Arguments = append(v.Arguments, a)
+			}
+			cmd.Variant = append(cmd.Variant, *v)
+		}
+
+		http.Redirect(w, r, "/cmd/"+requestedCommand, http.StatusTemporaryRedirect)
 		return
-	}
-	fmt.Println("edit command", cmd.Name)
-	data := struct {
-		Command      *ltxref.Command
-		Edit         bool
-		XMLUrl       string
-		PlainTextUrl string
-	}{
-		Command:      cmd,
-		Edit:         editMode,
-		XMLUrl:       addXMLFormatString(r.URL),
-		PlainTextUrl: addTXTFormatString(r.URL),
-	}
-	err := tpl.ExecuteTemplate(w, "editcommand", data)
-	if err != nil {
-		fmt.Println(err)
+
+	case "GET":
+		fmt.Println("new command name=", requestedCommand)
+		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
+		if cmd == nil {
+			fmt.Println("Command not found")
+			return
+		}
+		fmt.Println("edit command", cmd.Name)
+		data := struct {
+			Command      *ltxref.Command
+			Edit         bool
+			XMLUrl       string
+			PlainTextUrl string
+		}{
+			Command:      cmd,
+			Edit:         editMode,
+			XMLUrl:       addXMLFormatString(r.URL),
+			PlainTextUrl: addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "editcommand", data)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
@@ -162,7 +208,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
-		l.Commands = append(l.Commands, *cmd)
+		l.Commands = append(l.Commands, cmd)
 		str, err := l.ToXML()
 		if err != nil {
 			fmt.Println(err)

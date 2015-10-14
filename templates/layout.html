@@ -20,20 +20,21 @@
     <![endif]-->
 
     <link rel="stylesheet" type="text/css" href="/assets/lc/main.css">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+
   </head>
   <body>
 <div class="navbar">
   <a class="navbar-brand" href="/">LaTeX commands</a>
+  <p class="navbar-left">No edits are permanent. Nothing will be saved to disc!</p>
 </div>
   {{end}}
 
   {{ define "foot" }}
     <p style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px;">ltxdoc by Patrick Gundlach / speedata. Source code at <a href="https://github.com/speedata/ltxdoc">Github</a>. {{with .XMLUrl}}<a href="{{ . }}">Export this page as XML</a>{{end}} {{with .PlainTextUrl}}<a href="{{ . }}">or as plain text</a>.{{end}} The contents is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.</p>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/assets/js/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
 
   </body>
 </html>

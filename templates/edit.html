@@ -1,13 +1,52 @@
-{{ define "editcommand"}}{{template "head"}}{{ with .Command}}
+{{ define "editcommand"}}{{template "head"}}
+
+<div id="varpanel" class="varpanel" style="display: none">
+	<div class="row">
+  		<div class="form-group">
+			<label for="variant" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label varlabel">Variant</label>
+			<div class="col-md-5">
+				<div class="panel panel-default">
+					<div class="panel-heading"><input class="form-control nameinput" value="" name="name" placeholder="\name" type="text"></div>
+			  		<div class="panel-body">
+	  					<label for="inputshortdescvar1" class="control-label">Description</label>
+ 						<div class="vardescriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold">bold</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic">italic</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+						</div>
+						<textarea  class="vardescription form-control" placeholder="Enter a detailled description ..."   name="variant"></textarea>
+						<p class="lead" style="margin-top: 20px;">Arguments</p>
+						<input class="argcount" type="hidden" name="argcount" value="0">
+			  			<table class="table table-striped">
+			  			<thead>
+			  					<tr><th>Name</th><th>Optional?</th><th>Type</th><th>Remove</th></tr>
+			  			</thead>
+			  			<tbody>
+			  			</tbody>
+			  			</table>
+			  			<a class="addargument">Add argument</a>
+					</div>
+					<div class="panel-footer">
+						<a href="#" class="removevariant">Remove variant</a>
+					</div>
+				</div><!-- panel -->
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ with .Command}}
 <div class="container-fluid">
 	<h1>{{ .Name }}</h1>
 
-  			<form class="form-horizontal" action="/foo" method="GET">
+  			<form class="form-horizontal" action="/editcmd/{{.Name}}" method="POST">
+  			<input id="maxvarpanelcount" type="hidden" name="maxvarpanelcount" value="0">
   			<div class="row">
 				<div class="form-group">
 			  		<label for="selectlevel" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Level</label>
 			  		<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-			  			 <select id="selectlevel" class="form-control" name="level"><option>beginner</option><option>expert</option></select>
+			  			 <select id="selectlevel" class="form-control" name="level"><option value="beginner" {{ if eq .Level "beginner"}}selected{{end}}>beginner</option><option value="expert"{{ if eq .Level "expert"}}selected{{end}}>expert</option></select>
 			  		</div>
 		  		</div>
 		  	</div>
@@ -15,7 +54,7 @@
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" name="tags" data-role="tagsinput" >
+  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
 		  			</div>
 		  		</div>
 		  	</div>
@@ -31,42 +70,56 @@
 		  		<div class="form-group">
 		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailled description</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-		  				<textarea class="form-control">{{index .ShortDescription "en"}}</textarea>
+ 						<div id="descriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold">bold</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic">italic</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+						</div>
+		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailled description ...">{{ index .Description "en"}}</textarea>
 		  			</div>
 		  		</div>
 		  	</div>
+		  	<div id="varpanelhere"></div>
 
-		  	{{ range .Variant}}
-		  	<div class="row">
-		  	<div class="col-md-offset-3 col-md-5">
-				<div class="panel panel-default">
-				  <!-- Default panel contents -->
-				  <div class="panel-heading"><input class="form-control" type="text" value="{{.Name}}" name="name" placeholder="\name"></div>
-				  <div class="panel-body">
-		  			<label for="inputshortdescvar1" class="control-label">Description</label>
-					<textarea class="form-control">{{index .Description "en"}}</textarea>
-				  </div>
-
-				  <!-- Table -->
-				  <table class="table">
-				  	<thead>
-				  		<tr><th>Name</th><th>Optional?</th><th>Type</th></tr>
-				  	</thead>
-				  {{ range .Arguments }}
-				    <tr>
-				    	<td>{{.Name}}</td><td>{{.Optional}}</td><td>{{.Type}}</td>
-				    </tr>
-				    {{ end }}
-				  </table>
+		  	<div id="varrow"  class="row">
+		  		<div class="col-md-offset-3 col-md-5">
+					<p><a id="addvariant" href="#">Add a variant</a></p>
 				</div>
+			</div><!-- row -->
+			<div class="row">
+				<div class="col-md-offset-3">
+					<a role="button" class="btn btn-default" href="http://localhost:6555/cmd/{{ .Name }}">Cancel</a>
+					<button class="btn btn-primary" type="submit">Save changes</button>
 				</div>
 			</div>
-			{{ end }}{{/* range Variant */}}
+	</form>
 
-		  		<a role="button" class="btn btn-default" href="/cmd/{{.Name}}">Cancel</a>
-				<button  class="btn btn-primary" type="submit">Save changes</button>
-		  	</form>
-</div>
+
+
+	</div>
+
+    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
+
+    <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
+    <script src="/assets/js/advanced_and_extended.js"></script>
+    <script src="/assets/js/ltxedit.js"></script>
+    <script>
+	$( document ).ready(function() {
+		$("#addvariant").click(addVariant);
+		var variant;
+		{{ range .Variant }}
+variant = addVariant();
+setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
+{{ range .Arguments}}addArgumentToVariant(variant,{{.Name}},{{.Optional}},{{.Type}});
+{{ end }}
+{{ end }}
+		new wysihtml5.Editor('descriptioneditor', {
+    		toolbar: 'descriptiontoolbar',
+    		parserRules:  wysihtml5ParserRules
+ 		});
+	});
+</script>
 {{ end }}{{/* with .Command  */}}
 {{ template "foot" . }}
 {{ end }}{{/* editcommand  */}}

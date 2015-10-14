@@ -6,7 +6,7 @@
     <variant name="\hbox">
       <argument optional="yes" name="to" type="todimenorspreaddimen"/>
       <argument optional="no" name="contents" type="mandarg"/>
-      <description lang="en"/>
+      <description lang="en"><![CDATA[This is a <i>description</i> of hbox]]></description>
     </variant>
   </command>
   <command name="\makebox" level="beginner" label="box command">
@@ -64,6 +64,7 @@
       <description lang="en"/>
     </variant>
   </command>
+  <command name="\bar" label="" level=""></command>
   <environment name="description" level="beginner" label="list">
     <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
     <description lang="en"/>
@@ -72,7 +73,7 @@
     </variant>
   </environment>
   <environment name="minipage" label="box command" level="beginner">
-    <shortdescription lang="en"><![CDATA[The minipage environment creates a rectangle area of a <i>fixed</i> width]]></shortdescription>
+    <shortdescription lang="en">The minipage environment creates a rectangle area of a fixed width></shortdescription>
     <description lang="en">The minipage environment is very nice</description>
     <variant name="minipage">
       <argument name="pos" optional="yes" type="optarg"/>
