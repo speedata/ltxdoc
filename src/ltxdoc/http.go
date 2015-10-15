@@ -102,15 +102,23 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 }
 
 func addCommandHandler(w http.ResponseWriter, r *http.Request) {
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		return
+	}
 	requestedCommand := r.FormValue("command")
+
 	_, err := latexref.AddCommand(requestedCommand)
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		fmt.Println(err)
 		return
 	}
-	escaped := "/editcmd/" + requestedCommand
-	http.Redirect(w, r, escaped, http.StatusTemporaryRedirect)
+	backlink := &url.URL{}
+	backlink.Path = "/editcmd/" + requestedCommand
+	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+	// Post/Redirect/Get doesn't work with temp redirect.
+	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
 	return
 }
 
@@ -122,7 +130,8 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var cmd *ltxref.Command
-	if isEdit(r) == "" {
+
+	if editToken(r) == "" {
 		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand), http.StatusUnauthorized)
 		return
 	}
@@ -135,7 +144,6 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 		cmd.Label = strings.Split(r.FormValue("tags"), ",")
 		cmd.Level = r.FormValue("level")
 		cmd.Variant = nil
-
 		variantcount, err := strconv.Atoi(r.FormValue("maxvarpanelcount"))
 		if err != nil {
 			fmt.Println(err)
@@ -166,7 +174,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			cmd.Variant = append(cmd.Variant, *v)
 		}
 
-		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+isEdit(r), http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+editToken(r), http.StatusTemporaryRedirect)
 		return
 
 	case "GET":
@@ -193,7 +201,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 		}{
 			Backlink:     backlink.String(),
 			Command:      cmd,
-			Edit:         isEdit(r),
+			Edit:         editToken(r),
 			XMLUrl:       addXMLFormatString(r.URL),
 			PlainTextUrl: addTXTFormatString(r.URL),
 		}
@@ -245,7 +253,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 				PlainTextUrl string
 			}{
 				Backlink:     backlink.String(),
-				Edit:         isEdit(r),
+				Edit:         editToken(r),
 				Filter:       filtervalue,
 				Command:      cmd,
 				XMLUrl:       addXMLFormatString(r.URL),
@@ -302,7 +310,7 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 			PlainTextUrl  string
 		}{
 			Backlink:      backlink.String(),
-			Edit:          isEdit(r),
+			Edit:          editToken(r),
 			Filter:        filtervalue,
 			Documentclass: *class,
 			XMLUrl:        addXMLFormatString(r.URL),
@@ -354,7 +362,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 			PlainTextUrl string
 		}{
 			Backlink:     backlink.String(),
-			Edit:         isEdit(r),
+			Edit:         editToken(r),
 			Filter:       filtervalue,
 			Environment:  *env,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -406,7 +414,7 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 			PlainTextUrl string
 		}{
 			Backlink:     backlink.String(),
-			Edit:         isEdit(r),
+			Edit:         editToken(r),
 			Filter:       filtervalue,
 			Package:      *pkg,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -456,7 +464,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		L:            l,
 		Filter:       filter,
 		Tag:          tag,
-		Edit:         isEdit(r),
+		Edit:         editToken(r),
 		Tags:         latexref.Tags(),
 		XMLUrl:       addXMLFormatString(r.URL),
 		PlainTextUrl: addTXTFormatString(r.URL),
@@ -468,7 +476,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func isEdit(r *http.Request) string {
+func editToken(r *http.Request) string {
 	if !editMode {
 		return ""
 	}
