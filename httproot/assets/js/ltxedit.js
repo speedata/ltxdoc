@@ -90,7 +90,7 @@ function addArgument(variantnumber) {
 	$(varpanelselector +  " * .argcount").val(argcount)
 	$(varpanelselector).data('argcount', argcount)
 	varargname = mkname(variantnumber,argcount)
-	$(varpanelselector +  " * tbody").append('<tr id="' + varargname + '"><td><input class="form-control" type="text" value="" name="' + varargname + 'name"></td><td><input name="'  + varargname + 'optional"  class="form-control" type="checkbox"></td><td><select class="form-control" name="' + varargname +  'type"><option value="0">0*</option><option value="1">1*</option><option  value="2">2*</option></select></td><td><a class="removerow" href="' + varpanelselector + '">X</a></td></tr>');
+	$(varpanelselector +  " * tbody").append('<tr id="' + varargname + '"><td><input class="form-control" type="text" value="" name="' + varargname + 'name"></td><td><input name="'  + varargname + 'optional"  class="form-control" type="checkbox"></td><td><select class="form-control" name="' + varargname +  'type"><option value="1">{...}</option><option value="2">{...,...,...}</option><option  value="3">[...]</option><option value="4">[...,...,...]</option><option value="5">to dimen | spread dimen</option></select></td><td><a class="removerow" href="' + varpanelselector + '">X</a></td></tr>');
 		$("#" + varargname + " * .removerow").click(function() { removerow(variantnumber,argcount) })
 	return varpanelselector
 }

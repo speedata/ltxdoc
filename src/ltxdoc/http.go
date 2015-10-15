@@ -47,14 +47,14 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 		"showargument": func(in ltxref.Argumenttype) template.HTML {
 			var ret string
 			switch in {
-			case ltxref.OPTARG:
-				ret = ("<tt>[...]</tt>")
-			case ltxref.OPTLIST:
-				ret = ("<tt>[...,...,...]</tt>")
 			case ltxref.MANDARG:
 				ret = ("<tt>{...}</tt>")
 			case ltxref.MANDLIST:
 				ret = ("<tt>{...,...,...}</tt>")
+			case ltxref.OPTARG:
+				ret = ("<tt>[...]</tt>")
+			case ltxref.OPTLIST:
+				ret = ("<tt>[...,...,...]</tt>")
 			case ltxref.TODIMENORSPREADDIMEN:
 				ret = ("<tt>to</tt> <i>‹dimen›</i> or <tt>spread</tt> ‹<i>dimen</i>›")
 			default:
@@ -102,7 +102,6 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 }
 
 func addCommandHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("addCommandHandler")
 	requestedCommand := r.FormValue("command")
 	_, err := latexref.AddCommand(requestedCommand)
 	if err != nil {
@@ -111,7 +110,6 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	escaped := "/editcmd/" + requestedCommand //  escapeurl(requestedCommand)
-	fmt.Printf("escaped: %q\n", escaped)
 	http.Redirect(w, r, escaped, http.StatusTemporaryRedirect)
 	return
 }
@@ -125,7 +123,6 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "POST":
-		fmt.Println("POST")
 		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
 		cmd.ShortDescription["en"] = r.FormValue("shortdesc")
 		cmd.Description["en"] = template.HTML(r.FormValue("description"))
@@ -140,7 +137,6 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		for i := 1; i <= variantcount; i++ {
 			v := ltxref.NewVariant()
-			fmt.Printf("%p\n", v)
 			v.Name = r.FormValue(fmt.Sprintf("name%d", i))
 			v.Description["en"] = template.HTML(r.FormValue(fmt.Sprintf("variant%d", i)))
 			numarguments, err := strconv.Atoi(r.FormValue(fmt.Sprintf("argcount%d", i)))
@@ -164,17 +160,15 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			cmd.Variant = append(cmd.Variant, *v)
 		}
 
-		http.Redirect(w, r, "/cmd/"+requestedCommand, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand), http.StatusTemporaryRedirect)
 		return
 
 	case "GET":
-		fmt.Println("new command name=", requestedCommand)
 		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
 		if cmd == nil {
 			fmt.Println("Command not found")
 			return
 		}
-		fmt.Println("edit command", cmd.Name)
 		data := struct {
 			Command      *ltxref.Command
 			Edit         bool
