@@ -1,4 +1,4 @@
-{{template "head"}}
+{{template "head" . }}
 {{ with .Edit}}
 <div class="modal fade" id="addcommand">
   <div class="modal-dialog">
@@ -28,11 +28,12 @@
   <div class="col-md-7">
           <form class="form-inline" role="search" action="/" method="GET">
           <div class="form-group">
+          {{ with .Edit}}<input type="hidden" name="edit" value="{{.}}">{{end}}
             <input type="text" class="form-control" placeholder="{{ with .Filter }}{{ . }}{{else}}Command{{end}}" name="filter">
             {{with .Tag}}<input type="hidden" value="{{ . }}" name="tag">{{end}}
           </div>
           <button type="submit" class="btn btn-default">Filter</button>
-          <a href="/{{ with .Tag}}?tag={{.}}{{end}}"><button type="button" class="btn btn-info">Clear Filter</button></a>
+          <a href="/?{{ with .Tag}}tag={{.}}&amp;{{end}}{{with $.Edit}}edit={{.}}{{end}}"><button type="button" class="btn btn-info">Clear Filter</button></a>
         </form>
 </p>
   </div>
@@ -52,21 +53,21 @@
     <div class="col-xs-12 col-sm-9">
 {{with .Commands}}<h1 id="commands">Commands {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#addcommand" href="#">add new</a></small>{{end}}</h1>{{end}}
 {{ range .Commands }}
-<div class="cmddescription"><a href="/cmd/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+<div class="cmddescription"><a href="/cmd/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxcommand">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
 {{with .Environments }}<h1 id="environments">Environments</h1>{{end}}
 {{ range .Environments }}
-<div class="cmddescription"><a href="/env/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+<div class="cmddescription"><a href="/env/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
 {{ with .Documentclasses }}<h1 id="documentclasses">Documentclasses</h1>{{ end }}
 {{ range .Documentclasses }}
-<div class="cmddescription"><a href="/class/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+<div class="cmddescription"><a href="/class/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
@@ -74,7 +75,7 @@
 
 {{ with .Packages }}<h1 id="packages">Packages</h1>{{ end }}
 {{ range .Packages }}
-<div class="cmddescription"><a href="/pkg/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+<div class="cmddescription"><a href="/pkg/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}{{end}}&amp;{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>

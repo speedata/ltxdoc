@@ -109,16 +109,22 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	escaped := "/editcmd/" + requestedCommand //  escapeurl(requestedCommand)
+	escaped := "/editcmd/" + requestedCommand
 	http.Redirect(w, r, escaped, http.StatusTemporaryRedirect)
 	return
 }
 
 func editCommandHandler(w http.ResponseWriter, r *http.Request) {
-	var cmd *ltxref.Command
 	requestedCommand := r.FormValue("command")
+	requestedPackage := ""
 	if requestedCommand == "" {
 		requestedCommand = mux.Vars(r)["command"]
+	}
+
+	var cmd *ltxref.Command
+	if isEdit(r) == "" {
+		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand), http.StatusUnauthorized)
+		return
 	}
 
 	switch r.Method {
@@ -160,7 +166,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			cmd.Variant = append(cmd.Variant, *v)
 		}
 
-		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand), http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+isEdit(r), http.StatusTemporaryRedirect)
 		return
 
 	case "GET":
@@ -169,14 +175,25 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Command not found")
 			return
 		}
+
+		backlink := &url.URL{}
+		if requestedPackage == "" {
+			backlink.Path = "/cmd/" + requestedCommand
+		} else {
+			backlink.Path = "/pkg/" + requestedPackage + "/cmd/" + requestedCommand
+		}
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+
 		data := struct {
+			Backlink     string
 			Command      *ltxref.Command
-			Edit         bool
 			XMLUrl       string
 			PlainTextUrl string
+			Edit         string
 		}{
+			Backlink:     backlink.String(),
 			Command:      cmd,
-			Edit:         editMode,
+			Edit:         isEdit(r),
 			XMLUrl:       addXMLFormatString(r.URL),
 			PlainTextUrl: addTXTFormatString(r.URL),
 		}
@@ -191,12 +208,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedCommand := mux.Vars(r)["command"]
 	requestedPackage := mux.Vars(r)["package"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
-	var backlink string
-	if requestedPackage == "" {
-		backlink = "/"
-	} else {
-		backlink = "/pkg/" + escapeurl(requestedPackage)
-	}
+
 	cmd := latexref.GetCommandFromPackage(requestedCommand, requestedPackage)
 
 	switch strings.ToLower(r.FormValue("format")) {
@@ -214,17 +226,26 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 		cmd.ToString(w)
 		return
 	default:
+		backlink := &url.URL{}
+		if requestedPackage == "" {
+			backlink.Path = "/"
+		} else {
+			backlink.Path = "/pkg/" + requestedPackage
+		}
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+		addKeyValueToUrl(backlink, "filter", r.FormValue("filter"))
+
 		if cmd != nil {
 			data := struct {
 				Command      *ltxref.Command
 				Backlink     string
-				Edit         bool
+				Edit         string
 				Filter       string
 				XMLUrl       string
 				PlainTextUrl string
 			}{
-				Backlink:     backlink,
-				Edit:         editMode,
+				Backlink:     backlink.String(),
+				Edit:         isEdit(r),
 				Filter:       filtervalue,
 				Command:      cmd,
 				XMLUrl:       addXMLFormatString(r.URL),
@@ -267,15 +288,21 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 		class.ToString(w)
 		return
 	default:
+		backlink := &url.URL{}
+		backlink.Path = "/"
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+		addKeyValueToUrl(backlink, "filter", r.FormValue("filter"))
+
 		data := struct {
-			Filter        string
-			Edit          bool
 			Backlink      string
+			Filter        string
+			Edit          string
 			Documentclass ltxref.Documentclass
 			XMLUrl        string
 			PlainTextUrl  string
 		}{
-			Edit:          editMode,
+			Backlink:      backlink.String(),
+			Edit:          isEdit(r),
 			Filter:        filtervalue,
 			Documentclass: *class,
 			XMLUrl:        addXMLFormatString(r.URL),
@@ -313,14 +340,21 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	case "txt":
 		env.ToString(w)
 	default:
+		backlink := &url.URL{}
+		backlink.Path = "/"
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+		addKeyValueToUrl(backlink, "filter", r.FormValue("filter"))
+
 		data := struct {
+			Backlink     string
 			Filter       string
-			Edit         bool
+			Edit         string
 			Environment  ltxref.Environment
 			XMLUrl       string
 			PlainTextUrl string
 		}{
-			Edit:         editMode,
+			Backlink:     backlink.String(),
+			Edit:         isEdit(r),
 			Filter:       filtervalue,
 			Environment:  *env,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -358,14 +392,21 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	case "txt":
 		pkg.ToString(w)
 	default:
+		backlink := &url.URL{}
+		backlink.Path = "/"
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+		addKeyValueToUrl(backlink, "filter", r.FormValue("filter"))
+
 		data := struct {
+			Backlink     string
 			Filter       string
-			Edit         bool
+			Edit         string
 			Package      ltxref.Package
 			XMLUrl       string
 			PlainTextUrl string
 		}{
-			Edit:         editMode,
+			Backlink:     backlink.String(),
+			Edit:         isEdit(r),
 			Filter:       filtervalue,
 			Package:      *pkg,
 			XMLUrl:       addXMLFormatString(r.URL),
@@ -406,7 +447,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Filter       string
 		Tag          string
-		Edit         bool
+		Edit         string
 		L            ltxref.Ltxref
 		Tags         []string
 		XMLUrl       string
@@ -415,7 +456,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		L:            l,
 		Filter:       filter,
 		Tag:          tag,
-		Edit:         editMode,
+		Edit:         isEdit(r),
 		Tags:         latexref.Tags(),
 		XMLUrl:       addXMLFormatString(r.URL),
 		PlainTextUrl: addTXTFormatString(r.URL),
@@ -425,6 +466,14 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func isEdit(r *http.Request) string {
+	if !editMode {
+		return ""
+	}
+	// Will be replaced by a more sane auth mode
+	return r.FormValue("edit")
 }
 
 // Add ?format=xml to the given URL
@@ -451,4 +500,15 @@ func addTXTFormatString(u *url.URL) string {
 	val.Add("format", "txt")
 	ret.RawQuery = val.Encode()
 	return ret.String()
+}
+
+// Add ?key=value to the given URL
+func addKeyValueToUrl(u *url.URL, key, value string) {
+	if value == "" {
+		return
+	}
+	val := u.Query()
+	val.Del(key)
+	val.Add(key, value)
+	u.RawQuery = val.Encode()
 }

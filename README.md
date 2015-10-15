@@ -42,6 +42,7 @@ Information
 
 Contact: Patrick Gundlach, gundlach@speedata.de<br>
 License: free / MIT license<br>
+Sneak Preview: https://ltxref.org<br>
 Status: pre-alpha<br>
 Sourcecode: https://github.com/speedata/ltxdoc
 
