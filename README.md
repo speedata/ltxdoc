@@ -18,15 +18,9 @@ Run `ltxdoc <commandname>`  such as `ltxdoc section` to get plain text informati
 How to build
 ------------
 
-You need a [Go compiler](https://golang.org) and git and perhaps GNU make. That should be enough.
+You need a [Go compiler](https://golang.org) and git and GNU make. That should be enough.
 
-Set the environment variables `$GOPATH` to `$PWD` and `$GOBIN` to `$PWD/bin` and add the bin directory to the `$PATH` variable if necessary:
-
-    export GOPATH=$PWD
-    export GOBIN=$PWD/bin
-    export PATH=$PATH:$GOBIN
-
-Clone the repository at [https://github.com/speedata/ltxdoc](https://github.com/speedata/ltxdoc) and run either `make getdependencies` or the commands listed in the `Makefile` in that section (`go get -u ...`)
+Clone the repository at [https://github.com/speedata/ltxdoc](https://github.com/speedata/ltxdoc) and run `make getdependencies`.
 
 After that run `make install`:
 

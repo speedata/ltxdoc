@@ -1,3 +1,10 @@
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(patsubst %/,%,$(dir $(mkfile_path)))
+
+GOPATH := $(current_dir)
+GOBIN := $(current_dir)/bin
+
+export GOBIN GOPATH
 
 all:
 	@echo "make [getdependencies | install | formatxml | validatexml | clean | bindata | local]"
@@ -6,7 +13,7 @@ all:
 
 getdependencies:
 	go get -u github.com/jteeuwen/go-bindata/...
-	bin/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	$(GOBIN)/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	go get ./...
 
 install: bindata
@@ -20,14 +27,14 @@ validatexml:
 	xmllint --relaxng src/github.com/speedata/ltxref/schema/commandlist.rng ltxref.xml  --noout
 
 clean:
-	-rm -rf bin/ltxdoc pkg
+	-rm -rf $(GOBIN)/ltxdoc pkg
 
 bindata:
-	bin/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	$(GOBIN)/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	cd src/github.com/speedata/ltxref;  make bindata
 
 bindata-debug:
-	bin/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	$(GOBIN)/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	cd src/github.com/speedata/ltxref;  make bindata-debug
 
 local: bindata-debug
