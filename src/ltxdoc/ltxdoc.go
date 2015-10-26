@@ -2,6 +2,7 @@ package ltxdoc
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/speedata/ltxref"
 )
@@ -12,14 +13,19 @@ var (
 
 func ShowHelpFor(cmdname, filename string) {
 	var err error
-	latexref, err = ltxref.ReadXMLFile(filename)
+	if filename != "" {
+		latexref, err = ltxref.ReadXMLFile(filename)
+	} else {
+		latexref, err = ltxref.ReadXMLData(MustAsset("ltxref.xml"))
+	}
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
 	commands := latexref.FilterCommands(cmdname, "")
 	for _, cmd := range commands {
-		fmt.Println("Documentation for command", cmd.Name)
+		cmd.ToString(os.Stdout)
 	}
 
 	return
