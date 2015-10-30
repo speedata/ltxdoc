@@ -10,10 +10,15 @@
 			  		<div class="panel-body">
 	  					<label for="inputshortdescvar1" class="control-label">Description</label>
  						<div class="vardescriptiontoolbar" >
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold">bold</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic">italic</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
 						</div>
 						<textarea  class="vardescription form-control" placeholder="Enter a detailled description ..."   name="variant"></textarea>
 						<p class="lead" style="margin-top: 20px;">Arguments</p>
@@ -71,10 +76,15 @@
 		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailled description</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
  						<div id="descriptiontoolbar" >
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold">bold</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic">italic</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
 						</div>
 		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailled description ...">{{ index .Description "en"}}</textarea>
 		  			</div>

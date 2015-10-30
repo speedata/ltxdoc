@@ -144,6 +144,11 @@
       <p>{{  index .Command.ShortDescription  "en" }}</p>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-12 commanddescription">
+    {{  index .Command.Description "en"  }}
+    </div>
+  </div>
 {{ range $varindex, $variant := .Command.Variant }}
   <div class="row">
     <div class="col-sm-4 col-md-4 col-xs-4">
@@ -160,16 +165,10 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">{{ index .Description "en" }}</div>
+    <div class="col-md-12 commanddescription">{{ index .Description "en" }}</div>
   </div>
   <hr class="vardivider">
 {{ end }}
-
-  <div class="row">
-    <div class="col-sm-12">
-    {{  index .Command.Description "en"  }}
-    </div>
-  </div>
 </div>
 {{ template "foot" . }}
 {{end }}

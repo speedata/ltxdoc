@@ -18,10 +18,6 @@ var (
 	editMode bool
 )
 
-func dummy() {
-	fmt.Println()
-}
-
 func escapeurl(part string) string {
 	var Url *url.URL
 	Url, err := url.Parse(part)
@@ -29,9 +25,6 @@ func escapeurl(part string) string {
 		fmt.Println(err)
 	}
 	return Url.String()
-}
-
-type common struct {
 }
 
 func StartHTTPD(httpaddress, filename string, allowEdit bool) {
@@ -123,8 +116,8 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func editCommandHandler(w http.ResponseWriter, r *http.Request) {
-	requestedCommand := r.FormValue("command")
 	requestedPackage := ""
+	requestedCommand := r.FormValue("command")
 	if requestedCommand == "" {
 		requestedCommand = mux.Vars(r)["command"]
 	}
@@ -174,7 +167,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			cmd.Variant = append(cmd.Variant, *v)
 		}
 
-		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+editToken(r), http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 
 	case "GET":

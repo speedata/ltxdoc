@@ -8,7 +8,7 @@ export GOBIN GOPATH
 
 all:
 	@echo "make [getdependencies | install | formatxml | validatexml | clean | bindata | local]"
-	@echo "'make install' installs a binary for your platform in the $GOBIN directory"
+	@echo "'make install' installs a binary for your platform in the GOBIN directory"
 
 
 getdependencies:
@@ -37,7 +37,7 @@ bindata-debug:
 	$(GOBIN)/go-bindata -debug -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
 	cd src/github.com/speedata/ltxref;  make bindata-debug
 
-local: bindata-debug
+local: # bindata-debug
 	go install ltxdoc/ltxdoc
 
 buildwindows64: bindata

@@ -64,6 +64,10 @@
       <description lang="en"/>
     </variant>
   </command>
+  <command name="\large" label="font size" level="beginner">
+    <shortdescription lang="en">Switch to a larger font</shortdescription>
+    <description lang="en">&lt;p&gt;Use &lt;code&gt;\large&lt;/code&gt; like this&lt;/p&gt;&lt;pre&gt;{\large ....}&lt;/pre&gt;and not like this:&lt;br&gt;&lt;pre&gt;\large{...}&lt;/pre&gt;This is because &lt;code&gt;\large&lt;/code&gt; switches to the larger font immediately.&lt;br&gt;&lt;br&gt;&lt;br&gt;</description> 
+  </command>
   <environment name="description" level="beginner" label="list">
     <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
     <description lang="en"/>
