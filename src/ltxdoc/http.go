@@ -1,10 +1,12 @@
 package ltxdoc
 
 import (
+	"bufio"
 	"fmt"
 	"html/template"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -14,8 +16,9 @@ import (
 )
 
 var (
-	tpl      *template.Template
-	editMode bool
+	tpl        *template.Template
+	editMode   bool
+	edittokens map[string]string
 )
 
 func escapeurl(part string) string {
@@ -28,6 +31,26 @@ func escapeurl(part string) string {
 }
 
 func StartHTTPD(httpaddress, filename string, allowEdit bool) {
+	file, err := os.Open("edittokens.txt")
+	edittokens = make(map[string]string)
+	if err != nil {
+		allowEdit = false
+	} else {
+		defer file.Close()
+
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			kv := strings.Split(scanner.Text(), "=")
+			edittokens[kv[1]] = kv[0]
+		}
+
+		if err := scanner.Err(); err != nil {
+			fmt.Println(err)
+		}
+	}
+	for k, v := range edittokens {
+		fmt.Println("k=", k, "v=", v)
+	}
 	editMode = allowEdit
 
 	funcMap := template.FuncMap{
@@ -62,7 +85,7 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	detailtemplate := string(MustAsset("templates/commanddetail.html"))
 	layouttemplate := string(MustAsset("templates/layout.html"))
 
-	var err error
+	// var err error
 	tpl = template.Must(template.New("main.html").Funcs(funcMap).Parse(maintemplate))
 	template.Must(tpl.Parse(detailtemplate))
 	template.Must(tpl.Parse(layouttemplate))
@@ -473,8 +496,12 @@ func editToken(r *http.Request) string {
 	if !editMode {
 		return ""
 	}
-	// Will be replaced by a more sane auth mode
-	return r.FormValue("edit")
+	x := r.FormValue("edit")
+	if edittokens[x] == "" {
+		return ""
+	} else {
+		return x
+	}
 }
 
 // Add ?format=xml to the given URL
