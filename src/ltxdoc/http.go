@@ -48,9 +48,7 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 			fmt.Println(err)
 		}
 	}
-	for k, v := range edittokens {
-		fmt.Println("k=", k, "v=", v)
-	}
+
 	editMode = allowEdit
 
 	funcMap := template.FuncMap{
