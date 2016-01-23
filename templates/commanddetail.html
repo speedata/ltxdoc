@@ -89,7 +89,7 @@
 </div>
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h1><tt>{{ .Environment.Name }}</tt></h1>
+      <h1><tt>{{ .Environment.Name }}</tt>{{ if .Edit}} <small><a href="/editenv/{{.Environment.Name}}?edit={{.Edit}}">(edit)</small></a>{{ end }}</h1>
       <p>{{  index .Environment.ShortDescription  "en" }}</p>
     </div>
   </div>

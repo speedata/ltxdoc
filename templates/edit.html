@@ -1,3 +1,143 @@
+{{ define "editenvironment" }}{{template "head" .}}
+<div id="varpanel" class="varpanel" style="display: none">
+	<div class="row">
+  		<div class="form-group">
+			<label for="variant" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label varlabel">Variant</label>
+			<div class="col-md-5">
+				<div class="panel panel-default">
+					<div class="panel-heading"><input class="form-control nameinput" value="" name="name" placeholder="environment name" type="text"></div>
+			  		<div class="panel-body">
+	  					<label for="inputshortdescvar1" class="control-label">Description</label>
+ 						<div class="vardescriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
+						</div>
+						<textarea  class="vardescription form-control" placeholder="Enter a detailled description ..."   name="variant"></textarea>
+						<p class="lead" style="margin-top: 20px;">Arguments</p>
+						<input class="argcount" type="hidden" name="argcount" value="0">
+			  			<table class="table table-striped">
+			  			<thead>
+			  					<tr><th>Name</th><th>Optional?</th><th>Type</th><th>Remove</th></tr>
+			  			</thead>
+			  			<tbody>
+			  			</tbody>
+			  			</table>
+			  			<a class="addargument">Add argument</a>
+					</div>
+					<div class="panel-footer">
+						<a href="#" class="removevariant">Remove variant</a>
+					</div>
+				</div><!-- panel -->
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ with .Environment}}
+<div class="container-fluid">
+	<h1>{{ .Name }}</h1>
+
+  			<form class="form-horizontal" action="/editenv/{{.Name}}?edit={{$.Edit}}" method="POST">
+  			<input id="maxvarpanelcount" type="hidden" name="maxvarpanelcount" value="0">
+  			<div class="row">
+				<div class="form-group">
+			  		<label for="selectlevel" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Level</label>
+			  		<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+			  			 <select id="selectlevel" class="form-control" name="level"><option value="beginner" {{ if eq .Level "beginner"}}selected{{end}}>beginner</option><option value="expert"{{ if eq .Level "expert"}}selected{{end}}>expert</option></select>
+			  		</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
+		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="inputshortdesc" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Short description</label>
+		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+		  				<input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description">
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailled description</label>
+		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+ 						<div id="descriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
+						</div>
+		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailled description ...">{{ index .Description "en"}}</textarea>
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div id="varpanelhere"></div>
+
+		  	<div id="varrow"  class="row">
+		  		<div class="col-md-offset-3 col-md-5">
+					<p><a id="addvariant" href="#">Add a variant</a></p>
+				</div>
+			</div><!-- row -->
+			<div class="row">
+				<div class="col-md-offset-3">
+					<a role="button" class="btn btn-default" href="{{$.Backlink}}">Cancel</a>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</div>
+	</form>
+
+
+
+	</div>
+
+    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
+
+    <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
+    <script src="/assets/js/advanced_and_extended.js"></script>
+    <script src="/assets/js/ltxedit.js"></script>
+    <script>
+	$( document ).ready(function() {
+		$("#addvariant").click(addVariant);
+		var variant;
+		{{ range .Variant }}
+variant = addVariant();
+setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
+{{ range .Arguments}}addArgumentToVariant(variant,{{.Name}},{{.Optional}},{{.Type}});
+{{ end }}
+{{ end }}
+		new wysihtml5.Editor('descriptioneditor', {
+    		toolbar: 'descriptiontoolbar',
+    		parserRules:  wysihtml5ParserRules
+ 		});
+	});
+</script>
+{{ end }}{{/* with .Command  */}}
+
+
+{{ template "foot" . }}
+{{end}}{{/*  define editenvironment  */}}
+{{/*   */}}
+
+
+
 {{ define "editcommand"}}{{template "head" .}}
 
 <div id="varpanel" class="varpanel" style="display: none">

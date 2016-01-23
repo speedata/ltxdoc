@@ -103,7 +103,9 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	r.HandleFunc("/", mainHandler)
 	r.HandleFunc("/editcmd", editCommandHandler)
 	r.HandleFunc("/addcommand", addCommandHandler).Methods("POST")
+	r.HandleFunc("/addenvironment", addEnvironmentHandler).Methods("POST")
 	r.HandleFunc("/editcmd/{command}", editCommandHandler)
+	r.HandleFunc("/editenv/{environment}", editEnvironmentHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
@@ -115,13 +117,32 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	http.ListenAndServe(httpaddress, nil)
 }
 
+func addEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		return
+	}
+	requestedEnvironment := r.FormValue("environment")
+	_, err := latexref.AddEnvironment(requestedEnvironment)
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		fmt.Println(err)
+		return
+	}
+	backlink := &url.URL{}
+	backlink.Path = "/editenv/" + requestedEnvironment
+	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+	// Post/Redirect/Get doesn't work with temp redirect.
+	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
+	return
+}
+
 func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 	if editToken(r) == "" {
 		http.Redirect(w, r, "/", http.StatusUnauthorized)
 		return
 	}
 	requestedCommand := r.FormValue("command")
-
 	_, err := latexref.AddCommand(requestedCommand)
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -136,6 +157,94 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func editEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
+	requestedPackage := ""
+	requestedEnvironment := r.FormValue("environment")
+	if requestedEnvironment == "" {
+		requestedEnvironment = mux.Vars(r)["environment"]
+	}
+
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/env/"+escapeurl(requestedEnvironment), http.StatusUnauthorized)
+		return
+	}
+
+	var env *ltxref.Environment
+	env = latexref.GetEnvironmentWithName(requestedEnvironment)
+	if env == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
+	}
+	switch r.Method {
+	case "POST":
+		env.ShortDescription["en"] = r.FormValue("shortdesc")
+		env.Description["en"] = template.HTML(r.FormValue("description"))
+		env.Label = strings.Split(r.FormValue("tags"), ",")
+		env.Level = r.FormValue("level")
+		env.Variant = nil
+		variantcount, err := strconv.Atoi(r.FormValue("maxvarpanelcount"))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for i := 1; i <= variantcount; i++ {
+			v := ltxref.NewVariant()
+			v.Name = r.FormValue(fmt.Sprintf("name%d", i))
+			v.Description["en"] = template.HTML(r.FormValue(fmt.Sprintf("variant%d", i)))
+			numarguments, err := strconv.Atoi(r.FormValue(fmt.Sprintf("argcount%d", i)))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			for arg := 1; arg <= numarguments; arg++ {
+				a := ltxref.NewArgument()
+				a.Name = r.FormValue(fmt.Sprintf("v%da%dname", i, arg))
+				a.Optional = r.FormValue(fmt.Sprintf("v%da%doptional", i, arg)) == "on"
+
+				tmp, err := strconv.Atoi(r.FormValue(fmt.Sprintf("v%da%dtype", i, arg)))
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				a.Type = ltxref.Argumenttype(tmp)
+				v.Arguments = append(v.Arguments, a)
+			}
+			env.Variant = append(env.Variant, *v)
+
+		}
+		http.Redirect(w, r, "/env/"+escapeurl(requestedEnvironment)+"?edit="+editToken(r), http.StatusSeeOther)
+		return
+
+	case "GET":
+		backlink := &url.URL{}
+		if requestedPackage == "" {
+			backlink.Path = "/env/" + requestedEnvironment
+		} else {
+			backlink.Path = "/pkg/" + requestedPackage + "/env/" + requestedEnvironment
+		}
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+
+		data := struct {
+			Backlink     string
+			Environment  *ltxref.Environment
+			XMLUrl       string
+			PlainTextUrl string
+			Edit         string
+		}{
+			Backlink:     backlink.String(),
+			Environment:  env,
+			Edit:         editToken(r),
+			XMLUrl:       addXMLFormatString(r.URL),
+			PlainTextUrl: addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "editenvironment", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}
+}
+
 func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 	requestedPackage := ""
 	requestedCommand := r.FormValue("command")
@@ -143,16 +252,20 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 		requestedCommand = mux.Vars(r)["command"]
 	}
 
-	var cmd *ltxref.Command
-
 	if editToken(r) == "" {
 		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand), http.StatusUnauthorized)
 		return
 	}
 
+	var cmd *ltxref.Command
+	cmd = latexref.GetCommandFromPackage(requestedCommand, "")
+	if cmd == nil {
+		fmt.Println("Command not found")
+		return
+	}
+
 	switch r.Method {
 	case "POST":
-		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
 		cmd.ShortDescription["en"] = r.FormValue("shortdesc")
 		cmd.Description["en"] = template.HTML(r.FormValue("description"))
 		cmd.Label = strings.Split(r.FormValue("tags"), ",")
@@ -190,14 +303,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
-
 	case "GET":
-		cmd = latexref.GetCommandFromPackage(requestedCommand, "")
-		if cmd == nil {
-			fmt.Println("Command not found")
-			return
-		}
-
 		backlink := &url.URL{}
 		if requestedPackage == "" {
 			backlink.Path = "/cmd/" + requestedCommand
@@ -351,7 +457,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
-		l.Environments = append(l.Environments, *env)
+		l.Environments = append(l.Environments, env)
 		str, err := l.ToXML()
 		if err != nil {
 			fmt.Println(err)
