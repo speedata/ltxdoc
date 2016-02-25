@@ -104,8 +104,10 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	r.HandleFunc("/editcmd", editCommandHandler)
 	r.HandleFunc("/addcommand", addCommandHandler).Methods("POST")
 	r.HandleFunc("/addenvironment", addEnvironmentHandler).Methods("POST")
+	r.HandleFunc("/adddocumentclass", addDocumentClassHandler).Methods("POST")
 	r.HandleFunc("/editcmd/{command}", editCommandHandler)
 	r.HandleFunc("/editenv/{environment}", editEnvironmentHandler)
+	r.HandleFunc("/editdc/{documentclass}", editDocumentClassHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
@@ -131,6 +133,26 @@ func addEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	backlink := &url.URL{}
 	backlink.Path = "/editenv/" + requestedEnvironment
+	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+	// Post/Redirect/Get doesn't work with temp redirect.
+	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
+	return
+}
+
+func addDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		return
+	}
+	requestedDocumentClass := r.FormValue("documentclass")
+	_, err := latexref.AddDocumentClass(requestedDocumentClass)
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		fmt.Println(err)
+		return
+	}
+	backlink := &url.URL{}
+	backlink.Path = "/editdc/" + requestedDocumentClass
 	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
 	// Post/Redirect/Get doesn't work with temp redirect.
 	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
@@ -238,6 +260,58 @@ func editEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 			PlainTextUrl: addTXTFormatString(r.URL),
 		}
 		err := tpl.ExecuteTemplate(w, "editenvironment", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}
+}
+
+func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
+	requestedDocumentClass := r.FormValue("documentclass")
+	if requestedDocumentClass == "" {
+		requestedDocumentClass = mux.Vars(r)["documentclass"]
+	}
+
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/env/"+escapeurl(requestedDocumentClass), http.StatusUnauthorized)
+		return
+	}
+
+	var dc *ltxref.DocumentClass
+	dc = latexref.GetDocumentClass(requestedDocumentClass)
+	if dc == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
+	}
+	switch r.Method {
+	case "POST":
+		dc.ShortDescription["en"] = r.FormValue("shortdesc")
+		dc.Description["en"] = template.HTML(r.FormValue("description"))
+		dc.Label = strings.Split(r.FormValue("tags"), ",")
+
+		http.Redirect(w, r, "/class/"+escapeurl(requestedDocumentClass)+"?edit="+editToken(r), http.StatusSeeOther)
+		return
+
+	case "GET":
+		backlink := &url.URL{}
+		backlink.Path = "/class/" + requestedDocumentClass
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+
+		data := struct {
+			Backlink      string
+			DocumentClass *ltxref.DocumentClass
+			XMLUrl        string
+			PlainTextUrl  string
+			Edit          string
+		}{
+			Backlink:      backlink.String(),
+			DocumentClass: dc,
+			Edit:          editToken(r),
+			XMLUrl:        addXMLFormatString(r.URL),
+			PlainTextUrl:  addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "editdocumentclass", data)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -396,7 +470,7 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedDocumentclass := mux.Vars(r)["documentclass"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
 
-	class := latexref.GetDocumentclass(requestedDocumentclass)
+	class := latexref.GetDocumentClass(requestedDocumentclass)
 	if class == nil {
 		// not found -> error // TODO
 		return
@@ -404,7 +478,7 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
-		l.Documentclasses = append(l.Documentclasses, *class)
+		l.DocumentClasses = append(l.DocumentClasses, class)
 		str, err := l.ToXML()
 		if err != nil {
 			fmt.Println(err)
@@ -425,14 +499,14 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 			Backlink      string
 			Filter        string
 			Edit          string
-			Documentclass ltxref.Documentclass
+			DocumentClass ltxref.DocumentClass
 			XMLUrl        string
 			PlainTextUrl  string
 		}{
 			Backlink:      backlink.String(),
 			Edit:          editToken(r),
 			Filter:        filtervalue,
-			Documentclass: *class,
+			DocumentClass: *class,
 			XMLUrl:        addXMLFormatString(r.URL),
 			PlainTextUrl:  addTXTFormatString(r.URL),
 		}
@@ -557,7 +631,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	l.Commands = latexref.FilterCommands(filter, tag)
 	l.Packages = latexref.FilterPackages(filter, tag)
 	l.Environments = latexref.FilterEnvironments(filter, tag)
-	l.Documentclasses = latexref.FilterDocumentclasses(filter, tag)
+	l.DocumentClasses = latexref.FilterDocumentClasses(filter, tag)
 
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":

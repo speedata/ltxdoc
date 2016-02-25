@@ -42,6 +42,27 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="adddc">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-inline" action="/adddocumentclass?edit={{.}}" method="POST">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Add new document class</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" name="documentclass" placeholder="document class name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button  class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {{end}}
 
 <div class="container-fluid">
@@ -86,8 +107,8 @@
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
-{{ with .Documentclasses }}<h1 id="documentclasses">Documentclasses</h1>{{ end }}
-{{ range .Documentclasses }}
+{{ with .DocumentClasses }}<h1 id="documentclasses">Documentclasses {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#adddc" href="#">add new</a></small>{{end}}</h1>{{ end }}
+{{ range .DocumentClasses }}
 <div class="cmddescription"><a href="/class/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>

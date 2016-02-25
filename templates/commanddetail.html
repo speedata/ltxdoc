@@ -6,10 +6,10 @@
     <a href="{{.Backlink}}">&lt;--  back to list</a>
   </div>
 </div>
-{{ with .Documentclass }}
+{{ with .DocumentClass }}
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h1>{{ .Name }}</h1>
+      <h1>{{ .Name }}{{ if $.Edit}} <small><a href="/editdc/{{.Name}}?edit={{$.Edit}}">(edit)</small></a>{{ end }}</h1>
       <p>{{  index .ShortDescription  "en" }}</p>
     </div>
   </div>
