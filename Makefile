@@ -30,7 +30,13 @@ clean:
 	-rm -rf $(GOBIN)/ltxdoc pkg
 
 bindata:
-	$(GOBIN)/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml
+	if [ -e "insertatend.txt" ] ; then \
+		sed -i.tmp -e  '/attheend/rinsertatend.txt' templates/layout.html; \
+	fi
+	$(GOBIN)/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml ; \
+	if [ -e "insertatend.txt" ] ; then \
+		cp templates/layout.html.tmp templates/layout.html ; \
+	fi
 	cd src/github.com/speedata/ltxref;  make bindata
 
 bindata-debug:
