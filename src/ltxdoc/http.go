@@ -76,6 +76,17 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 			}
 			return template.HTML(ret)
 		},
+		"buildurl": func(inlist ...string) string {
+			u := &url.URL{}
+			u.Path = inlist[0]
+			for i := 1; i < len(inlist); i++ {
+				if inlist[i+1] != "" {
+					addKeyValueToUrl(u, inlist[i], inlist[i+1])
+				}
+				i++
+			}
+			return u.String()
+		},
 	}
 
 	maintemplate := string(MustAsset("templates/main.html"))

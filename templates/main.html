@@ -127,9 +127,9 @@
 
       <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
       <h1 id="tags">Tags</h1>
-      {{with .Tag}}<p><a href="/{{ with $.Filter }}?filter={{ urlescape . }}{{end}}">Show all</a></p>{{end}}
+      {{with .Tag}}<p><a href="{{buildurl "/" "filter" $.Filter "edit" $.Edit }}">Show all</a></p>{{end}}
       <ul class="list-unstyled" >
-{{ range .Tags }}<li{{ if eq . $.Tag}} class="active"{{end}}><a href="/?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}tag={{ . }}{{with $.Edit }}&amp;edit={{.}}{{end}}">{{ . }}</a></li>{{ end }}
+{{ range .Tags }}<li{{ if eq . $.Tag}} class="active"{{end}}><a href="{{buildurl "/" "filter" $.Filter "tag" . "edit" $.Edit }}">{{ . }}</a></li>{{ end }}
       </ul>
     </div>
   </div>
