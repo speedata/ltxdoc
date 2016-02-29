@@ -63,6 +63,27 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" id="addpkg">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-inline" action="/addpackage?edit={{.}}" method="POST">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Add new package</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" name="package" placeholder="package name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button  class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {{end}}
 
 <div class="container-fluid">
@@ -115,7 +136,7 @@
 </div></a></div>
 {{end}}
 
-{{ with .Packages }}<h1 id="packages">Packages</h1>{{ end }}
+{{ with .Packages }}<h1 id="packages">Packages {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#addpkg" href="#">add new</a></small>{{end}}</h1>{{ end }}
 {{ range .Packages }}
 <div class="cmddescription"><a href="/pkg/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}{{end}}&amp;{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>

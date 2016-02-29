@@ -1,3 +1,73 @@
+{{ define "editpackage"}}{{template "head" . -}}
+{{ with .Package -}}
+<div class="container-fluid">
+<h1>Package <tt>{{ .Name }}</tt></h1>
+<form class="form-horizontal" action="/editpackage/{{.Name}}?edit={{$.Edit}}" method="POST">
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
+		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="inputshortdesc" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Short description</label>
+		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+		  				<input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description">
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailed description</label>
+		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+ 						<div id="descriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
+						</div>
+		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailed description ...">{{ index .Description "en"}}</textarea>
+		  			</div>
+		  		</div>
+		  	</div>
+{{ range .Options -}}
+	{{.Name}}<br>
+{{end}}
+
+		  				<div class="row">
+				<div class="col-md-offset-3">
+					<a role="button" class="btn btn-default" href="{{$.Backlink}}">Cancel</a>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</div>
+
+</form>
+</div>
+    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
+
+    <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
+    <script src="/assets/js/advanced_and_extended.js"></script>
+   <script>
+	$( document ).ready(function() {
+		new wysihtml5.Editor('descriptioneditor', {
+    		toolbar: 'descriptiontoolbar',
+    		parserRules:  wysihtml5ParserRules
+ 		});
+	});
+</script>
+
+{{end}}{{/*  with package */}}
+{{ template "foot" . }}
+{{ end }}{{/*  define editpackage  */}}
+
 {{ define "editdocumentclass"}}{{template "head" .}}
 
 {{ with .DocumentClass}}

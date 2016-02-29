@@ -116,9 +116,11 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	r.HandleFunc("/addcommand", addCommandHandler).Methods("POST")
 	r.HandleFunc("/addenvironment", addEnvironmentHandler).Methods("POST")
 	r.HandleFunc("/adddocumentclass", addDocumentClassHandler).Methods("POST")
+	r.HandleFunc("/addpackage", addPackageHandler).Methods("POST")
 	r.HandleFunc("/editcmd/{command}", editCommandHandler)
 	r.HandleFunc("/editenv/{environment}", editEnvironmentHandler)
 	r.HandleFunc("/editdc/{documentclass}", editDocumentClassHandler)
+	r.HandleFunc("/editpackage/{package}", editPackageHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
@@ -184,6 +186,26 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	backlink := &url.URL{}
 	backlink.Path = "/editcmd/" + requestedCommand
+	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+	// Post/Redirect/Get doesn't work with temp redirect.
+	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
+	return
+}
+
+func addPackageHandler(w http.ResponseWriter, r *http.Request) {
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		return
+	}
+	requestedPackage := r.FormValue("package")
+	_, err := latexref.AddPackage(requestedPackage)
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		fmt.Println(err)
+		return
+	}
+	backlink := &url.URL{}
+	backlink.Path = "/editpackage/" + requestedPackage
 	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
 	// Post/Redirect/Get doesn't work with temp redirect.
 	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
@@ -278,6 +300,44 @@ func editEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func editPackageHandler(w http.ResponseWriter, r *http.Request) {
+	requestedPackage := r.FormValue("package")
+	if requestedPackage == "" {
+		requestedPackage = mux.Vars(r)["package"]
+	}
+	if editToken(r) == "" {
+		http.Redirect(w, r, "/pkg/"+escapeurl(requestedPackage), http.StatusUnauthorized)
+		return
+	}
+	var pkg *ltxref.Package
+	pkg = latexref.GetPackageWithName(requestedPackage)
+	switch r.Method {
+	case "GET":
+		backlink := &url.URL{}
+		backlink.Path = "/pkg/" + requestedPackage
+		addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
+
+		data := struct {
+			Backlink     string
+			Package      *ltxref.Package
+			XMLUrl       string
+			PlainTextUrl string
+			Edit         string
+		}{
+			Backlink:     backlink.String(),
+			Package:      pkg,
+			Edit:         editToken(r),
+			XMLUrl:       addXMLFormatString(r.URL),
+			PlainTextUrl: addTXTFormatString(r.URL),
+		}
+		err := tpl.ExecuteTemplate(w, "editpackage", data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}
+}
+
 func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 	requestedDocumentClass := r.FormValue("documentclass")
 	if requestedDocumentClass == "" {
@@ -285,7 +345,7 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if editToken(r) == "" {
-		http.Redirect(w, r, "/env/"+escapeurl(requestedDocumentClass), http.StatusUnauthorized)
+		http.Redirect(w, r, "/class/"+escapeurl(requestedDocumentClass), http.StatusUnauthorized)
 		return
 	}
 
@@ -594,7 +654,7 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":
 		l := ltxref.Ltxref{Version: latexref.Version}
-		l.Packages = append(l.Packages, *pkg)
+		l.Packages = append(l.Packages, pkg)
 		str, err := l.ToXML()
 		if err != nil {
 			fmt.Println(err)
@@ -612,8 +672,8 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 
 		data := struct {
 			Backlink     string
-			Filter       string
 			Edit         string
+			Filter       string
 			Package      ltxref.Package
 			XMLUrl       string
 			PlainTextUrl string
