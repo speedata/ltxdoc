@@ -1,0 +1,62 @@
+{{ define "cmddetail" }}{{ with .Command }}{{ underline .Name 1 }}{{index .ShortDescription  "en"}}{{ range $idx, $var := .Variant }}
+{{ if gt $idx 0 }}······················································{{ end }}
+
+{{ if .Arguments }}{{.Name}} |{{ range $dummy, $argument := $var.Arguments }} {{ showargument $argument.Type }} |{{end }}{{/* range .Arguments */}}
+{{ space .Name}} |{{ range $idx, $argument := $var.Arguments }} {{ placehoder $argument.Type $idx $argument.Optional }} |{{end }}{{/* range .Arguments */}}
+{{ else }}{{ .Name }}{{end}}
+
+{{ showdescription ( index .Description "en" )}}
+{{end }}{{/* range .Variant */}}
+
+{{ showdescription ( index .Description "en" )}}
+{{end }}{{/*  with .Command */}}
+{{ end }}{{/*  */}}
+
+
+
+
+
+
+{{ define  "classdetail" }}{{ with .Class }}{{ underline .Name 1 }}{{  index .ShortDescription "en" }}
+
+{{ underline "Class options" 2 }}{{range .Optiongroup}}{{ if ( index .ShortDescription "en") }}{{ index .ShortDescription "en" }}
+{{end}}{{range .Classoption}}{{ if .Default}} *{{else}}  {{end}}{{.Name}}{{ with ( index .ShortDescription "en") }} - {{end}}{{ index .ShortDescription "en" }}
+{{end}}
+{{end}}
+······················································
+{{ showdescription ( index .Description "en" )}}
+{{end}}
+{{end }}{{/* classdetail */}}
+
+
+
+
+
+{{ define  "envdetail" }}{{ with .Environment}}{{ underline .Name 1 }}
+{{ index .ShortDescription "en" }}
+{{ range $idx, $var := .Variant }}
+{{ if gt $idx 0 }}······················································{{ end }}
+
+\begin{{ "{" }}{{ .Name }}{{ "}" }}{{ if .Arguments }} |{{ range $dummy, $argument := $var.Arguments }} {{ showargument $argument.Type }} |{{end }}{{/* range .Arguments */}}
+{{ envspace .Name}} |{{ range $idx, $argument := $var.Arguments }} {{ placehoder $argument.Type $idx $argument.Optional }} |{{end }}{{/* range .Arguments */}}
+{{end}}
+...
+\end{{ "{" }}{{ .Name }}{{ "}" }}
+
+{{ showdescription ( index .Description "en" )}}
+{{end }}{{/* range .Variant */}}
+{{ showdescription ( index .Description "en" )}}
+{{end}}{{/* with .Environment */}}{{end}}{{/* envdetail */}}
+
+
+
+
+
+
+{{ define  "pkgdetail" }}{{ with .Pkg}}{{ underline .Name 1}}{{ index .ShortDescription "en" }}
+
+{{ underline "Package options" 2}}{{ range .Options }}{{.Name }}{{ with ( index .Description "en") }} - {{end}}{{ showdescription ( index .Description "en" )}}
+{{end}}{{/* range .Options */}}
+
+{{ underline "Commands defined in this package" 2}}{{ range .Commands }}{{.Name }}{{end}}
+{{end}}{{end}}{{/* pkgdetail */}}
