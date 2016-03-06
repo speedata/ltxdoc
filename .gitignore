@@ -2,3 +2,5 @@ edittokens.txt
 bin
 pkg
 src/ltxdoc/bindata.go
+templates/layout.html.tmp
+insertatend.txt
