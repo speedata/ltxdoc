@@ -104,7 +104,7 @@ type DocumentClass struct {
 	Level            string
 	ShortDescription map[string]string
 	Description      map[string]template.HTML
-	Optiongroup      []Optiongroup
+	Optiongroup      []*Optiongroup
 }
 
 func NewDocumentClass() *DocumentClass {
@@ -114,17 +114,27 @@ func NewDocumentClass() *DocumentClass {
 	return dc
 }
 
+func NewOptionGroup() *Optiongroup {
+	og := &Optiongroup{}
+	og.ShortDescription = make(map[string]string)
+	return og
+}
+
 type Optiongroup struct {
-	Name             string
 	ShortDescription map[string]string
-	Classoption      []Classoption
+	Classoption      []*Classoption
+}
+
+func NewClassOption() *Classoption {
+	co := &Classoption{}
+	co.ShortDescription = make(map[string]string)
+	return co
 }
 
 type Classoption struct {
 	Name             string
 	Default          bool
 	ShortDescription map[string]string
-	Description      map[string]template.HTML
 }
 
 func NewCommand() *Command {

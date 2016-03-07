@@ -112,15 +112,9 @@ forloop:
 	}
 	return dc
 }
-func readOptiongroup(attributes []xml.Attr, dec *xml.Decoder) Optiongroup {
-	og := Optiongroup{}
+func readOptiongroup(attributes []xml.Attr, dec *xml.Decoder) *Optiongroup {
+	og := &Optiongroup{}
 	og.ShortDescription = make(map[string]string)
-	for _, attribute := range attributes {
-		switch attribute.Name.Local {
-		case "name":
-			og.Name = attribute.Value
-		}
-	}
 
 forloop:
 	for {
@@ -146,10 +140,9 @@ forloop:
 	return og
 }
 
-func readClassoption(attributes []xml.Attr, dec *xml.Decoder) Classoption {
-	po := Classoption{}
+func readClassoption(attributes []xml.Attr, dec *xml.Decoder) *Classoption {
+	po := &Classoption{}
 	po.ShortDescription = make(map[string]string)
-	po.Description = make(map[string]template.HTML)
 
 	for _, attribute := range attributes {
 		switch attribute.Name.Local {
@@ -172,9 +165,6 @@ forloop:
 			case "shortdescription":
 				lang, text := readShortDescription(v.Attr, dec)
 				po.ShortDescription[lang] = text
-			case "description":
-				lang, text := readDescription(v.Attr, dec)
-				po.Description[lang] = text
 			}
 		case xml.EndElement:
 			if v.Name.Local == "classoption" {

@@ -91,7 +91,6 @@
             <zeroOrMore>
                 <element name="optiongroup">
                     <!-- documentation purpose only -->
-                    <attribute name="name"/>
                     <ref name="shortdescription"/>
                     <oneOrMore>
                         <element name="classoption">
@@ -100,7 +99,6 @@
                                 <choice><value>yes</value><value>no</value></choice>
                             </attribute>
                             <ref name="shortdescription"/>
-                            <ref name="description"/>
                         </element>
                     </oneOrMore>
                 </element>
@@ -114,12 +112,8 @@
     </define>
     <define name="package">
         <element name="package">
-            <oneOrMore>
-                <element name="shortdescription">
-                    <ref name="attlang"/>
-                    <text/>
-                </element>
-            </oneOrMore>
+            <ref name="shortdescription"/>
+            <ref name="description"/>
             <zeroOrMore>
                 <element name="packageoption">
                     <attribute name="name"/>
@@ -139,7 +133,6 @@
             <oneOrMore>
                 <ref name="command"/>
             </oneOrMore>
-            <ref name="description"></ref>
         </element>
     </define>
     <define name="shortdescription">

@@ -39,7 +39,7 @@ bindata: $(GOBIN)/go-bindata
 	fi
 	$(GOBIN)/go-bindata -o src/ltxdoc/bindata.go -pkg ltxdoc  -ignore=\\.DS_Store  httproot/... templates/... ltxref.xml ; \
 	if [ -e "insertatend.txt" ] ; then \
-		cp templates/layout.html.tmp templates/layout.html ; \
+		mv templates/layout.html.tmp templates/layout.html ; \
 	fi
 	cd src/github.com/speedata/ltxref;  make bindata
 

@@ -1,3 +1,118 @@
+{{ define "editdocumentclass"}}{{template "head" .}}
+{{ with .DocumentClass}}
+<div id="panel" style="display: none;">
+	<div class="row">
+		<div class="form-group">
+			<div class="col-sm-3 col-md-3 col-lg-3 col-xs-3"></div>
+			<div class="col-sm-8 col-md-8 col-lg-8 col-xs-8">
+				<label for="shortdesc">Short description</label>
+				<input type="text" class="form-control ogshortdescription" name="shortdesc" value="xx" placeholder="A short description">
+			</div>
+		</div><!-- for group -->
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<label for="variant" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label varlabel"></label>
+			<div class="col-sm-8 col-md-8 col-lg-8 col-xs-8" >
+				<input class="argumentcount" type="hidden" value="0">
+				<table class="table table-striped " >
+				<thead>
+					<tr><th style="width: 30%">Option name</th><th>Default?</th><th  style="width: 60%">Short description</th><th>Remove</th></tr>
+				</thead>
+				<tbody>
+  				</tbody>
+				</table>
+				<p><a class="addoptiontogroup" href="#">Add option to this group</a></p>
+				<p><a class="removeog" href="#">Delete the option group above</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<h1>Document class <tt>{{ .Name }}</tt></h1>
+  			<form class="form-horizontal" action="/editdc/{{.Name}}?edit={{$.Edit}}" method="POST">
+			<input id="panelcount" type="hidden" name="panelcount" value="0">
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
+		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label for="inputshortdesc" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Short description</label>
+		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+		  				<input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description">
+		  			</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
+		  		<div class="form-group">
+		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailed description</label>
+		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+ 						<div id="descriptiontoolbar" >
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
+							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
+							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
+						</div>
+		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailed description ...">{{ index .Description "en"}}</textarea>
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div id="panelhere"></div>
+
+		  	<div id="varrow" class="row">
+		  		<div class="col-md-offset-3 col-md-5">
+					<p><a id="addpanel" href="#">Add an option group</a></p>
+				</div>
+			</div><!-- row -->
+
+			<div class="row">
+				<div class="col-md-offset-3">
+					<a role="button" class="btn btn-default" href="{{$.Backlink}}">Cancel</a>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</div>
+
+			</form>
+</div>
+    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
+    <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
+    <script src="/assets/js/advanced_and_extended.js"></script>
+    <script src="/assets/js/ltxedit.js"></script>
+
+   <script>
+	$( document ).ready(function() {
+		$("#addpanel").click(addclassoptiongroup);
+
+		new wysihtml5.Editor('descriptioneditor', {
+    		toolbar: 'descriptiontoolbar',
+    		parserRules:  wysihtml5ParserRules
+ 		});
+		{{ range .Optiongroup}}
+ 		var panelcount = addclassoptiongroup(null,{{ index .ShortDescription "en"}})
+ 		{{ range .Classoption}}
+	 		addclassoption(null,panelcount, {{.Name}},{{index .ShortDescription "en"}}, {{ .Default }})
+	 	{{ end }}
+ 		{{ end }}
+ 		console.log(panelcount)
+	});
+</script>
+{{ end }}{{/*  with documentclass */}}
+{{ template "foot" . }}
+{{ end }}{{/*  define editdocumentclass  */}}
+
+{{/*  -----------------------------------------------------------------------------------  */}}
+
 {{ define "editpackage"}}{{template "head" . -}}
 {{ with .Package -}}
 <div class="container-fluid">
@@ -68,110 +183,8 @@
 {{ template "foot" . }}
 {{ end }}{{/*  define editpackage  */}}
 
-{{ define "editdocumentclass"}}{{template "head" .}}
 
-{{ with .DocumentClass}}
-<div class="container-fluid">
-	<h1>Document class <tt>{{ .Name }}</tt></h1>
-
-  			<form class="form-horizontal" action="/editdc/{{.Name}}?edit={{$.Edit}}" method="POST">
-			<input id="maxoptiongroupcount" type="hidden" name="maxoptiongroupcount" value="0">
-  			<div class="row">
-		  		<div class="form-group">
-		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
-		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
-		  			</div>
-		  		</div>
-		  	</div>
-  			<div class="row">
-		  		<div class="form-group">
-		  			<label for="inputshortdesc" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Short description</label>
-		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-		  				<input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description">
-		  			</div>
-		  		</div>
-		  	</div>
-  			<div class="row">
-		  		<div class="form-group">
-		  			<label class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Detailed description</label>
-		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
- 						<div id="descriptiontoolbar" >
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code"><i class="fa fa-code"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><i class="fa fa-header"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p"><i class="fa fa-paragraph"></i></a>
-							 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="pre"><i class="fa fa-bars"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertOrderedList" data-wysihtml5-command-value="ol"><i class="fa fa-list-ol"></i></a>
-							<a unselectable="on" href="javascript:;" data-wysihtml5-command="insertUnorderedList" data-wysihtml5-command-value="ul"><i class="fa fa-list-ul"></i></a>
-						</div>
-		  				<textarea id="descriptioneditor" name="description" class="form-control" placeholder="Enter a detailed description ...">{{ index .Description "en"}}</textarea>
-		  			</div>
-		  		</div>
-		  	</div>
-		  	{{ range .Optiongroup}}
-		  	{{ $og := .Name}}
-	  		<div class="row">
-  				<div class="form-group">
-					<label for="variant" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label varlabel">Option group</label>
-					<div class="col-sm-8 col-md-8 col-lg-8 col-xs-8">
-						<label for="shortdesc">Short description</label>
-		  				<input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description">
-					</div>
-				</div><!-- for group -->
-			</div>
-	  		<div class="row">
-  				<div class="form-group">
-					<label for="variant" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label varlabel"></label>
-					<div class="col-sm-8 col-md-8 col-lg-8 col-xs-8" >
-			  			<table class="table table-striped " >
-			  			<thead>
-			  					<tr><th style="width: 30%">Option name</th><th>Default?</th><th  style="width: 60%">Short description</th><th>Remove</th></tr>
-			  			</thead>
-			  			<tbody>
-			{{ range .Classoption }}
-							<tr>
-								<td><input id="inputshortdesc" type="text" class="form-control" name="name" value="{{.Name}}" placeholder="Name of the option"></td>
-								<td><input type="checkbox" name="{{$og}}radio" class="form-control" {{if .Default}}checked="checked"{{end}}></td>
-								<td><input id="inputshortdesc" type="text" class="form-control" name="shortdesc" value="{{ index .ShortDescription "en"}}" placeholder="A short description"></td>
-								<td><a href="#">X</a></td>
-							</tr>
-			{{end}}{{/* range .Classoption */}}
-			  			</tbody>
-						</table>
-
-					</div>
-				</div>
-			</div>
-			{{end}}{{/* range .Optiongroup */}}
-
-			<div class="row">
-				<div class="col-md-offset-3">
-					<a role="button" class="btn btn-default" href="{{$.Backlink}}">Cancel</a>
-					<button class="btn btn-primary" type="submit">Save changes</button>
-				</div>
-			</div>
-
-			</form>
-</div>
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
-
-    <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
-    <script src="/assets/js/advanced_and_extended.js"></script>
-   <script>
-	$( document ).ready(function() {
-		new wysihtml5.Editor('descriptioneditor', {
-    		toolbar: 'descriptiontoolbar',
-    		parserRules:  wysihtml5ParserRules
- 		});
-	});
-</script>
-{{ end }}{{/*  with documentclass */}}
-{{ template "foot" . }}
-{{ end }}{{/*  define editdocumentclass  */}}
-
+{{/*  -----------------------------------------------------------------------------------  */}}
 
 
 {{ define "editenvironment" }}{{template "head" .}}
@@ -312,6 +325,7 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
 {{end}}{{/*  define editenvironment  */}}
 {{/*   */}}
 
+{{/*  -----------------------------------------------------------------------------------  */}}
 
 
 {{ define "editcommand"}}{{template "head" .}}

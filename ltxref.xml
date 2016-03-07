@@ -1,73 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <ltxref xmlns="urn:speedata.de:2015:latexref" version="0.0.1">
   <command name="\hbox" label="plain,box command" level="expert">
     <shortdescription lang="en">Create a horizontal box</shortdescription>
-    <description lang="en"/>
+    <description lang="en"></description>
     <variant name="\hbox">
-      <argument optional="yes" name="to" type="todimenorspreaddimen"/>
-      <argument optional="no" name="contents" type="mandarg"/>
-      <description lang="en"><![CDATA[This is a <i>description</i> of hbox]]></description>
+      <argument name="to" optional="yes" type="todimenorspreaddimen"></argument>
+      <argument name="contents" optional="no" type="mandarg"></argument>
+      <description lang="en">This is a &lt;i&gt;description&lt;/i&gt; of hbox</description>
     </variant>
   </command>
-  <command name="\makebox" level="beginner" label="box command">
+  <command name="\large" label="font size" level="beginner">
+    <shortdescription lang="en">Switch to a larger font</shortdescription>
+    <description lang="en">&lt;p&gt;Use &lt;code&gt;\large&lt;/code&gt; like this&lt;/p&gt;&lt;pre&gt;{\large ....}&lt;/pre&gt;and not like this:&lt;br&gt;&lt;pre&gt;\large{...}&lt;/pre&gt;This is because &lt;code&gt;\large&lt;/code&gt; switches to the larger font immediately.&lt;br&gt;&lt;br&gt;&lt;br&gt;</description>
+    <variant name="\large">
+      <description lang="en">Description of large</description>
+    </variant>
+  </command>
+  <command name="\makebox" label="box command" level="beginner">
     <shortdescription lang="en">Make a box with a given width and height</shortdescription>
     <description lang="en">Some long description</description>
     <variant name="makebox">
-      <argument name="width" optional="yes" type="optarg"/>
-      <argument name="pos" optional="yes" type="optarg"/>
-      <argument name="text" optional="no" type="mandarg"/>
-      <description lang="en"/>
+      <argument name="width" optional="yes" type="optarg"></argument>
+      <argument name="pos" optional="yes" type="optarg"></argument>
+      <argument name="text" optional="no" type="mandarg"></argument>
+      <description lang="en"></description>
     </variant>
   </command>
   <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
     <shortdescription lang="en">Sectioning command to create a heading and an entry in the table of contents.</shortdescription>
-    <description lang="en"><![CDATA[<p>This is a description of <tt>\section</tt>.
-            <ol>
-              <li>The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.</li>
-              <li>The second denotes the name of the section.
-            </ol></p>
-<pre>
+    <description lang="en">&lt;p&gt;This is a description of &lt;tt&gt;\section&lt;/tt&gt;.
+            &lt;ol&gt;
+              &lt;li&gt;The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.&lt;/li&gt;
+              &lt;li&gt;The second denotes the name of the section.
+            &lt;/ol&gt;&lt;/p&gt;
+&lt;pre&gt;
 \section{some example section}
-</pre>
-            ]]></description>
+&lt;/pre&gt;
+            </description>
     <variant name="\section">
-      <argument optional="yes" name="shorttitle" type="optarg"/>
-      <argument optional="no" name="longtitle" type="mandarg"/>
-      <description lang="en"><![CDATA[<ol>
-              <li>The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.</li>
-              <li>The second denotes the name of the section.
-            </ol>]]></description>
+      <argument name="shorttitle" optional="yes" type="optarg"></argument>
+      <argument name="longtitle" optional="no" type="mandarg"></argument>
+      <description lang="en">&lt;ol&gt;
+              &lt;li&gt;The first argument is optional. When present, it will be taken as the entry in the table of contents and for the running head.&lt;/li&gt;
+              &lt;li&gt;The second denotes the name of the section.
+            &lt;/ol&gt;</description>
     </variant>
     <variant name="\section*">
-      <argument optional="no" name="longtitle" type="mandarg"/>
-      <description lang="en"><![CDATA[<ol>
-              <li>The name of the section.</li>
-            </ol>]]></description>
+      <argument name="longtitle" optional="no" type="mandarg"></argument>
+      <description lang="en">&lt;ol&gt;
+              &lt;li&gt;The name of the section.&lt;/li&gt;
+            &lt;/ol&gt;</description>
     </variant>
-    <seealso><cmd name="\chapter"/>, <cmd name="\tableofcontents"/></seealso>
   </command>
   <command name="\tableofcontents" label="sectioning,tableofcontents,document structure" level="beginner">
     <shortdescription lang="en">Show the list of chapters, sections and similar commands</shortdescription>
-    <description lang="en"/>
+    <description lang="en"></description>
     <variant name="\tableofcontents">
-      <description lang="en"><![CDATA[<p>A table of contents is produced with the \tableofcontents command. You put the command right where you want the table of contents to go; LaTeX does the rest for you. A previous run must have generated a .toc file.</p>
-<p>The \tableofcontents command produces a heading, but it does not automatically start a new page. If you want a new page after the table of contents, write a \newpage command after the \tableofcontents command.</p>
-<p>The analogous commands \listoffigures and \listoftables produce a list of figures and a list of tables (from .lof and .lot files), respectively. Everything works exactly the same as for the table of contents.</p>]]></description>
+      <description lang="en">&lt;p&gt;A table of contents is produced with the \tableofcontents command. You put the command right where you want the table of contents to go; LaTeX does the rest for you. A previous run must have generated a .toc file.&lt;/p&gt;
+&lt;p&gt;The \tableofcontents command produces a heading, but it does not automatically start a new page. If you want a new page after the table of contents, write a \newpage command after the \tableofcontents command.&lt;/p&gt;
+&lt;p&gt;The analogous commands \listoffigures and \listoftables produce a list of figures and a list of tables (from .lof and .lot files), respectively. Everything works exactly the same as for the table of contents.&lt;/p&gt;</description>
     </variant>
   </command>
   <command name="\usepackage" label="preamble" level="beginner">
     <shortdescription lang="en">Loads a package which can influence the layout or the functionality of the document</shortdescription>
     <description lang="en">You can give a list of packages to load.</description>
     <variant name="\usepackage">
-      <argument name="options" optional="yes" type="optlist"/>
-      <argument name="packagelist" optional="no" type="mandlist"/>
-      <description lang="en"/>
+      <argument name="options" optional="yes" type="optlist"></argument>
+      <argument name="packagelist" optional="no" type="mandlist"></argument>
+      <description lang="en"></description>
     </variant>
   </command>
-  <command name="\large" label="font size" level="beginner">
-    <shortdescription lang="en">Switch to a larger font</shortdescription>
-    <description lang="en">&lt;p&gt;Use &lt;code&gt;\large&lt;/code&gt; like this&lt;/p&gt;&lt;pre&gt;{\large ....}&lt;/pre&gt;and not like this:&lt;br&gt;&lt;pre&gt;\large{...}&lt;/pre&gt;This is because &lt;code&gt;\large&lt;/code&gt; switches to the larger font immediately.&lt;br&gt;&lt;br&gt;&lt;br&gt;</description>
-  </command>
+  <environment name="description" level="beginner" label="list">
+    <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
+    <description lang="en"></description>
+    <variant name="description">
+      <description lang="en">To change the formatting of the label, you must redefine \descriptionlabel.</description>
+    </variant>
+  </environment>
   <environment name="itemize" level="beginner" label="lists">
     <shortdescription lang="en">Make an unordered list</shortdescription>
     <description lang="en"></description>
@@ -75,256 +83,231 @@
       <description lang="en"></description>
     </variant>
   </environment>
-  <environment name="description" level="beginner" label="list">
-    <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
-    <description lang="en"/>
-    <variant name="description">
-      <description lang="en">To change the formatting of the label, you must redefine \descriptionlabel.</description>
-    </variant>
-  </environment>
-  <environment name="minipage" label="box command" level="beginner">
+  <environment name="minipage" level="beginner" label="box command">
     <shortdescription lang="en">The minipage environment creates a rectangle area of a fixed width</shortdescription>
     <description lang="en">The minipage environment is very nice</description>
     <variant name="minipage">
-      <argument name="pos" optional="yes" type="optarg"/>
-      <argument name="height" optional="yes" type="optarg"/>
-      <argument name="inner-pos" optional="yes" type="optarg"/>
-      <argument name="width" optional="no" type="mandarg"/>
-      <description lang="en"/>
+      <argument name="pos" optional="yes" type="optarg"></argument>
+      <argument name="height" optional="yes" type="optarg"></argument>
+      <argument name="inner-pos" optional="yes" type="optarg"></argument>
+      <argument name="width" optional="no" type="mandarg"></argument>
+      <description lang="en"></description>
     </variant>
   </environment>
-  <documentclass name="article" label="documentclass">
-    <shortdescription lang="en">For a journal article, a presentation, and miscellaneous general use.</shortdescription>
-    <description lang="en">Description for article</description>
-    <optiongroup name="font size">
+  <documentclass name="aaa" level="expert" label="documentclass,testing">
+    <shortdescription lang="en">A class usable for testing purpose only.</shortdescription>
+    <description lang="en">This documentclass is intended primarily for testing and reference
+      purposes; loading it with \LoadClass{minimal} to use it as a base
+      class for some other document class is probably a mistake. If you wish
+      to start a new document class based on the minimal class, it is better
+      to start by copying the *contents* of minimal.cls directly into your
+      new class and making suitable modifications. You may, at that point
+      also want to start documenting the code using the conventions of the
+      doc package, rather than using simple ascii comments as used here.</description>
+    <optiongroup>
       <shortdescription lang="en">Font size</shortdescription>
       <classoption name="10pt" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en">ten point</shortdescription>
       </classoption>
       <classoption name="11pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en">eleven point</shortdescription>
       </classoption>
       <classoption name="12pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="paper size">
-      <shortdescription lang="en">Paper size</shortdescription>
-      <classoption name="a4paper" default="no">
-        <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="a5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="b5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="letterpaper" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="legalpaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="executivepaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="paper orientation">
-      <shortdescription lang="en">Paper orientation</shortdescription>
-      <classoption name="landscape" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="titlepage">
-      <shortdescription lang="en">Separate page for title</shortdescription>
-      <classoption name="titlepage" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="draft/final">
-      <shortdescription lang="en">State of the document</shortdescription>
-      <classoption name="draft" default="no">
-        <shortdescription lang="en">Show overfull rules</shortdescription>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="final" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="one/twocolumn">
-      <shortdescription lang="en">One or two column document</shortdescription>
-      <classoption name="onecolumn" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="twocolumn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="one/twoside">
-      <shortdescription lang="en">Different page layout on left / right page</shortdescription>
-      <classoption name="oneside" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-      <classoption name="twoside" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="leqno">
-      <shortdescription lang="en">Equation numbers centered or left</shortdescription>
-      <classoption name="leqno" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="fleqn">
-      <shortdescription lang="en"/>
-      <classoption name="fleqn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
-      </classoption>
-    </optiongroup>
-    <optiongroup name="openbib">
-      <shortdescription lang="en"/>
-      <classoption name="openbib" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
   </documentclass>
-  <documentclass name="book" label="documentclass">
-    <shortdescription lang="en">Full-length books, including chapters and possibly including front matter, such as a preface, and back matter, such as an appendix.</shortdescription>
-    <description lang="en">Description for book</description>
-    <optiongroup name="font size">
+  <documentclass name="article" level="beginner" label="documentclass">
+    <shortdescription lang="en">For a journal article, a presentation, and miscellaneous general use.</shortdescription>
+    <description lang="en">Description for article</description>
+    <optiongroup>
       <shortdescription lang="en">Font size</shortdescription>
       <classoption name="10pt" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="11pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="12pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="paper size">
+    <optiongroup>
       <shortdescription lang="en">Paper size</shortdescription>
       <classoption name="a4paper" default="no">
         <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
-        <description lang="en"/>
       </classoption>
       <classoption name="a5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="b5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="letterpaper" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="legalpaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="executivepaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="paper orientation">
+    <optiongroup>
       <shortdescription lang="en">Paper orientation</shortdescription>
       <classoption name="landscape" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="titlepage">
+    <optiongroup>
       <shortdescription lang="en">Separate page for title</shortdescription>
       <classoption name="titlepage" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="draft/final">
+    <optiongroup>
       <shortdescription lang="en">State of the document</shortdescription>
       <classoption name="draft" default="no">
         <shortdescription lang="en">Show overfull rules</shortdescription>
-        <description lang="en"/>
       </classoption>
       <classoption name="final" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="one/twocolumn">
+    <optiongroup>
       <shortdescription lang="en">One or two column document</shortdescription>
       <classoption name="onecolumn" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="twocolumn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="openany/openright">
+    <optiongroup>
+      <shortdescription lang="en">Different page layout on left / right page</shortdescription>
+      <classoption name="oneside" default="yes">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="twoside" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Equation numbers centered or left</shortdescription>
+      <classoption name="leqno" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <classoption name="fleqn" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
+      <classoption name="openbib" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+  </documentclass>
+  <documentclass name="book" level="beginner" label="documentclass">
+    <shortdescription lang="en">Full-length books, including chapters and possibly including front matter, such as a preface, and back matter, such as an appendix.</shortdescription>
+    <description lang="en">Description for book</description>
+    <optiongroup>
+      <shortdescription lang="en">Font size</shortdescription>
+      <classoption name="10pt" default="yes">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="11pt" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="12pt" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper size</shortdescription>
+      <classoption name="a4paper" default="no">
+        <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
+      </classoption>
+      <classoption name="a5paper" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="b5paper" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="letterpaper" default="yes">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="legalpaper" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="executivepaper" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Paper orientation</shortdescription>
+      <classoption name="landscape" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">Separate page for title</shortdescription>
+      <classoption name="titlepage" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">State of the document</shortdescription>
+      <classoption name="draft" default="no">
+        <shortdescription lang="en">Show overfull rules</shortdescription>
+      </classoption>
+      <classoption name="final" default="yes">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
+      <shortdescription lang="en">One or two column document</shortdescription>
+      <classoption name="onecolumn" default="yes">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+      <classoption name="twocolumn" default="no">
+        <shortdescription lang="en"></shortdescription>
+      </classoption>
+    </optiongroup>
+    <optiongroup>
       <shortdescription lang="en">This option determines whether or not a chapter must start on a right-hand page.</shortdescription>
       <classoption name="openright" default="yes">
         <shortdescription lang="en">Chapters always start on a right-hand page.</shortdescription>
-        <description lang="en">Chapters start on a left-hand or on a right-hand page.</description>
       </classoption>
     </optiongroup>
-    <optiongroup name="one/twoside">
+    <optiongroup>
       <shortdescription lang="en">Different page layout on left / right page</shortdescription>
       <classoption name="oneside" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="twoside" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="leqno">
+    <optiongroup>
       <shortdescription lang="en">Equation numbers centered or left</shortdescription>
       <classoption name="leqno" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="fleqn">
-      <shortdescription lang="en"/>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
       <classoption name="fleqn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="openbib">
-      <shortdescription lang="en"/>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
       <classoption name="openbib" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
   </documentclass>
@@ -339,133 +322,113 @@
       also want to start documenting the code using the conventions of the
       doc package, rather than using simple ascii comments as used here.</description>
   </documentclass>
-  <documentclass name="letter" label="documentclass,letter">
-    <shortdescription lang="en"/>
-    <description lang="en"/>
+  <documentclass name="letter" level="beginner" label="documentclass,letter">
+    <shortdescription lang="en"></shortdescription>
+    <description lang="en"></description>
   </documentclass>
-  <documentclass name="report" label="documentclass">
+  <documentclass name="report" level="beginner" label="documentclass">
     <shortdescription lang="en">For documents of length between an article and a book, such as technical reports or theses, which may contain several chapters. </shortdescription>
     <description lang="en">Description for report</description>
-    <optiongroup name="font size">
+    <optiongroup>
       <shortdescription lang="en">Font size</shortdescription>
       <classoption name="10pt" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="11pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="12pt" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="paper size">
+    <optiongroup>
       <shortdescription lang="en">Paper size</shortdescription>
       <classoption name="a4paper" default="no">
         <shortdescription lang="en">Select A4 paper (210mm x 297mm)</shortdescription>
-        <description lang="en"/>
       </classoption>
       <classoption name="a5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="b5paper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="letterpaper" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="legalpaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="executivepaper" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="paper orientation">
+    <optiongroup>
       <shortdescription lang="en">Paper orientation</shortdescription>
       <classoption name="landscape" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="titlepage">
+    <optiongroup>
       <shortdescription lang="en">Separate page for title</shortdescription>
       <classoption name="titlepage" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="draft/final">
+    <optiongroup>
       <shortdescription lang="en">State of the document</shortdescription>
       <classoption name="draft" default="no">
         <shortdescription lang="en">Show overfull rules</shortdescription>
-        <description lang="en"/>
       </classoption>
       <classoption name="final" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="one/twocolumn">
+    <optiongroup>
       <shortdescription lang="en">One or two column document</shortdescription>
       <classoption name="onecolumn" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="twocolumn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="one/twoside">
+    <optiongroup>
       <shortdescription lang="en">Different page layout on left / right page</shortdescription>
       <classoption name="oneside" default="yes">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
       <classoption name="twoside" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="openany/openright">
+    <optiongroup>
       <shortdescription lang="en">This option determines whether or not a chapter must start on a right-hand page.</shortdescription>
       <classoption name="openright" default="yes">
         <shortdescription lang="en">Chapters always start on a right-hand page.</shortdescription>
-        <description lang="en">Chapters start on a left-hand or on a right-hand page.</description>
       </classoption>
     </optiongroup>
-    <optiongroup name="leqno">
+    <optiongroup>
       <shortdescription lang="en">Equation numbers centered or left</shortdescription>
       <classoption name="leqno" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="fleqn">
-      <shortdescription lang="en"/>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
       <classoption name="fleqn" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
-    <optiongroup name="openbib">
-      <shortdescription lang="en"/>
+    <optiongroup>
+      <shortdescription lang="en"></shortdescription>
       <classoption name="openbib" default="no">
-        <shortdescription lang="en"/>
-        <description lang="en"/>
+        <shortdescription lang="en"></shortdescription>
       </classoption>
     </optiongroup>
   </documentclass>
   <package name="graphicx" level="beginner" label="graphics" loadspackages="keyval,graphics">
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
+    <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>
     <packageoption name="draft">
       <description lang="en">Suppress all the ‘special’ features. In particular graphics files are not included (but they are still read for size info) just the filename is printed in a box of the correct size.</description>
     </packageoption>
@@ -486,13 +449,12 @@
     </packageoption>
     <command name="\includegraphics" label="graphics,images" level="beginner">
       <shortdescription lang="en">Include an image file</shortdescription>
-      <description lang="en"><![CDATA[<p>The package <code>graphicx</code> (with cx at the end!) provides the command \includegraphics which can be used to include images of various formats, such as PNG, PDF etc. The complete list of</p>]]></description>
+      <description lang="en">&lt;p&gt;The package &lt;code&gt;graphicx&lt;/code&gt; (with cx at the end!) provides the command \includegraphics which can be used to include images of various formats, such as PNG, PDF etc. The complete list of&lt;/p&gt;</description>
       <variant name="\includegraphics">
-        <argument optional="yes" name="keyvalue" type="optlist"/>
-        <argument optional="no" name="filename" type="mandarg"/>
-        <description lang="en"/>
+        <argument name="keyvalue" optional="yes" type="optlist"></argument>
+        <argument name="filename" optional="no" type="mandarg"></argument>
+        <description lang="en"></description>
       </variant>
     </command>
-    <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>
   </package>
 </ltxref>

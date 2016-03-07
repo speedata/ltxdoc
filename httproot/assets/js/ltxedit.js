@@ -75,7 +75,6 @@ function removerow(variantnumber,argumentnumber) {
 	var argcount = $(varpanelselector).data('argcount')
 	argcount -= 1
 	$(varpanelselector).data('argcount',argcount)
-	console.log("remove arg from variant",variantnumber,". Now argcount is",argcount)
 	$(varpanelselector +  " * .argcount").val(argcount)
 	var varargname =  mkname(variantnumber,argumentnumber)
 	$("#" + varargname ).remove()
@@ -91,6 +90,68 @@ function addArgument(variantnumber) {
 	$(varpanelselector).data('argcount', argcount)
 	varargname = mkname(variantnumber,argcount)
 	$(varpanelselector +  " * tbody").append('<tr id="' + varargname + '"><td><input class="form-control" type="text" value="" name="' + varargname + 'name"></td><td><input name="'  + varargname + 'optional"  class="form-control" type="checkbox"></td><td><select class="form-control" name="' + varargname +  'type"><option value="1">{...}</option><option value="2">{...,...,...}</option><option  value="3">[...]</option><option value="4">[...,...,...]</option><option value="5">to dimen | spread dimen</option></select></td><td><a class="removerow" href="' + varpanelselector + '">X</a></td></tr>');
-		$("#" + varargname + " * .removerow").click(function() { removerow(variantnumber,argcount) })
+	$("#" + varargname + " * .removerow").click(function() { removerow(variantnumber,argcount) })
 	return varpanelselector
 }
+
+function getPanelCount(selector) {
+	var panelcount = parseInt($(arg).attr("value"))
+	return panelcount
+}
+
+function incPanelCount(arg) {
+	var panelcount = parseInt($(arg).attr("value")) + 1
+	$(arg).attr("value",panelcount)
+	return panelcount
+}
+
+function decPanelCount(selector) {
+	var panelcount = parseInt($(selector).attr("value")) - 1
+	$(selector).attr("value",panelcount)
+	return panelcount
+}
+
+function addclassoptiongroup(obj,shortdescription) {
+	var panelcount = incPanelCount("#panelcount")
+	var newid = "panel" + panelcount
+	var newselector = "#" + newid
+	$("#panel").clone().attr("id",newid).show().appendTo( "#panelhere" );
+	$(newselector + " .ogshortdescription").attr("value",shortdescription)
+	$(newselector + " .ogshortdescription").attr("name","optiongroup" + panelcount + "shortdescription")
+	$(".addoptiontogroup").click(function() {  addclassoption(null, panelcount, "","",false) })
+	$(newselector + " .removeog").click(function() {  removeoptiongroup(panelcount) })
+	return panelcount
+}
+
+function addclassoption(obj,optiongroup,name,shortdescription,dflt) {
+	if (dflt) {
+		dflt = 'checked="checked"'
+	} else {
+		dflt = ''
+	}
+	if (optiongroup == null) {
+		optiongroup = getPanelCount("#panelcount")
+	}
+
+	var panelselector = "#panel" + optiongroup
+	var argumentnumber = incPanelCount(panelselector + " .argumentcount")
+	$(panelselector + " .argumentcount").attr("name","panel" + optiongroup + "argumentcount")
+	var cls = "argument" + argumentnumber
+	var name1 = "og" + optiongroup + "optionname" + argumentnumber
+	var name2 = "og" + optiongroup + "optional" + argumentnumber
+	var name3 = "og" + optiongroup + "shortdesc" + argumentnumber
+	$(panelselector +  " * tbody").append('<tr class="' + cls + '"><td><input class="form-control" type="text" value="' + name + '" name="' +  name1 + '"></td><td><input name="' + name2  + '" class="form-control" type="checkbox"' + dflt + '></td><td><input class="form-control" name="' + name3  + '" type="text" value="' +  shortdescription + '"></td><td><a class="removerow" href="#">X</a></td></tr>');
+	$("." + cls + " .removerow").click(function() {  removeoption(optiongroup,argumentnumber) })
+}
+
+function removeoptiongroup(optiongroup) {
+	var panelselector = "#panel" + optiongroup
+	$(panelselector).remove()
+}
+
+function removeoption(optiongroup,argumentnumber) {
+	var panelselector = "#panel" + optiongroup
+	var argumentselector = " .argument" + argumentnumber
+	$(panelselector + argumentselector).remove()
+}
+

@@ -1,5 +1,5 @@
-{{ define "classdetail"}}
-{{ template "head" . }}
+{{ define "classdetail" -}}
+{{ template "head" . -}}
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
@@ -29,13 +29,12 @@
 
 <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
 
-
-{{ end}}
+{{ end }}
 </div>
 {{ template "foot" . }}
-{{end }}
+{{ end }}
 
-
+{{/*  -----------------------------------------------------------------------------------  */}}
 
 
 {{ define "pkgdetail"}}
@@ -76,7 +75,7 @@
 {{ template "foot" . }}
 {{end }}
 
-
+{{/*  -----------------------------------------------------------------------------------  */}}
 
 
 {{ define "envdetail"}}
@@ -129,6 +128,7 @@
 {{ template "foot" . }}
 {{end }}
 
+{{/*  -----------------------------------------------------------------------------------  */}}
 
 {{ define "commanddetail.html"}}
 {{ template "head" . }}

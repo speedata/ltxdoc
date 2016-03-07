@@ -129,7 +129,7 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	r.PathPrefix("/assets/").Handler(http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: "httproot"}))
 	http.Handle("/", r)
 	fmt.Println("Listening on", httpaddress)
-	http.ListenAndServe(httpaddress, nil)
+	fmt.Println(http.ListenAndServe(httpaddress, nil))
 }
 
 func addEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -334,7 +334,7 @@ func editPackageHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-
+	case "POST":
 	}
 }
 
@@ -353,13 +353,40 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 	dc = latexref.GetDocumentClass(requestedDocumentClass)
 	if dc == nil {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-
 	}
+
 	switch r.Method {
 	case "POST":
+		dc.Optiongroup = nil
 		dc.ShortDescription["en"] = r.FormValue("shortdesc")
 		dc.Description["en"] = template.HTML(r.FormValue("description"))
 		dc.Label = strings.Split(r.FormValue("tags"), ",")
+
+		maxog, err := strconv.Atoi(r.FormValue("panelcount"))
+		if err != nil {
+			return
+		}
+
+		// starting with 1
+		for i := 1; i <= maxog; i++ {
+			og := ltxref.NewOptionGroup()
+			og.ShortDescription["en"] = r.FormValue(fmt.Sprintf("optiongroup%dshortdescription", i))
+
+			argcountname := fmt.Sprintf("panel%dargumentcount", i)
+			argc, err := strconv.Atoi(r.FormValue(argcountname))
+			if err == nil {
+				for j := 1; j <= argc; j++ {
+					co := ltxref.NewClassOption()
+					co.Default = r.FormValue(fmt.Sprintf("og%doptional%d", i, j)) == "on"
+					co.Name = r.FormValue(fmt.Sprintf("og%doptionname%d", i, j))
+					co.ShortDescription["en"] = r.FormValue(fmt.Sprintf("og%dshortdesc%d", i, j))
+					if co.Name != "" {
+						og.Classoption = append(og.Classoption, co)
+					}
+				}
+				dc.Optiongroup = append(dc.Optiongroup, og)
+			}
+		}
 
 		http.Redirect(w, r, "/class/"+escapeurl(requestedDocumentClass)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
