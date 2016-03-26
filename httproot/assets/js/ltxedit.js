@@ -155,3 +155,22 @@ function removeoption(optiongroup,argumentnumber) {
 	$(panelselector + argumentselector).remove()
 }
 
+function addpackageoption(name,description, dflt) {
+	var panelcount = incPanelCount("#panelcount")
+	var newid = "panel" + panelcount
+	var newselector = "#" + newid
+	$("#panel").clone().attr("id",newid).show().appendTo( "#panelhere" );
+
+	$(newselector + " .packageoptionname").attr("value",name)
+	$(newselector + " .packageoptionname").attr("name","packageoption" + panelcount + "name")
+
+	$(newselector + " .packageoptionshortdesc").attr("value",description)
+	$(newselector + " .packageoptionshortdesc").attr("name","packageoption" + panelcount + "shortdescription")
+
+	$(newselector + " .packageoptiondefault").attr("name","packageoption" + panelcount + "default")
+	if (dflt) {
+		$(newselector + " .packageoptiondefault").attr("checked","checked")
+	}
+
+}
+

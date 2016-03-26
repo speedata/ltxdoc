@@ -430,22 +430,22 @@
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
     <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>
     <packageoption name="draft">
-      <description lang="en">Suppress all the ‘special’ features. In particular graphics files are not included (but they are still read for size info) just the filename is printed in a box of the correct size.</description>
+      <shortdescription lang="en">Suppress all the ‘special’ features. In particular graphics files are not included (but they are still read for size info) just the filename is printed in a box of the correct size.</shortdescription>
     </packageoption>
-    <packageoption name="final">
-      <description lang="en">The opposite of draft. Useful to over-ride a global draft option specified in the \documentclass command.</description>
+    <packageoption name="final" default="yes">
+      <shortdescription lang="en">The opposite of draft. Useful to over-ride a global draft option specified in the \documentclass command.</shortdescription>
     </packageoption>
     <packageoption name="hiderotate">
-      <description lang="en">Do not show rotated text (presumably because the previewer can not rotate).</description>
+      <shortdescription lang="en">Do not show rotated text (presumably because the previewer can not rotate).</shortdescription>
     </packageoption>
     <packageoption name="hidescale">
-      <description lang="en">Do not show scaled text (presumably because the previewer can not scale).</description>
+      <shortdescription lang="en">Do not show scaled text (presumably because the previewer can not scale).</shortdescription>
     </packageoption>
     <packageoption name="hiresbb">
-      <description lang="en">Look for size specifications in %%HiResBoundingBox lines rather than standard %%BoundingBox lines.</description>
+      <shortdescription lang="en">Look for size specifications in %%HiResBoundingBox lines rather than standard %%BoundingBox lines.</shortdescription>
     </packageoption>
-    <packageoption name="demo">
-      <description lang="en">Instead of inserting an image file \includegraphics draws a 150 pt by 100 pt rectangle unless other dimensions are specified manually.</description>
+    <packageoption name="demo" >
+      <shortdescription lang="en">Instead of inserting an image file \includegraphics draws a 150 pt by 100 pt rectangle unless other dimensions are specified manually.</shortdescription>
     </packageoption>
     <command name="\includegraphics" label="graphics,images" level="beginner">
       <shortdescription lang="en">Include an image file</shortdescription>

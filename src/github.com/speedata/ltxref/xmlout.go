@@ -294,10 +294,6 @@ func (node *Packageoption) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 	if err != nil {
 		return err
 	}
-	err = marshalDescription("description", e, node.Description)
-	if err != nil {
-		return err
-	}
 	return e.EncodeToken(xml.EndElement{Name: startElt.Name})
 }
 

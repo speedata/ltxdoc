@@ -47,20 +47,6 @@ func (slice DocumentClasses) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
 
-type Environments []*Environment
-
-func (slice Environments) Len() int {
-	return len(slice)
-}
-
-func (slice Environments) Less(i, j int) bool {
-	return strings.ToLower(slice[i].Name) < strings.ToLower(slice[j].Name)
-}
-
-func (slice Environments) Swap(i, j int) {
-	slice[i], slice[j] = slice[j], slice[i]
-}
-
 type Commands []*Command
 
 func (slice Commands) Len() int {
@@ -72,20 +58,6 @@ func (slice Commands) Less(i, j int) bool {
 }
 
 func (slice Commands) Swap(i, j int) {
-	slice[i], slice[j] = slice[j], slice[i]
-}
-
-type Packages []*Package
-
-func (slice Packages) Len() int {
-	return len(slice)
-}
-
-func (slice Packages) Less(i, j int) bool {
-	return strings.ToLower(slice[i].Name) < strings.ToLower(slice[j].Name)
-}
-
-func (slice Packages) Swap(i, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
 
@@ -153,12 +125,7 @@ type Command struct {
 	Variant          []Variant
 }
 
-type Packageoption struct {
-	Name             string
-	Default          bool
-	ShortDescription map[string]string
-	Description      map[string]template.HTML
-}
+// Packages
 
 func NewPackage() *Package {
 	p := &Package{}
@@ -169,6 +136,18 @@ func NewPackage() *Package {
 	return p
 }
 
+func NewPackageOption() *Packageoption {
+	po := &Packageoption{}
+	po.ShortDescription = make(map[string]string)
+	return po
+}
+
+type Packageoption struct {
+	Name             string
+	Default          bool
+	ShortDescription map[string]string
+}
+
 type Package struct {
 	Name             string
 	Level            string
@@ -177,8 +156,24 @@ type Package struct {
 	ShortDescription map[string]string
 	Description      map[string]template.HTML
 	Commands         Commands
-	Options          []Packageoption
+	Options          []*Packageoption
 }
+
+type Packages []*Package
+
+func (slice Packages) Len() int {
+	return len(slice)
+}
+
+func (slice Packages) Less(i, j int) bool {
+	return strings.ToLower(slice[i].Name) < strings.ToLower(slice[j].Name)
+}
+
+func (slice Packages) Swap(i, j int) {
+	slice[i], slice[j] = slice[j], slice[i]
+}
+
+// Environment
 
 type Environment struct {
 	Name             string
@@ -195,6 +190,20 @@ func NewEnvironment() *Environment {
 	e.ShortDescription = make(map[string]string)
 	e.Description = make(map[string]template.HTML)
 	return e
+}
+
+type Environments []*Environment
+
+func (slice Environments) Len() int {
+	return len(slice)
+}
+
+func (slice Environments) Less(i, j int) bool {
+	return strings.ToLower(slice[i].Name) < strings.ToLower(slice[j].Name)
+}
+
+func (slice Environments) Swap(i, j int) {
+	slice[i], slice[j] = slice[j], slice[i]
 }
 
 func NewVariant() *Variant {

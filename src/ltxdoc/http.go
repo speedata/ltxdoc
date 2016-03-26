@@ -335,6 +335,26 @@ func editPackageHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 	case "POST":
+		pkg.Options = make([]*ltxref.Packageoption, 0)
+		pkg.ShortDescription["en"] = r.FormValue("shortdesc")
+		pkg.Description["en"] = template.HTML(r.FormValue("description"))
+		pkg.Label = strings.Split(r.FormValue("tags"), ",")
+		pkg.Level = r.FormValue("level")
+		maxpackageoptions, err := strconv.Atoi(r.FormValue("panelcount"))
+		if err != nil {
+			return
+		}
+		for i := 1; i <= maxpackageoptions; i++ {
+			po := ltxref.NewPackageOption()
+			po.ShortDescription["en"] = r.FormValue(fmt.Sprintf("packageoption%dshortdescription", i))
+			po.Default = r.FormValue(fmt.Sprintf("packageoption%ddefault", i)) == "on"
+			po.Name = r.FormValue(fmt.Sprintf("packageoption%dname", i))
+			fmt.Println(po)
+			pkg.Options = append(pkg.Options, po)
+		}
+		http.Redirect(w, r, "/pkg/"+escapeurl(requestedPackage)+"?edit="+editToken(r), http.StatusSeeOther)
+		return
+
 	}
 }
 

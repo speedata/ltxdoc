@@ -175,10 +175,9 @@ forloop:
 	return po
 }
 
-func readPackageoption(attributes []xml.Attr, dec *xml.Decoder) Packageoption {
-	po := Packageoption{}
+func readPackageoption(attributes []xml.Attr, dec *xml.Decoder) *Packageoption {
+	po := &Packageoption{}
 	po.ShortDescription = make(map[string]string)
-	po.Description = make(map[string]template.HTML)
 
 	for _, attribute := range attributes {
 		switch attribute.Name.Local {
@@ -201,9 +200,6 @@ forloop:
 			case "shortdescription":
 				lang, text := readShortDescription(v.Attr, dec)
 				po.ShortDescription[lang] = text
-			case "description":
-				lang, text := readDescription(v.Attr, dec)
-				po.Description[lang] = text
 			}
 		case xml.EndElement:
 			if v.Name.Local == "packageoption" {

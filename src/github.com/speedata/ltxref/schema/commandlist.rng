@@ -95,9 +95,7 @@
                     <oneOrMore>
                         <element name="classoption">
                             <attribute name="name"></attribute>
-                            <attribute name="default">
-                                <choice><value>yes</value><value>no</value></choice>
-                            </attribute>
+                            <ref name="att.default"/>
                             <ref name="shortdescription"/>
                         </element>
                     </oneOrMore>
@@ -117,7 +115,8 @@
             <zeroOrMore>
                 <element name="packageoption">
                     <attribute name="name"/>
-                    <ref name="description"/>
+                    <optional><ref name="att.default"/></optional>
+                    <ref name="shortdescription"/>
                 </element>
             </zeroOrMore>
             <attribute name="name"/>
@@ -158,6 +157,12 @@
                 <value>beginner</value>
                 <value>expert</value>
             </choice>
+        </attribute>
+    </define>
+    
+    <define name="att.default">
+        <attribute name="default">
+            <choice><value>yes</value><value>no</value></choice>
         </attribute>
     </define>
 </grammar>
