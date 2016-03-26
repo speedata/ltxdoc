@@ -121,6 +121,7 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	r.HandleFunc("/editenv/{environment}", editEnvironmentHandler)
 	r.HandleFunc("/editdc/{documentclass}", editDocumentClassHandler)
 	r.HandleFunc("/editpackage/{package}", editPackageHandler)
+	r.HandleFunc("/editpkgcmd/{package}/{command}", editCommandHandler)
 	r.HandleFunc("/cmd/{command}", commandDetailHandler)
 	r.HandleFunc("/class/{documentclass}", documentclassDetailHandler)
 	r.HandleFunc("/env/{environment}", environmentDetailHandler)
@@ -349,7 +350,6 @@ func editPackageHandler(w http.ResponseWriter, r *http.Request) {
 			po.ShortDescription["en"] = r.FormValue(fmt.Sprintf("packageoption%dshortdescription", i))
 			po.Default = r.FormValue(fmt.Sprintf("packageoption%ddefault", i)) == "on"
 			po.Name = r.FormValue(fmt.Sprintf("packageoption%dname", i))
-			fmt.Println(po)
 			pkg.Options = append(pkg.Options, po)
 		}
 		http.Redirect(w, r, "/pkg/"+escapeurl(requestedPackage)+"?edit="+editToken(r), http.StatusSeeOther)
@@ -438,7 +438,10 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func editCommandHandler(w http.ResponseWriter, r *http.Request) {
-	requestedPackage := ""
+	requestedPackage := r.FormValue("package")
+	if requestedPackage == "" {
+		requestedPackage = mux.Vars(r)["package"]
+	}
 	requestedCommand := r.FormValue("command")
 	if requestedCommand == "" {
 		requestedCommand = mux.Vars(r)["command"]
@@ -450,7 +453,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var cmd *ltxref.Command
-	cmd = latexref.GetCommandFromPackage(requestedCommand, "")
+	cmd = latexref.GetCommandFromPackage(requestedCommand, requestedPackage)
 	if cmd == nil {
 		fmt.Println("Command not found")
 		return
@@ -492,8 +495,13 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			cmd.Variant = append(cmd.Variant, *v)
 		}
-
-		http.Redirect(w, r, "/cmd/"+escapeurl(requestedCommand)+"?edit="+editToken(r), http.StatusSeeOther)
+		var path string
+		if requestedPackage != "" {
+			path = "/pkg/" + escapeurl(requestedPackage) + "/cmd/" + escapeurl(requestedCommand)
+		} else {
+			path = "/cmd/" + escapeurl(requestedCommand)
+		}
+		http.Redirect(w, r, path+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 	case "GET":
 		backlink := &url.URL{}
@@ -509,12 +517,14 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			Command      *ltxref.Command
 			XMLUrl       string
 			PlainTextUrl string
+			Package      string
 			Edit         string
 		}{
 			Backlink:     backlink.String(),
 			Command:      cmd,
 			Edit:         editToken(r),
 			XMLUrl:       addXMLFormatString(r.URL),
+			Package:      requestedPackage,
 			PlainTextUrl: addTXTFormatString(r.URL),
 		}
 		err := tpl.ExecuteTemplate(w, "editcommand", data)
@@ -563,6 +573,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 				Filter       string
 				XMLUrl       string
 				PlainTextUrl string
+				Package      string
 			}{
 				Backlink:     backlink.String(),
 				Edit:         editToken(r),
@@ -570,6 +581,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 				Command:      cmd,
 				XMLUrl:       addXMLFormatString(r.URL),
 				PlainTextUrl: addTXTFormatString(r.URL),
+				Package:      requestedPackage,
 			}
 			err := tpl.ExecuteTemplate(w, "commanddetail.html", data)
 			if err != nil {

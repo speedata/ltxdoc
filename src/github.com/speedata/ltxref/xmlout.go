@@ -286,15 +286,33 @@ func (node *Classoption) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 func (node *Packageoption) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	var err error
 	startElt := xml.StartElement{Name: xml.Name{Local: "packageoption"}}
+
+	var dflt string
+	if node.Default {
+		dflt = "yes"
+	} else {
+		dflt = "no"
+	}
 	startElt.Attr = []xml.Attr{
 		xml.Attr{Name: xml.Name{Local: "name"}, Value: node.Name},
+		xml.Attr{Name: xml.Name{Local: "default"}, Value: dflt},
 	}
 
 	err = e.EncodeToken(startElt)
 	if err != nil {
 		return err
 	}
-	return e.EncodeToken(xml.EndElement{Name: startElt.Name})
+
+	err = marshalShortDescription("shortdescription", e, node.ShortDescription)
+	if err != nil {
+		return err
+	}
+	err = e.EncodeToken(xml.EndElement{Name: startElt.Name})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (a *Argument) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

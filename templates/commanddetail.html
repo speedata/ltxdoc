@@ -65,7 +65,7 @@
   <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
 
 {{ range .Commands }}
-<div class="cmddescription"><a href="/pkg/{{ urlescape $.Package.Name }}/cmd/{{ urlescape .Name }}{{ with $.Filter }}?filter={{ urlescape . }}{{end}}"><div class="row">
+<div class="cmddescription"><a href="/pkg/{{ urlescape $.Package.Name }}/cmd/{{ urlescape .Name }}{{ with $.Edit }}?edit={{ . }}{{end}}"><div class="row">
       <div class="col-md-4 lxcommand">{{ .Name }}</div>
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
@@ -140,7 +140,7 @@
 </div>
   <div class="row">
     <div class="col-sm-12 col-md-12">
-      <h1><tt>{{ .Command.Name }}</tt>{{ if .Edit}} <small><a href="/editcmd/{{.Command.Name}}?edit={{.Edit}}">(edit)</small></a>{{ end }}</h1>
+      <h1><tt>{{ .Command.Name }}</tt>{{ if .Edit}} <small><a href="{{ if .Package }}/editpkgcmd/{{.Package}}/{{.Command.Name}}{{else}}/editcmd/{{.Command.Name}}{{end}}?edit={{.Edit}}">(edit)</small></a>{{ end }}</h1>
       <p>{{  index .Command.ShortDescription  "en" }}</p>
     </div>
   </div>

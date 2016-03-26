@@ -418,8 +418,8 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
 {{ with .Command}}
 <div class="container-fluid">
 	<h1>{{ .Name }}</h1>
-
   			<form class="form-horizontal" action="/editcmd/{{.Name}}?edit={{$.Edit}}" method="POST">
+  			{{ with $.Package }}<input type="hidden" name="package" value="{{.}}">{{end}}
   			<input id="maxvarpanelcount" type="hidden" name="maxvarpanelcount" value="0">
   			<div class="row">
 				<div class="form-group">
