@@ -76,7 +76,7 @@
 
 	<div id="varrow"  class="row">
 		<div class="col-md-offset-3 col-md-5">
-			<p><a id="addvariant" href="#">Add package option</a></p>
+			<p><a id="addpackageoption" href="#">Add package option</a></p>
 		</div>
 	</div><!-- row -->
 
@@ -104,6 +104,9 @@
  		{{ range .Options }}
 		addpackageoption({{ .Name }}, {{ index .ShortDescription "en"}},{{ .Default }})
 		{{ end }}
+		$("#addpackageoption").click(function(){
+			addpackageoption("","",false)
+		})
 	});
 </script>
 
@@ -220,7 +223,6 @@
 	 		addclassoption(null,panelcount, {{.Name}},{{index .ShortDescription "en"}}, {{ .Default }})
 	 	{{ end }}
  		{{ end }}
- 		console.log(panelcount)
 	});
 </script>
 {{ end }}{{/*  with documentclass */}}

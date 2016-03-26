@@ -155,6 +155,11 @@ function removeoption(optiongroup,argumentnumber) {
 	$(panelselector + argumentselector).remove()
 }
 
+function removepackageoption(packageoptionnumber) {
+	var panelselector = "#panel" + packageoptionnumber
+	$(panelselector).remove()
+}
+
 function addpackageoption(name,description, dflt) {
 	var panelcount = incPanelCount("#panelcount")
 	var newid = "panel" + panelcount
@@ -171,6 +176,7 @@ function addpackageoption(name,description, dflt) {
 	if (dflt) {
 		$(newselector + " .packageoptiondefault").attr("checked","checked")
 	}
+	$(newselector + " .removepackageoption").click(function() { removepackageoption(panelcount)  })
 
 }
 
