@@ -159,7 +159,7 @@
             </choice>
         </attribute>
     </define>
-    
+
     <define name="att.default">
         <attribute name="default">
             <choice><value>yes</value><value>no</value></choice>

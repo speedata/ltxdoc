@@ -132,22 +132,25 @@ func (l *Ltxref) Tags() []string {
 }
 
 // Case insensitive fuzzy match.
-func (l *Ltxref) FilterCommands(like string, tag string) Commands {
+func (l *Ltxref) FilterCommands(like string, tag string, showexpert bool) Commands {
 	var commandsThatMatch Commands
 	like = strings.ToLower(like)
 	tag = strings.ToLower(tag)
 
 	for _, command := range l.Commands {
 		if (like == "" || fuzzy.Match(like, command.Name)) && (tag == "" || hasTag(command.Label, tag)) {
-			commandsThatMatch = append(commandsThatMatch, command)
+			if !showexpert && command.Level != "expert" || showexpert {
+				commandsThatMatch = append(commandsThatMatch, command)
+			}
+
 		}
 	}
 	return commandsThatMatch
 }
 
 // Case insensitive fuzzy match.
-func (l *Ltxref) FilterEnvironments(like string, tag string) Environments {
-	if like == "" && tag == "" {
+func (l *Ltxref) FilterEnvironments(like string, tag string, showexpert bool) Environments {
+	if like == "" && tag == "" && showexpert {
 		return l.Environments
 	} else {
 		like = strings.ToLower(like)
@@ -156,15 +159,17 @@ func (l *Ltxref) FilterEnvironments(like string, tag string) Environments {
 	var itemsThatMatch Environments
 	for _, item := range l.Environments {
 		if fuzzy.Match(like, item.Name) && (tag == "" || hasTag(item.Label, tag)) {
-			itemsThatMatch = append(itemsThatMatch, item)
+			if !showexpert && item.Level != "expert" || showexpert {
+				itemsThatMatch = append(itemsThatMatch, item)
+			}
 		}
 	}
 	return itemsThatMatch
 }
 
 // Case insensitive fuzzy match.
-func (l *Ltxref) FilterDocumentClasses(like string, tag string) DocumentClasses {
-	if like == "" && tag == "" {
+func (l *Ltxref) FilterDocumentClasses(like string, tag string, showexpert bool) DocumentClasses {
+	if like == "" && tag == "" && showexpert {
 		return l.DocumentClasses
 	} else {
 		like = strings.ToLower(like)
@@ -173,7 +178,9 @@ func (l *Ltxref) FilterDocumentClasses(like string, tag string) DocumentClasses 
 	var itemsThatMatch DocumentClasses
 	for _, item := range l.DocumentClasses {
 		if fuzzy.Match(like, item.Name) && (tag == "" || hasTag(item.Label, tag)) {
-			itemsThatMatch = append(itemsThatMatch, item)
+			if !showexpert && item.Level != "expert" || showexpert {
+				itemsThatMatch = append(itemsThatMatch, item)
+			}
 		}
 	}
 	return itemsThatMatch
@@ -191,6 +198,13 @@ func (l *Ltxref) FilterPackages(like string, tag string) []*Package {
 	for _, item := range l.Packages {
 		if fuzzy.Match(like, item.Name) && (tag == "" || hasTag(item.Label, tag)) {
 			itemsThatMatch = append(itemsThatMatch, item)
+		} else {
+			for _, command := range item.Commands {
+				if (like == "" || fuzzy.Match(like, command.Name)) && (tag == "" || hasTag(command.Label, tag)) {
+					itemsThatMatch = append(itemsThatMatch, item)
+				}
+			}
+
 		}
 	}
 	return itemsThatMatch

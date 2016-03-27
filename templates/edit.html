@@ -153,6 +153,14 @@
   			<form class="form-horizontal" action="/editdc/{{.Name}}?edit={{$.Edit}}" method="POST">
 			<input id="panelcount" type="hidden" name="panelcount" value="0">
   			<div class="row">
+				<div class="form-group">
+			  		<label for="selectlevel" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Level</label>
+			  		<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
+			  			 <select id="selectlevel" class="form-control" name="level"><option value="beginner" {{ if eq .Level "beginner"}}selected{{end}}>beginner</option><option value="expert"{{ if eq .Level "expert"}}selected{{end}}>expert</option></select>
+			  		</div>
+		  		</div>
+		  	</div>
+  			<div class="row">
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">

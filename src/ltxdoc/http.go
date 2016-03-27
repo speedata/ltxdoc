@@ -41,7 +41,9 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
 			kv := strings.Split(scanner.Text(), "=")
-			edittokens[kv[1]] = kv[0]
+			if len(kv) == 2 {
+				edittokens[kv[1]] = kv[0]
+			}
 		}
 
 		if err := scanner.Err(); err != nil {
@@ -381,6 +383,7 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 		dc.ShortDescription["en"] = r.FormValue("shortdesc")
 		dc.Description["en"] = template.HTML(r.FormValue("description"))
 		dc.Label = strings.Split(r.FormValue("tags"), ",")
+		dc.Level = r.FormValue("level")
 
 		maxog, err := strconv.Atoi(r.FormValue("panelcount"))
 		if err != nil {
@@ -550,7 +553,7 @@ func commandDetailHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Fprint(w, string(str))
+		sendXML(w, str)
 		return
 	case "txt":
 		cmd.ToString(w)
@@ -614,7 +617,7 @@ func documentclassDetailHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Fprint(w, string(str))
+		sendXML(w, str)
 		return
 	case "txt":
 		class.ToString(w)
@@ -667,7 +670,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Fprint(w, string(str))
+		sendXML(w, str)
 		return
 	case "txt":
 		env.ToString(w)
@@ -700,6 +703,11 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func sendXML(w http.ResponseWriter, data []byte) {
+	w.Header().Set("Content-type", "application/xml")
+	fmt.Fprint(w, string(data))
+}
+
 func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 	requestedPackage := mux.Vars(r)["package"]
 	filtervalue := strings.ToLower(r.FormValue("filter"))
@@ -719,7 +727,7 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Fprint(w, string(str))
+		sendXML(w, str)
 		return
 	case "txt":
 		pkg.ToString(w)
@@ -755,13 +763,15 @@ func packageDetailHandler(w http.ResponseWriter, r *http.Request) {
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 
 	filter := strings.ToLower(r.FormValue("filter"))
+	expert := r.FormValue("expert") == "on"
+
 	tag := strings.ToLower(r.FormValue("tag"))
 
 	l := ltxref.Ltxref{Version: latexref.Version}
-	l.Commands = latexref.FilterCommands(filter, tag)
+	l.Commands = latexref.FilterCommands(filter, tag, expert)
 	l.Packages = latexref.FilterPackages(filter, tag)
-	l.Environments = latexref.FilterEnvironments(filter, tag)
-	l.DocumentClasses = latexref.FilterDocumentClasses(filter, tag)
+	l.Environments = latexref.FilterEnvironments(filter, tag, expert)
+	l.DocumentClasses = latexref.FilterDocumentClasses(filter, tag, expert)
 
 	switch strings.ToLower(r.FormValue("format")) {
 	case "xml":
@@ -769,7 +779,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Fprint(w, string(str))
+		sendXML(w, str)
 		return
 	case "txt":
 		l.ToString(w, true)
@@ -780,6 +790,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		Filter       string
 		Tag          string
 		Edit         string
+		Expert       bool
 		L            ltxref.Ltxref
 		Tags         []string
 		XMLUrl       string
@@ -789,6 +800,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		Filter:       filter,
 		Tag:          tag,
 		Edit:         editToken(r),
+		Expert:       expert,
 		Tags:         latexref.Tags(),
 		XMLUrl:       addXMLFormatString(r.URL),
 		PlainTextUrl: addTXTFormatString(r.URL),

@@ -3,17 +3,12 @@ package ltxref
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"html/template"
 	"io"
 	"os"
 	"sort"
 	"strings"
 )
-
-func dummy() {
-	fmt.Println("")
-}
 
 func ReadXMLFile(filename string) (Ltxref, error) {
 	r, err := os.Open(filename)

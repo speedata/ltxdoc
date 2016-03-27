@@ -12,7 +12,13 @@
     <shortdescription lang="en">Switch to a larger font</shortdescription>
     <description lang="en">&lt;p&gt;Use &lt;code&gt;\large&lt;/code&gt; like this&lt;/p&gt;&lt;pre&gt;{\large ....}&lt;/pre&gt;and not like this:&lt;br&gt;&lt;pre&gt;\large{...}&lt;/pre&gt;This is because &lt;code&gt;\large&lt;/code&gt; switches to the larger font immediately.&lt;br&gt;&lt;br&gt;&lt;br&gt;</description>
     <variant name="\large">
-      <description lang="en">Description of large</description>
+      <description lang="en">Description of \large</description>
+    </variant>
+    <variant name="\Large">
+      <description lang="en"></description>
+    </variant>
+    <variant name="\Huge">
+      <description lang="en"></description>
     </variant>
   </command>
   <command name="\makebox" label="box command" level="beginner">
@@ -94,29 +100,6 @@
       <description lang="en"></description>
     </variant>
   </environment>
-  <documentclass name="aaa" level="expert" label="documentclass,testing">
-    <shortdescription lang="en">A class usable for testing purpose only.</shortdescription>
-    <description lang="en">This documentclass is intended primarily for testing and reference
-      purposes; loading it with \LoadClass{minimal} to use it as a base
-      class for some other document class is probably a mistake. If you wish
-      to start a new document class based on the minimal class, it is better
-      to start by copying the *contents* of minimal.cls directly into your
-      new class and making suitable modifications. You may, at that point
-      also want to start documenting the code using the conventions of the
-      doc package, rather than using simple ascii comments as used here.</description>
-    <optiongroup>
-      <shortdescription lang="en">Font size</shortdescription>
-      <classoption name="10pt" default="yes">
-        <shortdescription lang="en">ten point</shortdescription>
-      </classoption>
-      <classoption name="11pt" default="no">
-        <shortdescription lang="en">eleven point</shortdescription>
-      </classoption>
-      <classoption name="12pt" default="no">
-        <shortdescription lang="en"></shortdescription>
-      </classoption>
-    </optiongroup>
-  </documentclass>
   <documentclass name="article" level="beginner" label="documentclass">
     <shortdescription lang="en">For a journal article, a presentation, and miscellaneous general use.</shortdescription>
     <description lang="en">Description for article</description>

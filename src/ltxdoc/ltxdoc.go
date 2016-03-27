@@ -23,7 +23,7 @@ func ShowHelpFor(cmdname, filename string) {
 		return
 	}
 
-	commands := latexref.FilterCommands(cmdname, "")
+	commands := latexref.FilterCommands(cmdname, "", false)
 	for _, cmd := range commands {
 		cmd.ToString(os.Stdout)
 	}
