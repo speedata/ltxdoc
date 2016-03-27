@@ -29,13 +29,14 @@
   </head>
   <body>
 <div class="navbar">
-  <a class="navbar-brand" href="/{{with .Edit}}?edit={{.}}{{end}}">LaTeX commands</a>
-  <p class="navbar-left">Demo only! Stay tuned for a full version (probably starting 2016-03-30). Would you help me bringing this to useful version? <a href="mailto:gundlach@speedata.de?subject=I'd like to improve ltxref.org&amp;body=Hello Patrick!%0A%0Altxref.org looks promising. I'd like to help out, can you give me write permission?%0A%0AThanks, <person with a name>">Then drop me an email!</a></p>
+  <a class="navbar-brand" href="/{{with .Edit}}?edit={{.}}{{end}}"><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> command reference</a>
 </div>
   {{end}}
 
   {{ define "foot" }}
-    <p style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px;">ltxref / ltxdoc by <a href="mailto:gundlach@speedata.de"> Patrick Gundlach / speedata</a>. Source code at <a href="https://github.com/speedata/ltxdoc">Github</a>. {{with .XMLUrl}}<a href="{{ . }}">Export this page as XML</a>{{end}} {{with .PlainTextUrl}}<a href="{{ . }}">or as plain text</a>.{{end}} The contents is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.</p>
+  <div class="footer">
+    <p style="margin-left: 10px">{{with .XMLUrl}}<a href="{{ . }}"> Export this page as XML</a>{{end}} {{with .PlainTextUrl}}or <a href="{{ . }}">as plain text</a>.{{end}}  ltxref / ltxdoc by <a href="mailto:gundlach@speedata.de"> Patrick Gundlach</a>. Source code at <a href="https://github.com/speedata/ltxdoc">Github</a>. The contents is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>. <a href="mailto:gundlach@speedata.de?subject=I'd like to improve ltxref.org&amp;body=Hello Patrick!%0A%0Altxref.org looks promising. I'd like to help out, can you give me write permission?%0A%0AThanks, <person with a name>">Want to help out?</a></p>
+   </div>
  <!-- attheend -->
 
 

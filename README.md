@@ -1,14 +1,12 @@
 LaTeX documentation system
 ==========================
 
-This is work-in-progress and more a prototype than anything useful.
-
-The aim is to have a reference manual for LaTeX accessible via HTTP and command line.
-
-This documentation will have a precise description of all LaTeX kernel commands, environments and the most basic packages and document classes.
+The aim is to have a reference manual for LaTeX accessible via HTTP and command line. The reference manual will have a precise description of all LaTeX kernel commands, environments and the most basic packages and document classes.
 
 Usage
 -----
+
+Use it online at <https://ltxref.org> or local on your computer. To use it locally:
 
 Run `ltxdoc -http :6555` on the command line and point your browser to [http://localhost:6555](http://localhost:6555) to start the built-in webserver.
 
@@ -35,6 +33,6 @@ Information
 
 Contact: Patrick Gundlach, gundlach@speedata.de<br>
 License: free / MIT license<br>
-Sneak Preview: https://ltxref.org<br>
-Status: pre-alpha<br>
+Web: https://ltxref.org<br>
+Status: beta<br>
 Sourcecode: https://github.com/speedata/ltxdoc
