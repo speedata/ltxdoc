@@ -66,17 +66,19 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 			var ret string
 			switch in {
 			case ltxref.MANDARG:
-				ret = ("<tt>{...}</tt>")
+				ret = "<tt>{...}</tt>"
 			case ltxref.MANDLIST:
-				ret = ("<tt>{...,...,...}</tt>")
+				ret = "<tt>{...,...,...}</tt>"
 			case ltxref.OPTARG:
-				ret = ("<tt>[...]</tt>")
+				ret = "<tt>[...]</tt>"
 			case ltxref.OPTLIST:
-				ret = ("<tt>[...,...,...]</tt>")
+				ret = "<tt>[...,...,...]</tt>"
 			case ltxref.TODIMENORSPREADDIMEN:
-				ret = ("<tt>to</tt> <i>‹dimen›</i> or <tt>spread</tt> ‹<i>dimen</i>›")
+				ret = "<tt>to</tt> <i>‹dimen›</i> or <tt>spread</tt> ‹<i>dimen</i>›"
 			case ltxref.KEYVALLIST:
-				ret = ("<tt>[..=..,..=..,..=..]</tt>")
+				ret = "<tt>[..=..,..=..,..=..]</tt>"
+			case ltxref.PAREN:
+				ret = "(...)"
 			default:
 				ret = "??"
 			}

@@ -88,7 +88,7 @@
 
   <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
 
-{{with .Commands}}<h1 id="commands">Commands {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#addcommand" href="#">add new</a></small>{{end}}</h1>{{end}}
+{{with .Commands}}<h1 id="commands">Commands</h1>{{end}}
 
 {{ range .Commands }}
 <div class="cmddescription"><a href="/pkg/{{ urlescape $.Package.Name }}/cmd/{{ urlescape .Name }}{{ with $.Edit }}?edit={{ . }}{{end}}"><div class="row">
@@ -96,6 +96,7 @@
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
+{{ with $.Edit}}<div style="margin-top: 20px;"><a  data-toggle="modal" data-target="#addcommand" href="#">Add new command</a></div>{{end}}
 {{ end}}
 </div>
 {{ template "foot" . }}

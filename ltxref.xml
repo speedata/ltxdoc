@@ -409,6 +409,66 @@
       </classoption>
     </optiongroup>
   </documentclass>
+  <package name="booktabs" level="beginner" label="tabular" loadspackages="">
+    <shortdescription lang="en">Enhance the quality of tables in LaTeX</shortdescription>
+    <description lang="en">Provides commands for drawing horizontal lines in tabular material and handle vertical spacing.&lt;br&gt;&lt;br&gt;Example:&lt;br&gt;&lt;pre&gt;\begin{tabular}{@{}llr@{}} \toprule&lt;br&gt;\multicolumn{2}{c}{Item} \\ \cmidrule(r){1-2}&lt;br&gt;Animal    &amp;amp; Description &amp;amp; Price (\$)\\ \midrule&lt;br&gt;Gnat      &amp;amp; per gram    &amp;amp; 13.65 \\&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;     &amp;amp; each        &amp;amp; 0.01  \\&lt;br&gt;Gnu       &amp;amp; stuffed     &amp;amp; 92.50 \\&lt;br&gt;Emu       &amp;amp; stuffed     &amp;amp; 33.33 \\&lt;br&gt;Armadillo &amp;amp; frozen      &amp;amp; 8.99  \\ \bottomrule&lt;br&gt;\end{tabular}&lt;/pre&gt;</description>
+    <command name="\addlinespace" label="linespacing,tabular" level="beginner">
+      <shortdescription lang="en">Add extra space between certain rows of a table</shortdescription>
+      <description lang="en"></description>
+      <variant name="\addlinespace">
+        <argument name="width" optional="yes" type="optarg"></argument>
+        <description lang="en">1: width &lt;br&gt;&lt;br&gt;The default space before or after an adjacent rule is replaced by exactly &lt;code&gt;\defaultaddspace&lt;/code&gt; or the amount of space specified in the optional argument.&lt;br&gt;&lt;br&gt;</description>
+      </variant>
+    </command>
+    <command name="\bottomrule" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Draw the top rule in a table</shortdescription>
+      <description lang="en"></description>
+      <variant name="\bottomrule">
+        <argument name="width" optional="yes" type="optarg"></argument>
+        <description lang="en"></description>
+      </variant>
+    </command>
+    <command name="\cmidrule" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Draw a rule within the table with a cell range</shortdescription>
+      <description lang="en"></description>
+      <variant name="\cmidrule">
+        <argument name="width" optional="yes" type="optarg"></argument>
+        <argument name="trim" optional="no" type="paren"></argument>
+        <argument name="a-b" optional="no" type="mandarg"></argument>
+        <description lang="en">1: the default width is &lt;code&gt;\cmidrulewidth&lt;/code&gt;&lt;br&gt;&lt;br&gt;</description>
+      </variant>
+    </command>
+    <command name="\midrule" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Draw a rule within the table</shortdescription>
+      <description lang="en"></description>
+      <variant name="\midrule">
+        <argument name="width" optional="yes" type="optarg"></argument>
+        <description lang="en"></description>
+      </variant>
+    </command>
+    <command name="\morecmidrules" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Allow multiple \cmidrule in a table cell</shortdescription>
+      <description lang="en">Usage:&lt;br&gt;&lt;br&gt;&lt;code&gt;\cmidrule{1-2}\morecmidrules\cmidrule{1-2}&lt;/code&gt;&lt;br&gt;&lt;br&gt;</description>
+    </command>
+    <command name="\specialrule" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Total control over a horizontal rule in a table</shortdescription>
+      <description lang="en"></description>
+      <variant name="\specialrule">
+        <argument name="width" optional="no" type="mandarg"></argument>
+        <argument name="abovespace" optional="no" type="mandarg"></argument>
+        <argument name="belowspace" optional="no" type="mandarg"></argument>
+        <description lang="en">1: width&lt;br&gt;2: above space&lt;br&gt;3: below space&lt;br&gt;&lt;br&gt;</description>
+      </variant>
+    </command>
+    <command name="\toprule" label="tabular,rules" level="beginner">
+      <shortdescription lang="en">Draw the top rule in a table</shortdescription>
+      <description lang="en"></description>
+      <variant name="\toprule">
+        <argument name="width" optional="yes" type="optarg"></argument>
+        <description lang="en"></description>
+      </variant>
+    </command>
+  </package>
   <package name="graphicx" level="beginner" label="graphics" loadspackages="keyval,graphics">
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
     <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>

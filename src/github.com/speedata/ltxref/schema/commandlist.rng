@@ -64,6 +64,7 @@
                                 <value>optlist</value>
                                 <value>keyvallist</value>
                                 <value>mandlist</value>
+                                <value>paren</value>
                             </choice>
                         </attribute>
                     </element>

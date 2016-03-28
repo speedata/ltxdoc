@@ -42,6 +42,8 @@ func tfshowargument(in Argumenttype) string {
 		ret = "to ‹dimen› [or] spread ‹dimen›"
 	case KEYVALLIST:
 		ret = "[..=..,..=..,..=..]"
+	case PAREN:
+		ret = "(...)"
 	default:
 		ret = "??"
 	}
