@@ -96,12 +96,11 @@
             {{with .Tag}}<input type="hidden" value="{{ . }}" name="tag">{{end}}
           </div>
           <button type="submit" class="btn btn-default">Filter</button>
-          <a href="/?{{ with .Tag}}tag={{.}}&amp;{{end}}{{with $.Edit}}edit={{.}}{{end}}"><button type="button" class="btn btn-info">Clear Filter</button></a>
+          <a class="btn btn-info" href="/?{{ with .Tag}}tag={{.}}&amp;{{end}}{{with $.Edit}}edit={{.}}{{end}}">Clear Filter</a>
           <div>
           <input name="expert" type="checkbox" {{if .Expert}}checked="checked"{{end}}> Show expert commands
           </div>
         </form>
-</p>
   </div>
 </div>
 
