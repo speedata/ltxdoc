@@ -1,4 +1,22 @@
 <ltxref xmlns="urn:speedata.de:2015:latexref" version="0.0.1">
+  <command name="\backmatter" label="document structure" level="beginner">
+    <shortdescription lang="en">Indicate the end of the document (optional)</shortdescription>
+    <description lang="en"></description>
+  </command>
+  <command name="\documentclass" label="documentclass" level="beginner">
+    <shortdescription lang="en">Set the basic structure of the document</shortdescription>
+    <description lang="en">Example:&lt;br&gt;&lt;pre&gt;\documentclass[twocolumn]{article}[1994/06/01]&lt;/pre&gt;&lt;br&gt;</description>
+    <variant name="\documentclass">
+      <argument name="options" optional="yes" type="optlist"></argument>
+      <argument name="class" optional="no" type="mandarg"></argument>
+      <argument name="release date" optional="yes" type="optarg"></argument>
+      <description lang="en">1: the options that are visible to the document class and all packages&lt;br&gt;2: the name of the document class&lt;br&gt;3: the required release date &lt;br&gt;</description>
+    </variant>
+  </command>
+  <command name="\frontmatter" label="document structure" level="beginner">
+    <shortdescription lang="en">Indicate the beginning of the document (optional)</shortdescription>
+    <description lang="en"></description>
+  </command>
   <command name="\hbox" label="plain,box command" level="expert">
     <shortdescription lang="en">Create a horizontal box</shortdescription>
     <description lang="en"></description>
@@ -21,6 +39,14 @@
       <description lang="en"></description>
     </variant>
   </command>
+  <command name="\listfiles" label="file i/o" level="expert">
+    <shortdescription lang="en">List all files that are loaded during a run</shortdescription>
+    <description lang="en"></description>
+  </command>
+  <command name="\mainmatter" label="document structure" level="beginner">
+    <shortdescription lang="en">Indicate the main part of the document (optional)</shortdescription>
+    <description lang="en"></description>
+  </command>
   <command name="\makebox" label="box command" level="beginner">
     <shortdescription lang="en">Make a box with a given width and height</shortdescription>
     <description lang="en">The &lt;code&gt;\makebox&lt;/code&gt; command creates a box just wide enough to contain the text specified. The width of the box can be overridden by the optional width argument. The position of the text within the box is determined by the optional position argument, which may take the following values:&lt;br&gt;&lt;br&gt;c = Centered (default).&lt;br&gt;l = Flush left.&lt;br&gt;r = Flush right.&lt;br&gt;s = Stretch (justify) across entire width; text must contain stretchable space for this to work.&lt;br&gt;</description>
@@ -29,6 +55,24 @@
       <argument name="pos" optional="yes" type="optarg"></argument>
       <argument name="text" optional="no" type="mandarg"></argument>
       <description lang="en">1 = width&lt;br&gt;2 = pos&lt;br&gt;3 = text&lt;br&gt;&lt;br&gt;</description>
+    </variant>
+  </command>
+  <command name="\newcommand" label="macro" level="beginner">
+    <shortdescription lang="en">Define a new command (macro) or change the definition of an existing command (\renewcommand)</shortdescription>
+    <description lang="en">This command defines a new command. Use \renewcommand to change the definition of an existing command.&lt;br&gt;</description>
+    <variant name="\newcommand">
+      <argument name="command" optional="no" type="mandarg"></argument>
+      <argument name="num" optional="yes" type="optarg"></argument>
+      <argument name="default" optional="yes" type="optarg"></argument>
+      <argument name="definition" optional="no" type="mandarg"></argument>
+      <description lang="en">Define a new command.&lt;br&gt;</description>
+    </variant>
+    <variant name="\newcommand*">
+      <argument name="command" optional="no" type="mandarg"></argument>
+      <argument name="num" optional="yes" type="optarg"></argument>
+      <argument name="default" optional="yes" type="optarg"></argument>
+      <argument name="definition" optional="no" type="mandarg"></argument>
+      <description lang="en">Define a new command that must not contain an “end of paragraph” marker.&lt;br&gt;</description>
     </variant>
   </command>
   <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
@@ -68,11 +112,12 @@
   </command>
   <command name="\usepackage" label="preamble" level="beginner">
     <shortdescription lang="en">Loads a package which can influence the layout or the functionality of the document</shortdescription>
-    <description lang="en">You can give a list of packages to load.</description>
+    <description lang="en">You can give a list of packages to load.&lt;br&gt;&lt;br&gt;Example: &lt;br&gt;&lt;pre&gt;\usepackage[dvips]{graphics}[1994/06/01]&lt;/pre&gt;</description>
     <variant name="\usepackage">
       <argument name="options" optional="yes" type="optlist"></argument>
       <argument name="packagelist" optional="no" type="mandlist"></argument>
-      <description lang="en"></description>
+      <argument name="release date" optional="yes" type="optarg"></argument>
+      <description lang="en">1: package options (for all packages)&lt;br&gt;2: the pagages to load&lt;br&gt;3: optional release date&lt;br&gt;</description>
     </variant>
   </command>
   <environment name="description" level="beginner" label="list">
@@ -80,6 +125,18 @@
     <description lang="en">&lt;pre&gt;\begin{description}&lt;br&gt;\item [first label] text of first item&lt;br&gt;\item [second label] text of second item&lt;br&gt;&amp;nbsp; ...&lt;br&gt;\end{description}&lt;/pre&gt;&lt;br&gt;&lt;br&gt;Environment to make a labelled list of items. Each item’s label is typeset in bold, flush-left. Each item’s text may contain multiple paragraphs. Although the labels on the items are optional there is no sensible default, so all items should have labels.&lt;br&gt;&lt;br&gt;The list consists of at least one item; see \item (having no items causes the LaTeX error ‘Something&#39;s wrong--perhaps a missing \item’). Each item is produced with an \item command.&lt;br&gt;&lt;br&gt;Since the labels are in bold style, if the label text calls for a font change given in argument style (see Font styles) then it will come out bold. For instance, if the label text calls for typewriter with \item[\texttt{label text}] then it will appear in bold typewriter, if that is available. The simplest way to get non-bolded typewriter is to use declaritive style \item[{\tt label text}]. Similarly, get normal text use \item[{\rm label text}].&lt;br&gt;&lt;br&gt;For other major LaTeX labelled list environments, see itemize and enumerate. For information about customizing list layout, see list; also, the package enumitem is useful for this.&lt;br&gt;&lt;br&gt;This example shows the environment used for a sequence of definitions.&lt;br&gt;&lt;pre&gt;\begin{definition}&lt;br&gt;&amp;nbsp; \item[lama] A priest.&lt;br&gt;&amp;nbsp; \item[llama] A beast.&lt;br&gt;\end{definition}&lt;/pre&gt;</description>
     <variant name="description">
       <description lang="en">To change the formatting of the label, you must redefine \descriptionlabel.</description>
+    </variant>
+  </environment>
+  <environment name="filecontents" level="expert" label="file i/o">
+    <shortdescription lang="en">Write the contents of the environment to a file</shortdescription>
+    <description lang="en"></description>
+    <variant name="filecontents">
+      <argument name="filename" optional="no" type="mandarg"></argument>
+      <description lang="en">1: the filename&lt;br&gt;</description>
+    </variant>
+    <variant name="filecontents*">
+      <argument name="filename" optional="no" type="mandarg"></argument>
+      <description lang="en">Same as the unstarred environment, but doesn&#39;t include a comment at the beginning.&lt;br&gt;&lt;br&gt;1: filename&lt;br&gt;</description>
     </variant>
   </environment>
   <environment name="itemize" level="beginner" label="lists">
