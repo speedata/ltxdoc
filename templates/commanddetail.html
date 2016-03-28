@@ -37,8 +37,32 @@
 {{/*  -----------------------------------------------------------------------------------  */}}
 
 
-{{ define "pkgdetail"}}
+{{ define "pkgdetail" -}}
 {{ template "head" .}}
+{{ with .Edit}}
+<div class="modal fade" id="addcommand">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-inline" action="/addcommand?edit={{.}}" method="POST">
+        {{ with $.Package }}<input type="hidden" name="package" value="{{.Name}}">{{end}}
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Add command</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" name="command" placeholder="\command">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button  class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{end}}
 <div class="container-fluid">
 <div class="row">
   <div class="col-sm-12 col-md-12">
@@ -63,6 +87,8 @@
 {{ end }}
 
   <div class="row"><div class="col-sm-12">{{  index .Description "en"  }}</div></div>
+
+{{with .Commands}}<h1 id="commands">Commands {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#addcommand" href="#">add new</a></small>{{end}}</h1>{{end}}
 
 {{ range .Commands }}
 <div class="cmddescription"><a href="/pkg/{{ urlescape $.Package.Name }}/cmd/{{ urlescape .Name }}{{ with $.Edit }}?edit={{ . }}{{end}}"><div class="row">

@@ -62,6 +62,7 @@
                                 <value>mandarg</value>
                                 <value>todimenorspreaddimen</value>
                                 <value>optlist</value>
+                                <value>keyvallist</value>
                                 <value>mandlist</value>
                             </choice>
                         </attribute>

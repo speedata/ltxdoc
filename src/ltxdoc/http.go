@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/gorilla/mux"
@@ -73,6 +75,8 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 				ret = ("<tt>[...,...,...]</tt>")
 			case ltxref.TODIMENORSPREADDIMEN:
 				ret = ("<tt>to</tt> <i>‹dimen›</i> or <tt>spread</tt> ‹<i>dimen</i>›")
+			case ltxref.KEYVALLIST:
+				ret = ("<tt>[..=..,..=..,..=..]</tt>")
 			default:
 				ret = "??"
 			}
@@ -135,6 +139,18 @@ func StartHTTPD(httpaddress, filename string, allowEdit bool) {
 	fmt.Println(http.ListenAndServe(httpaddress, nil))
 }
 
+var mutex = &sync.Mutex{}
+
+func saveXML() {
+	data, err := latexref.ToXML()
+	if err != nil {
+		return
+	}
+	mutex.Lock()
+	ioutil.WriteFile("savedata.xml", data, os.ModePerm)
+	mutex.Unlock()
+}
+
 func addEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 	if editToken(r) == "" {
 		http.Redirect(w, r, "/", http.StatusUnauthorized)
@@ -181,14 +197,19 @@ func addCommandHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	requestedCommand := r.FormValue("command")
-	_, err := latexref.AddCommand(requestedCommand)
+	requestedPackage := r.FormValue("package")
+	_, err := latexref.AddCommand(requestedCommand, requestedPackage)
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		fmt.Println(err)
 		return
 	}
 	backlink := &url.URL{}
-	backlink.Path = "/editcmd/" + requestedCommand
+	if requestedPackage == "" {
+		backlink.Path = "/editcmd/" + requestedCommand
+	} else {
+		backlink.Path = "/editpkgcmd/" + requestedPackage + "/" + requestedCommand
+	}
 	addKeyValueToUrl(backlink, "edit", r.FormValue("edit"))
 	// Post/Redirect/Get doesn't work with temp redirect.
 	http.Redirect(w, r, backlink.String(), http.StatusSeeOther)
@@ -270,6 +291,7 @@ func editEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 			env.Variant = append(env.Variant, *v)
 
 		}
+		saveXML()
 		http.Redirect(w, r, "/env/"+escapeurl(requestedEnvironment)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 
@@ -354,6 +376,7 @@ func editPackageHandler(w http.ResponseWriter, r *http.Request) {
 			po.Name = r.FormValue(fmt.Sprintf("packageoption%dname", i))
 			pkg.Options = append(pkg.Options, po)
 		}
+		saveXML()
 		http.Redirect(w, r, "/pkg/"+escapeurl(requestedPackage)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 
@@ -411,6 +434,7 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		saveXML()
 		http.Redirect(w, r, "/class/"+escapeurl(requestedDocumentClass)+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 
@@ -504,6 +528,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			path = "/cmd/" + escapeurl(requestedCommand)
 		}
+		saveXML()
 		http.Redirect(w, r, path+"?edit="+editToken(r), http.StatusSeeOther)
 		return
 	case "GET":
@@ -703,6 +728,7 @@ func environmentDetailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Write the data as application/xml to w
 func sendXML(w http.ResponseWriter, data []byte) {
 	w.Header().Set("Content-type", "application/xml")
 	fmt.Fprint(w, string(data))

@@ -7,11 +7,17 @@ import (
 	"github.com/renstrom/fuzzysearch/fuzzy"
 )
 
-func (l *Ltxref) AddCommand(commandname string) (*Command, error) {
+func (l *Ltxref) AddCommand(commandname string, pkg string) (*Command, error) {
 	cmd := NewCommand()
 	cmd.Name = commandname
-	l.Commands = append(l.Commands, cmd)
-	sort.Sort(l.Commands)
+	if pkg == "" {
+		l.Commands = append(l.Commands, cmd)
+		sort.Sort(l.Commands)
+	} else {
+		p := l.GetPackageWithName(pkg)
+		p.Commands = append(p.Commands, cmd)
+		sort.Sort(p.Commands)
+	}
 	return cmd, nil
 }
 
@@ -202,6 +208,7 @@ func (l *Ltxref) FilterPackages(like string, tag string) []*Package {
 			for _, command := range item.Commands {
 				if (like == "" || fuzzy.Match(like, command.Name)) && (tag == "" || hasTag(command.Label, tag)) {
 					itemsThatMatch = append(itemsThatMatch, item)
+					break
 				}
 			}
 

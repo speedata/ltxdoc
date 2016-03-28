@@ -1,16 +1,24 @@
-{{ define "main"}}{{ with .L}}{{ with .Commands}}{{ underline "Commands" 1 }}{{ range . }}{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ define "main" -}}
+{{ with .L -}}
+{{ with .Commands -}}
+{{ underline "Commands" 1 -}}
+{{ range . -}}
+{{ .Name }} -- {{ index .ShortDescription  "en" }}
 {{ end }}{{/*  range . (Commands) */}}
 {{ end }}{{/*  with .Commands */}}
-{{ with .Environments }}{{ underline "Environments" 1 }}{{ range . }}{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ with .Environments }}{{ underline "Environments" 1 -}}
+{{ range . }}{{ .Name }} -- {{ index .ShortDescription  "en" }}
 {{ end }}{{/*  range . */}}
 {{ end }}{{/*  with .Environments */}}
-{{ with .Documentclasses}}Documentclasses
+{{ with .DocumentClasses -}}
+Documentclasses
 ===============
 {{ range . }}
-{{ .Name }} -- {{ index .ShortDescription  "en" }}
+{{ .Name }} -- {{ index .ShortDescription  "en" -}}
 {{ end }}{{/*  range . */}}
-{{ end }}{{/*  with .Documentclasses */}}
-{{ with .Packages}}Packages
+{{ end }}{{/*  with .DocumentClasses */}}
+{{ with .Packages -}}
+Packages
 ========
 {{ range . }}
 {{ .Name }} -- {{ index .ShortDescription  "en" }}

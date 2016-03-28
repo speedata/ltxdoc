@@ -14,6 +14,7 @@ const (
 	OPTARG
 	OPTLIST
 	TODIMENORSPREADDIMEN
+	KEYVALLIST
 )
 
 var argumenttypemap map[string]Argumenttype
@@ -26,6 +27,7 @@ func init() {
 		"optarg":               OPTARG,
 		"optlist":              OPTLIST,
 		"todimenorspreaddimen": TODIMENORSPREADDIMEN,
+		"keyvallist":           KEYVALLIST,
 	}
 	argumentTypeReveseMap = make(map[Argumenttype]string, len(argumenttypemap))
 	for key, value := range argumenttypemap {

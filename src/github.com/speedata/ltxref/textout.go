@@ -31,15 +31,17 @@ func tfshowargument(in Argumenttype) string {
 	var ret string
 	switch in {
 	case OPTARG:
-		ret = ("[...]")
+		ret = "[...]"
 	case OPTLIST:
-		ret = ("[...,...,...]")
+		ret = "[...,...,...]"
 	case MANDARG:
-		ret = ("{...}")
+		ret = "{...}"
 	case MANDLIST:
-		ret = ("{...,...,...}")
+		ret = "{...,...,...}"
 	case TODIMENORSPREADDIMEN:
-		ret = ("to ‹dimen› [or] spread ‹dimen›")
+		ret = "to ‹dimen› [or] spread ‹dimen›"
+	case KEYVALLIST:
+		ret = "[..=..,..=..,..=..]"
 	default:
 		ret = "??"
 	}

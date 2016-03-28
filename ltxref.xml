@@ -23,12 +23,12 @@
   </command>
   <command name="\makebox" label="box command" level="beginner">
     <shortdescription lang="en">Make a box with a given width and height</shortdescription>
-    <description lang="en">Some long description</description>
+    <description lang="en">The &lt;code&gt;\makebox&lt;/code&gt; command creates a box just wide enough to contain the text specified. The width of the box can be overridden by the optional width argument. The position of the text within the box is determined by the optional position argument, which may take the following values:&lt;br&gt;&lt;br&gt;c = Centered (default).&lt;br&gt;l = Flush left.&lt;br&gt;r = Flush right.&lt;br&gt;s = Stretch (justify) across entire width; text must contain stretchable space for this to work.&lt;br&gt;</description>
     <variant name="makebox">
       <argument name="width" optional="yes" type="optarg"></argument>
       <argument name="pos" optional="yes" type="optarg"></argument>
       <argument name="text" optional="no" type="mandarg"></argument>
-      <description lang="en"></description>
+      <description lang="en">1 = width&lt;br&gt;2 = pos&lt;br&gt;3 = text&lt;br&gt;&lt;br&gt;</description>
     </variant>
   </command>
   <command name="\section" label="sectioning,tableofcontents,document structure" level="beginner">
@@ -61,9 +61,9 @@
     <shortdescription lang="en">Show the list of chapters, sections and similar commands</shortdescription>
     <description lang="en"></description>
     <variant name="\tableofcontents">
-      <description lang="en">&lt;p&gt;A table of contents is produced with the \tableofcontents command. You put the command right where you want the table of contents to go; LaTeX does the rest for you. A previous run must have generated a .toc file.&lt;/p&gt;
-&lt;p&gt;The \tableofcontents command produces a heading, but it does not automatically start a new page. If you want a new page after the table of contents, write a \newpage command after the \tableofcontents command.&lt;/p&gt;
-&lt;p&gt;The analogous commands \listoffigures and \listoftables produce a list of figures and a list of tables (from .lof and .lot files), respectively. Everything works exactly the same as for the table of contents.&lt;/p&gt;</description>
+      <description lang="en">&lt;p&gt;A table of contents is produced with the &lt;code&gt;\tableofcontents&lt;/code&gt; command. You put the command right where you want the table of contents to go; LaTeX does the rest for you. A previous run must have generated a .toc file.&lt;/p&gt;&#xD;
+        &lt;p&gt;The&lt;code&gt; \tableofcontents&lt;/code&gt; command produces a heading, but it does not automatically start a new page. If you want a new page after the table of contents, write a &lt;code&gt;\newpage&lt;/code&gt; command after the &lt;code&gt;\tableofcontents&lt;/code&gt; command.&lt;/p&gt;&#xD;
+        &lt;p&gt;The analogous commands &lt;code&gt;\listoffigures&lt;/code&gt; and &lt;code&gt;\listoftables&lt;/code&gt; produce a list of figures and a list of tables (from .lof and .lot files), respectively. Everything works exactly the same as for the table of contents.&lt;/p&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</description>
     </variant>
   </command>
   <command name="\usepackage" label="preamble" level="beginner">
@@ -77,7 +77,7 @@
   </command>
   <environment name="description" level="beginner" label="list">
     <shortdescription lang="en">The description environment is used to make labelled lists. Each label is typeset in bold, flush right. The item text may contain multiple paragraphs.</shortdescription>
-    <description lang="en"></description>
+    <description lang="en">&lt;pre&gt;\begin{description}&lt;br&gt;\item [first label] text of first item&lt;br&gt;\item [second label] text of second item&lt;br&gt;&amp;nbsp; ...&lt;br&gt;\end{description}&lt;/pre&gt;&lt;br&gt;&lt;br&gt;Environment to make a labelled list of items. Each item’s label is typeset in bold, flush-left. Each item’s text may contain multiple paragraphs. Although the labels on the items are optional there is no sensible default, so all items should have labels.&lt;br&gt;&lt;br&gt;The list consists of at least one item; see \item (having no items causes the LaTeX error ‘Something&#39;s wrong--perhaps a missing \item’). Each item is produced with an \item command.&lt;br&gt;&lt;br&gt;Since the labels are in bold style, if the label text calls for a font change given in argument style (see Font styles) then it will come out bold. For instance, if the label text calls for typewriter with \item[\texttt{label text}] then it will appear in bold typewriter, if that is available. The simplest way to get non-bolded typewriter is to use declaritive style \item[{\tt label text}]. Similarly, get normal text use \item[{\rm label text}].&lt;br&gt;&lt;br&gt;For other major LaTeX labelled list environments, see itemize and enumerate. For information about customizing list layout, see list; also, the package enumitem is useful for this.&lt;br&gt;&lt;br&gt;This example shows the environment used for a sequence of definitions.&lt;br&gt;&lt;pre&gt;\begin{definition}&lt;br&gt;&amp;nbsp; \item[lama] A priest.&lt;br&gt;&amp;nbsp; \item[llama] A beast.&lt;br&gt;\end{definition}&lt;/pre&gt;</description>
     <variant name="description">
       <description lang="en">To change the formatting of the label, you must redefine \descriptionlabel.</description>
     </variant>
@@ -412,30 +412,73 @@
   <package name="graphicx" level="beginner" label="graphics" loadspackages="keyval,graphics">
     <shortdescription lang="en">Package to include bitmap and vector images</shortdescription>
     <description lang="en">The packages graphicx (with cx) can include a variety of different image types.</description>
-    <packageoption name="draft">
+    <packageoption name="draft" default="no">
       <shortdescription lang="en">Suppress all the ‘special’ features. In particular graphics files are not included (but they are still read for size info) just the filename is printed in a box of the correct size.</shortdescription>
     </packageoption>
     <packageoption name="final" default="yes">
       <shortdescription lang="en">The opposite of draft. Useful to over-ride a global draft option specified in the \documentclass command.</shortdescription>
     </packageoption>
-    <packageoption name="hiderotate">
+    <packageoption name="hiderotate" default="no">
       <shortdescription lang="en">Do not show rotated text (presumably because the previewer can not rotate).</shortdescription>
     </packageoption>
-    <packageoption name="hidescale">
+    <packageoption name="hidescale" default="no">
       <shortdescription lang="en">Do not show scaled text (presumably because the previewer can not scale).</shortdescription>
     </packageoption>
-    <packageoption name="hiresbb">
+    <packageoption name="hiresbb" default="no">
       <shortdescription lang="en">Look for size specifications in %%HiResBoundingBox lines rather than standard %%BoundingBox lines.</shortdescription>
     </packageoption>
-    <packageoption name="demo" >
+    <packageoption name="demo" default="no">
       <shortdescription lang="en">Instead of inserting an image file \includegraphics draws a 150 pt by 100 pt rectangle unless other dimensions are specified manually.</shortdescription>
     </packageoption>
     <command name="\includegraphics" label="graphics,images" level="beginner">
       <shortdescription lang="en">Include an image file</shortdescription>
-      <description lang="en">&lt;p&gt;The package &lt;code&gt;graphicx&lt;/code&gt; (with cx at the end!) provides the command \includegraphics which can be used to include images of various formats, such as PNG, PDF etc. The complete list of&lt;/p&gt;</description>
+      <description lang="en">&lt;p&gt;The package &lt;code&gt;graphicx&lt;/code&gt; (with cx at the end!) provides the command \includegraphics which can be used to include images of various formats, such as PNG, PDF etc. The complete list of file formats depends on the driver.&lt;/p&gt;&lt;p&gt;If * is present, then the graphic is ‘clipped’ to the size specified. If * is omitted, then any part of the graphic that is outside the specified ‘bounding box’ will over-print the surrounding text.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</description>
       <variant name="\includegraphics">
-        <argument name="keyvalue" optional="yes" type="optlist"></argument>
+        <argument name="keyvalue" optional="yes" type="keyvallist"></argument>
         <argument name="filename" optional="no" type="mandarg"></argument>
+        <description lang="en"></description>
+      </variant>
+      <variant name="\includegraphics*">
+        <argument name="keyvalue" optional="yes" type="keyvallist"></argument>
+        <argument name="filename" optional="no" type="mandarg"></argument>
+        <description lang="en"></description>
+      </variant>
+    </command>
+    <command name="\reflectbox" label="box" level="beginner">
+      <shortdescription lang="en">Mirrors a text horizontally</shortdescription>
+      <description lang="en">An abbreviation for &lt;code&gt;\scalebox{-1}[1]{⟨text⟩}&lt;/code&gt;.&lt;br&gt;&lt;br&gt;</description>
+      <variant name="\reflectbox">
+        <argument name="text" optional="no" type="mandarg"></argument>
+        <description lang="en">1: text that gets reflected&lt;br&gt;</description>
+      </variant>
+    </command>
+    <command name="\resizebox" label="box" level="beginner">
+      <shortdescription lang="en">Scale text to a given width.</shortdescription>
+      <description lang="en"></description>
+      <variant name="">
+        <argument name="h-length" optional="no" type="mandarg"></argument>
+        <argument name="v-length" optional="no" type="mandarg"></argument>
+        <argument name="text" optional="no" type="mandarg"></argument>
+        <description lang="en"></description>
+      </variant>
+    </command>
+    <command name="\rotatebox" label="box" level="beginner">
+      <shortdescription lang="en">Rotate the contents of the box</shortdescription>
+      <description lang="en">This puts text in a box, like &lt;code&gt;\mbox&lt;/code&gt;, but rotates the box through angle degrees.&lt;br&gt;&lt;br&gt;</description>
+      <variant name="\rotatebox">
+        <argument name="Options" optional="yes" type="keyvallist"></argument>
+        <argument name="angle" optional="no" type="mandarg"></argument>
+        <argument name="text" optional="no" type="mandarg"></argument>
+        <description lang="en">The keyval version takes the following keys:&lt;br&gt; &lt;pre&gt;origin=⟨label⟩ &lt;br&gt;x=⟨dimen⟩ &lt;br&gt;y=⟨dimen⟩ &lt;br&gt;units=⟨number⟩&lt;/pre&gt;&amp;nbsp; &amp;nbsp;</description>
+      </variant>
+    </command>
+    <command name="\scalebox" label="box,scale" level="beginner">
+      <shortdescription lang="en">Scale the contents of the box</shortdescription>
+      <description lang="en">Scale the contents of the box&lt;br&gt;</description>
+      <variant name="">
+        <argument name="h-scale" optional="no" type="mandarg"></argument>
+        <argument name="v-scale" optional="yes" type="optarg"></argument>
+        <argument name="text" optional="no" type="mandarg"></argument>
         <description lang="en"></description>
       </variant>
     </command>
