@@ -44,7 +44,7 @@
         <oneOrMore>
             <ref name="description"/>
         </oneOrMore>
-        <oneOrMore>
+        <zeroOrMore>
             <element name="variant">
                 <attribute name="name"/>
                 <zeroOrMore>
@@ -71,7 +71,7 @@
                 </zeroOrMore>
                 <ref name="description"/>
             </element>
-        </oneOrMore>
+        </zeroOrMore>
         <optional>
             <element name="seealso">
                 <oneOrMore>

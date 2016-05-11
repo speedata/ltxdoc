@@ -106,7 +106,7 @@
 
 <div class="row">
   <div class="col-md-7">
-    <p>Goto: <a href="#commands">commands</a>, <a href="#environments">environments</a>, <a href="#documentclasses">documentclasses</a>, <a href="#packages">packages</a>, <a href="#tags">tags</a>
+    <p>Goto: <a href="#commands">commands</a>, <a href="#environments">environments</a>, <a href="#documentclasses">document classes</a>, <a href="#packages">packages</a>, <a href="#tags">tags</a>
   </div>
 </div>
 
@@ -130,7 +130,7 @@
       <div class="col-md-7 shortdesc">{{ index .ShortDescription "en" }}</div>
 </div></a></div>
 {{ end }}
-{{ with .DocumentClasses }}<h1 id="documentclasses">Documentclasses {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#adddc" href="#">add new</a></small>{{end}}</h1>{{ end }}
+{{ with .DocumentClasses }}<h1 id="documentclasses">Document classes {{ with $.Edit}}<small><a  data-toggle="modal" data-target="#adddc" href="#">add new</a></small>{{end}}</h1>{{ end }}
 {{ range .DocumentClasses }}
 <div class="cmddescription"><a href="/class/{{ urlescape .Name }}?{{ with $.Filter }}filter={{ urlescape . }}&amp;{{end}}{{with $.Edit }}edit={{.}}{{end}}"><div class="row">
       <div class="col-md-4 lxenvironment">{{ .Name }}</div>
