@@ -312,12 +312,14 @@ func editEnvironmentHandler(w http.ResponseWriter, r *http.Request) {
 			XMLUrl       string
 			PlainTextUrl string
 			Edit         string
+			Tags         []string
 		}{
 			Backlink:     backlink.String(),
 			Environment:  env,
 			Edit:         editToken(r),
 			XMLUrl:       addXMLFormatString(r.URL),
 			PlainTextUrl: addTXTFormatString(r.URL),
+			Tags:         latexref.Tags(),
 		}
 		err := tpl.ExecuteTemplate(w, "editenvironment", data)
 		if err != nil {
@@ -350,12 +352,14 @@ func editPackageHandler(w http.ResponseWriter, r *http.Request) {
 			XMLUrl       string
 			PlainTextUrl string
 			Edit         string
+			Tags         []string
 		}{
 			Backlink:     backlink.String(),
 			Package:      pkg,
 			Edit:         editToken(r),
 			XMLUrl:       addXMLFormatString(r.URL),
 			PlainTextUrl: addTXTFormatString(r.URL),
+			Tags:         latexref.Tags(),
 		}
 		err := tpl.ExecuteTemplate(w, "editpackage", data)
 		if err != nil {
@@ -451,12 +455,14 @@ func editDocumentClassHandler(w http.ResponseWriter, r *http.Request) {
 			XMLUrl        string
 			PlainTextUrl  string
 			Edit          string
+			Tags          []string
 		}{
 			Backlink:      backlink.String(),
 			DocumentClass: dc,
 			Edit:          editToken(r),
 			XMLUrl:        addXMLFormatString(r.URL),
 			PlainTextUrl:  addTXTFormatString(r.URL),
+			Tags:          latexref.Tags(),
 		}
 		err := tpl.ExecuteTemplate(w, "editdocumentclass", data)
 		if err != nil {
@@ -549,6 +555,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			PlainTextUrl string
 			Package      string
 			Edit         string
+			Tags         []string
 		}{
 			Backlink:     backlink.String(),
 			Command:      cmd,
@@ -556,6 +563,7 @@ func editCommandHandler(w http.ResponseWriter, r *http.Request) {
 			XMLUrl:       addXMLFormatString(r.URL),
 			Package:      requestedPackage,
 			PlainTextUrl: addTXTFormatString(r.URL),
+			Tags:         latexref.Tags(),
 		}
 		err := tpl.ExecuteTemplate(w, "editcommand", data)
 		if err != nil {

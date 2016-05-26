@@ -1,3 +1,11 @@
+function initialize() {
+	$("#selecttags").tagsinput({
+  	typeahead: {
+   	 		source: alltags
+  		}
+	});
+}
+
 function mkname(variantnumber, argumentnumber) {
    	return "v" + variantnumber + "a" + argumentnumber
 }

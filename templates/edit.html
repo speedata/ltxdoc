@@ -29,17 +29,17 @@
 <form class="form-horizontal" action="/editpackage/{{.Name}}?edit={{$.Edit}}" method="POST">
 			<input id="panelcount" type="hidden" name="panelcount" value="0">
 
-  			<div class="row">
+ 			<div class="row">
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
-		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+		  			<div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+  						<input id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-provide="typeahead">
 		  			</div>
 		  		</div>
 		  	</div>
   			<div class="row">
 		  		<div class="form-group">
-		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Loads packages</label>
+		  			<label for="selectpackages" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Loads packages</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
   						<input  id="selectpackages" class="" type="text" value="{{range .LoadsPackages}}{{.}},{{end}}" name="loadspackages" data-role="tagsinput" >
 		  			</div>
@@ -89,13 +89,13 @@
 
 </form>
 </div>
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
-
     <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
     <script src="/assets/js/advanced_and_extended.js"></script>
     <script src="/assets/js/ltxedit.js"></script>
 
    <script>
+   var alltags = [{{range $.Tags}}"{{.}}",{{end}}];
+
 	$( document ).ready(function() {
 		new wysihtml5.Editor('descriptioneditor', {
     		toolbar: 'descriptiontoolbar',
@@ -107,6 +107,7 @@
 		$("#addpackageoption").click(function(){
 			addpackageoption("","",false)
 		})
+		initialize()
 	});
 </script>
 
@@ -164,7 +165,7 @@
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+  						<input id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-provide="typeahead">
 		  			</div>
 		  		</div>
 		  	</div>
@@ -212,13 +213,14 @@
 
 			</form>
 </div>
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
     <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
     <script src="/assets/js/advanced_and_extended.js"></script>
     <script src="/assets/js/ltxedit.js"></script>
 
    <script>
+    var alltags = [{{range $.Tags}}"{{.}}",{{end}}];
 	$( document ).ready(function() {
+
 		$("#addpanel").click(addclassoptiongroup);
 
 		new wysihtml5.Editor('descriptioneditor', {
@@ -231,6 +233,7 @@
 	 		addclassoption(null,panelcount, {{.Name}},{{index .ShortDescription "en"}}, {{ .Default }})
 	 	{{ end }}
  		{{ end }}
+ 		initialize()
 	});
 </script>
 {{ end }}{{/*  with documentclass */}}
@@ -301,7 +304,7 @@
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+  						<input id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-provide="typeahead">
 		  			</div>
 		  		</div>
 		  	</div>
@@ -351,12 +354,11 @@
 
 	</div>
 
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
-
     <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
     <script src="/assets/js/advanced_and_extended.js"></script>
     <script src="/assets/js/ltxedit.js"></script>
     <script>
+    var alltags = [{{range $.Tags}}"{{.}}",{{end}}];
 	$( document ).ready(function() {
 		$("#addvariant").click(addVariant);
 		var variant;
@@ -370,6 +372,7 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
     		toolbar: 'descriptiontoolbar',
     		parserRules:  wysihtml5ParserRules
  		});
+ 	initialize()
 	});
 </script>
 {{ end }}{{/* with .Command  */}}
@@ -443,7 +446,7 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
 		  		<div class="form-group">
 		  			<label for="selecttags" class="col-sm-3 col-md-3 col-lg-3 col-xs-3 control-label">Tags</label>
 		  			<div class="col-sm-5 col-md-5 col-xs-5 col-lg-5">
-  						<input  id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-role="tagsinput" >
+  						<input id="selecttags" class="" type="text" value="{{range .Label}}{{.}},{{end}}" name="tags" data-provide="typeahead">
 		  			</div>
 		  		</div>
 		  	</div>
@@ -493,12 +496,11 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
 
 	</div>
 
-    <script src="/assets/js/bootstrap-tagsinput.min.js"></script>
-
     <script src="/assets/js/wysihtml5x-toolbar.min.js"></script>
     <script src="/assets/js/advanced_and_extended.js"></script>
     <script src="/assets/js/ltxedit.js"></script>
     <script>
+    var alltags = [{{range $.Tags}}"{{.}}",{{end}}];
 	$( document ).ready(function() {
 		$("#addvariant").click(addVariant);
 		var variant;
@@ -512,6 +514,7 @@ setVariantNameDescription(variant,{{.Name}},{{ index .Description "en"}})
     		toolbar: 'descriptiontoolbar',
     		parserRules:  wysihtml5ParserRules
  		});
+ 		initialize()
 	});
 </script>
 {{ end }}{{/* with .Command  */}}
